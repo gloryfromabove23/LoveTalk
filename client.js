@@ -1,3 +1,44 @@
+// ------------------- Voice Activity Detection -------------------
+let audioContext = null;
+let analyser = null;
+let microphone = null;
+let dataArray = null;
+let animationFrameId = null;
+const heartElement = document.getElementById('heartLogo');
+
+function startVoiceDetection(stream) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    microphone = audioContext.createMediaStreamSource(stream);
+    microphone.connect(analyser);
+    analyser.fftSize = 512;
+
+    const bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+
+    function detect() {
+        analyser.getByteFrequencyData(dataArray);
+        const avg = dataArray.reduce((a,b)=>a+b,0)/dataArray.length;
+
+        if(avg > 15){ // threshold for detecting speech
+            heartElement.classList.add('bouncing');
+        } else {
+            heartElement.classList.remove('bouncing');
+        }
+
+        animationFrameId = requestAnimationFrame(detect);
+    }
+
+    detect();
+}
+
+function stopVoiceDetection() {
+    if(animationFrameId) cancelAnimationFrame(animationFrameId);
+    if(audioContext) audioContext.close();
+    heartElement.classList.remove('bouncing');
+}
+// ---------------------------------------------------------------
+
 const socket = io();
 let incomingOffer = null;
 let callerSocketId = null;
@@ -195,6 +236,10 @@ hangupBtn.onclick = () => {
         localStream.getTracks().forEach(t=>t.stop());
         localStream=null;
     }
+
+    // ------------------- Stop Heart Bounce -------------------
+    stopVoiceDetection();
+    // ----------------------------------------------------------
 };
 
 function createPeerConnection(){
