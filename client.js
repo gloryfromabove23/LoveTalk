@@ -75,45 +75,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ------------------- Live Users -------------------
-    socket.on('updateUsers', users => {
-        userList.innerHTML = '';
-        users
-          .filter(u => u.room === currentRoom)
-          .forEach(u => {
-            if(u.socketId === socket.id) return; // skip yourself
+// ------------------- Live users -------------------
+socket.on('updateUsers', users => {
+    userList.innerHTML = '';
 
-            const wrapper = document.createElement('div');
-            wrapper.className = 'userItem';
+    // Show only users in the same room, if joined
+    users
+      .filter(u => currentRoom ? u.room === currentRoom : true) 
+      .forEach(u => {
+        if(u.socketId === socket.id) return; // skip yourself
 
-            const nameDiv = document.createElement('div');
-            nameDiv.textContent = u.name;
-            nameDiv.style.cursor = 'pointer';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'userItem';
 
-            const actionBar = document.createElement('div');
-            actionBar.style.display = 'none';
-            actionBar.style.marginTop = '5px';
+        const nameDiv = document.createElement('div');
+        nameDiv.textContent = u.name;
+        nameDiv.style.cursor = 'pointer';
 
-            const callUserBtn = document.createElement('button');
-            callUserBtn.textContent = '📞 Call';
-            callUserBtn.onclick = () => startCall(u.socketId);
+        const actionBar = document.createElement('div');
+        actionBar.style.display = 'none';
+        actionBar.style.marginTop = '5px';
 
-            const friendBtn = document.createElement('button');
-            friendBtn.textContent = '🤝 Friend';
-            friendBtn.onclick = () => alert(`Friend request sent to ${u.name}`);
+        const callUserBtn = document.createElement('button');
+        callUserBtn.textContent = '📞 Call';
+        callUserBtn.onclick = () => startCall(u.socketId); // uses socketId now
 
-            actionBar.appendChild(callUserBtn);
-            actionBar.appendChild(friendBtn);
+        const friendBtn = document.createElement('button');
+        friendBtn.textContent = '🤝 Friend';
+        friendBtn.onclick = () => alert(`Friend request sent to ${u.name}`);
 
-            nameDiv.onclick = () => {
-                actionBar.style.display = actionBar.style.display === 'none' ? 'block' : 'none';
-            };
+        actionBar.appendChild(callUserBtn);
+        actionBar.appendChild(friendBtn);
 
-            wrapper.appendChild(nameDiv);
-            wrapper.appendChild(actionBar);
+        nameDiv.onclick = () => {
+            actionBar.style.display = actionBar.style.display === 'none' ? 'block' : 'none';
+        };
 
-            userList.appendChild(wrapper);
-        });
+        wrapper.appendChild(nameDiv);
+        wrapper.appendChild(actionBar);
+
+        userList.appendChild(wrapper);
     });
+});
 
     // ------------------- Voice Call -------------------
     async function startCall(targetSocketId){
