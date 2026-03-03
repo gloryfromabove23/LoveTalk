@@ -1,3 +1,31 @@
+document.addEventListener('DOMContentLoaded', () => {
+
+    const heartElement = document.getElementById('heartLogo');
+    const socket = io();
+    let name = '';
+    let currentRoom = '';
+    let pc = null;
+    let localStream = null;
+
+    const nameInputDiv = document.getElementById('nameInputDiv');
+    const nameInput = document.getElementById('nameInput');
+    const nameBtn = document.getElementById('nameBtn');
+    const mainDiv = document.getElementById('main');
+
+    // ------------------- Join Button -------------------
+    nameBtn.onclick = () => {
+        const val = nameInput.value.trim();
+        if(val){
+            name = val;
+            socket.emit('setName', name);
+            nameInputDiv.style.display = 'none';
+            mainDiv.style.display = 'flex';
+        }
+    };
+
+    // ...rest of your code goes here...
+    
+});
 // ------------------- Voice Activity Detection -------------------
 let audioContext = null;
 let analyser = null;
