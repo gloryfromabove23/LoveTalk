@@ -68,14 +68,45 @@ function addMessage(msg){
 // Live users
 socket.on('updateUsers', users=>{
     userList.innerHTML='';
-    users.forEach(u=>{
-        const div = document.createElement('div');
-        div.className='userItem';
-        div.textContent = u.name;
-        userList.appendChild(div);
+
+    users
+      .filter(u => u.room === currentRoom) // only show same room
+      .forEach(u=>{
+        if(u.socketId === socket.id) return; // don't show yourself
+
+        const wrapper = document.createElement('div');
+        wrapper.className='userItem';
+
+        const nameDiv = document.createElement('div');
+        nameDiv.textContent = u.name;
+        nameDiv.style.cursor = "pointer";
+
+        const actionBar = document.createElement('div');
+        actionBar.style.display='none';
+        actionBar.style.marginTop='5px';
+
+        const callUserBtn = document.createElement('button');
+        callUserBtn.textContent='📞 Call';
+        callUserBtn.onclick = ()=> startCall(u.socketId);
+
+        const friendBtn = document.createElement('button');
+        friendBtn.textContent='🤝 Friend';
+        friendBtn.onclick = ()=> alert(`Friend request sent to ${u.name}`);
+
+        actionBar.appendChild(callUserBtn);
+        actionBar.appendChild(friendBtn);
+
+        nameDiv.onclick = ()=>{
+            actionBar.style.display =
+              actionBar.style.display==='none' ? 'block':'none';
+        };
+
+        wrapper.appendChild(nameDiv);
+        wrapper.appendChild(actionBar);
+
+        userList.appendChild(wrapper);
     });
 });
-
 ///////////////////////
 // Voice Call
 callBtn.onclick = async () => {
@@ -85,9 +116,6 @@ callBtn.onclick = async () => {
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
 
-    // send offer to all other users in room
-    const usersInRoom = Array.from(document.querySelectorAll('.userItem')).map(u=>u.textContent);
-    usersInRoom.forEach(u=> socket.emit('webrtc-offer', { offer, targetId: u.socketId }));
 };
 
 hangupBtn.onclick = () => {
