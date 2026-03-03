@@ -5,6 +5,22 @@
 <title>LoveTalk 💖</title>
 <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
 <style>
+    /* ------------------- Heart Bounce ------------------- */
+.logo {
+  width: 150px;
+  transition: transform 0.2s ease;
+}
+
+/* Bouncing animation when speaking */
+.bouncing {
+  animation: bounce 0.5s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+/* ---------------------------------------------------- */
 body {
     margin: 0; font-family: 'Bubblegum Sans', cursive;
     background: linear-gradient(135deg, #ffc1cc, #ffb6c1);
