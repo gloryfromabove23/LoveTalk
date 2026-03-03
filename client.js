@@ -1,5 +1,6 @@
 const socket = io();
-
+let incomingOffer = null;
+let callerSocketId = null;
 let name = '';
 let currentRoom = '';
 let pc = null; // WebRTC PeerConnection
@@ -57,6 +58,60 @@ socket.on('message', msg=>{
     addMessage(msg);
 });
 
+socket.on('incoming-call', ({ offer, from, name })=>{
+    incomingOffer = offer;
+    callerSocketId = from;
+
+    document.getElementById('callerName').textContent =
+        `📞 ${name} is calling...`;
+
+    document.getElementById('incomingCallPopup').style.display='block';
+});
+
+document.getElementById('acceptCall').onclick = async () => {
+    document.getElementById('incomingCallPopup').style.display='none';
+
+    localStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+
+    pc = createPeerConnection();
+
+    localStream.getTracks().forEach(track =>
+        pc.addTrack(track, localStream)
+    );
+
+    await pc.setRemoteDescription(
+        new RTCSessionDescription(incomingOffer)
+    );
+
+    document.getElementById('declineCall').onclick = () => {
+    document.getElementById('incomingCallPopup').style.display='none';
+
+    socket.emit('call-declined', {
+        targetId: callerSocketId
+    });
+};
+
+    socket.on('webrtc-answer', async ({ answer })=>{
+    document.getElementById('callingStatus').style.display='none';
+    await pc.setRemoteDescription(
+        new RTCSessionDescription(answer)
+    );
+});
+
+    socket.on('call-declined', ()=>{
+    document.getElementById('callingStatus').style.display='none';
+    alert("Call declined");
+});
+
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+
+    socket.emit('call-accepted', {
+        targetId: callerSocketId,
+        answer
+    });
+};
+
 function addMessage(msg){
     const p = document.createElement('p');
     p.textContent = msg;
@@ -109,12 +164,25 @@ socket.on('updateUsers', users=>{
 });
 ///////////////////////
 // Voice Call
-callBtn.onclick = async () => {
+async function startCall(targetSocketId){
+    document.getElementById('callingStatus').style.display='block';
+
     localStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+
     pc = createPeerConnection();
-    localStream.getTracks().forEach(track=>pc.addTrack(track, localStream));
+
+    localStream.getTracks().forEach(track =>
+        pc.addTrack(track, localStream)
+    );
+
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
+
+    socket.emit('webrtc-offer', {
+        offer,
+        targetId: targetSocketId
+    });
+}
 
 };
 
