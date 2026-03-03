@@ -2,32 +2,91 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LoveTalk 💖</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heart Talk App</title>
+<style>
+  /* Reset & body */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body, html {
+    height: 100%;
+    background-color: #1a1a1a; /* very dark grey */
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  /* Heart Logo */
+  .logo {
+    width: 150px;
+    cursor: pointer;
+    transform-origin: center bottom;
+    transition: transform 0.2s ease;
+  }
+
+  /* Bounce animation */
+  .bouncing {
+    animation: bounce 0.5s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  /* Layout like Airtalk */
+  .controls {
+    margin-top: 40px;
+    display: flex;
+    gap: 20px;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+  }
+
+  button:hover {
+    background-color: #555;
+  }
+</style>
 </head>
 <body>
-<div id="loginDiv">
-    <h1>LoveTalk 💖</h1>
-    <input id="nameInput" placeholder="Enter your name" />
-    <input type="file" id="picInput" accept="image/*" />
-    <button id="loginBtn">Create Account / Login</button>
-</div>
 
-<div id="mainDiv" style="display:none;">
-    <div id="logoDiv">
-        <img src="logo.svg" alt="LoveTalk Logo" id="logo" />
-    </div>
-    <div id="voiceCircle">
-        <img id="profilePic" src="" alt="">
-        <div id="username"></div>
-        <canvas id="voiceGlow"></canvas>
-    </div>
-    <button id="callBtn" class="bigBtn">📞 Call</button>
-    <button id="hangupBtn" class="bigBtn">🛑 Hang Up</button>
-    <button id="heartBtn" class="reactionBtn">💗</button>
-</div>
+  <!-- Logo -->
+  <img src="a_pair_of_digital_vector_graphic_designs_is_presen.png" alt="Heart Logo" class="logo" id="heartLogo">
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="client.js"></script>
+  <!-- Controls (simulate talking) -->
+  <div class="controls">
+    <button id="talkBtn">Start Talking</button>
+    <button id="stopBtn">Stop Talking</button>
+  </div>
+
+<script>
+  const logo = document.getElementById('heartLogo');
+  const talkBtn = document.getElementById('talkBtn');
+  const stopBtn = document.getElementById('stopBtn');
+
+  talkBtn.addEventListener('click', () => {
+    logo.classList.add('bouncing');
+  });
+
+  stopBtn.addEventListener('click', () => {
+    logo.classList.remove('bouncing');
+  });
+</script>
+
 </body>
 </html>
