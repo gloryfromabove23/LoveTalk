@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LoveTalk 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+<style>
+body {
+    margin: 0; font-family: 'Bubblegum Sans', cursive;
+    background: linear-gradient(135deg, #ffc1cc, #ffb6c1);
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+}
+h1 { color: #fff; text-shadow: 2px 2px #ff69b4; margin:20px 0; }
+#main { display:flex; width:90%; max-width:1200px; flex:1; gap:20px; }
+#rooms { background: rgba(255,255,255,0.2); border-radius:15px; padding:10px; width:150px; }
+#rooms button { display:block; width:100%; margin:5px 0; padding:10px; border:none; border-radius:10px; background:#ff69b4; color:#fff; cursor:pointer; }
+#chatArea { flex:1; display:flex; flex-direction:column; background: rgba(255,255,255,0.2); border-radius:15px; padding:10px; }
+#messages { flex:1; overflow-y:auto; border:2px solid #fff; border-radius:10px; padding:10px; background: rgba(255,255,255,0.3); }
+#chatControls { display:flex; gap:10px; margin-top:10px; }
+#chatControls input { flex:1; padding:10px; border-radius:10px; border:none; outline:none; }
+#chatControls button { padding:10px 15px; border:none; border-radius:10px; background:#ff69b4; color:#fff; cursor:pointer; }
+#users { background: rgba(255,255,255,0.2); border-radius:15px; padding:10px; width:200px; }
+#users h3 { margin-top:0; color:#fff; text-align:center; }
+.userItem { padding:5px; background:rgba(255,255,255,0.3); margin:5px 0; border-radius:5px; text-align:center; }
+#voiceControls { margin-top:10px; display:flex; gap:10px; align-items:center; }
+</style>
+</head>
+<body>
+
+<h1>LoveTalk 💖</h1>
+
+<div id="nameInputDiv">
+    <input id="nameInput" placeholder="Enter your name..." />
+    <button id="nameBtn">Join</button>
+</div>
+
+<div id="main" style="display:none;">
+    <div id="rooms">
+        <h3>Rooms</h3>
+        <button data-room="Love">💖 Love</button>
+        <button data-room="Friendship">💌 Friendship</button>
+        <button data-room="Chill">🌸 Chill Chat</button>
+        <button data-room="Gaming">🎮 Gaming</button>
+    </div>
+
+    <div id="chatArea">
+        <div id="messages"></div>
+        <div id="chatControls">
+            <input id="msgInput" placeholder="Type your message..." />
+            <button id="sendBtn">Send</button>
+        </div>
+        <div id="voiceControls">
+            <button id="callBtn">📞 Call</button>
+            <button id="hangupBtn">🛑 Hang Up</button>
+            <label><input type="checkbox" id="autoCall" /> Auto-Call</label>
+        </div>
+    </div>
+
+    <div id="users">
+        <h3>Live Users</h3>
+        <div id="userList"></div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="client.js"></script>
+</body>
+</html>
