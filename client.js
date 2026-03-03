@@ -1,121 +1,75 @@
 const socket = io();
 
-let name = '';
-let currentRoom = '';
-let pc = null; // WebRTC PeerConnection
-let localStream = null;
-
-const nameInputDiv = document.getElementById('nameInputDiv');
+const loginDiv = document.getElementById('loginDiv');
+const mainDiv = document.getElementById('mainDiv');
 const nameInput = document.getElementById('nameInput');
-const nameBtn = document.getElementById('nameBtn');
+const picInput = document.getElementById('picInput');
+const loginBtn = document.getElementById('loginBtn');
 
-const mainDiv = document.getElementById('main');
-const roomsBtns = document.querySelectorAll('#rooms button');
-const messages = document.getElementById('messages');
-const msgInput = document.getElementById('msgInput');
-const sendBtn = document.getElementById('sendBtn');
-const userList = document.getElementById('userList');
+const profilePic = document.getElementById('profilePic');
+const usernameDiv = document.getElementById('username');
 
-const callBtn = document.getElementById('callBtn');
-const hangupBtn = document.getElementById('hangupBtn');
-const autoCall = document.getElementById('autoCall');
+loginBtn.onclick = async () => {
+    const name = nameInput.value.trim();
+    if(!name) return;
 
-///////////////////////
-// Name input
-nameBtn.onclick = () => {
-    const val = nameInput.value.trim();
-    if(val){
-        name = val;
-        socket.emit('setName', name);
-        nameInputDiv.style.display = 'none';
-        mainDiv.style.display = 'flex';
+    let picPath = '';
+    if(picInput.files[0]){
+        const formData = new FormData();
+        formData.append('picture', picInput.files[0]);
+        const res = await fetch('/upload', { method:'POST', body:formData });
+        const data = await res.json();
+        picPath = data.filePath;
     }
+
+    profilePic.src = picPath;
+    usernameDiv.textContent = name;
+
+    socket.emit('createUser', { name, picture: picPath });
+
+    loginDiv.style.display = 'none';
+    mainDiv.style.display = 'flex';
 };
 
-///////////////////////
-// Join room
-roomsBtns.forEach(btn=>{
-    btn.onclick = () => {
-        const room = btn.dataset.room;
-        currentRoom = room;
-        socket.emit('joinRoom', room);
-        addMessage(`💖 You joined ${room}`);
-    };
-});
+// Voice glow (prototype using random values)
+const voiceGlow = document.getElementById('voiceGlow');
+voiceGlow.width = 250;
+voiceGlow.height = 250;
+const ctx = voiceGlow.getContext('2d');
 
-///////////////////////
-// Chat messages
-sendBtn.onclick = () => {
-    const msg = msgInput.value.trim();
-    if(msg) {
-        socket.emit('chatMessage', { msg });
-        msgInput.value='';
-    }
-};
-
-socket.on('message', msg=>{
-    addMessage(msg);
-});
-
-function addMessage(msg){
-    const p = document.createElement('p');
-    p.textContent = msg;
-    messages.appendChild(p);
-    messages.scrollTop = messages.scrollHeight;
+function drawGlow(){
+    ctx.clearRect(0,0,voiceGlow.width,voiceGlow.height);
+    ctx.beginPath();
+    ctx.arc(125,125,120,0,Math.PI*2);
+    const intensity = Math.random()*5 + 5; // placeholder for mic level
+    ctx.shadowBlur = intensity*10;
+    ctx.shadowColor = '#ff69b4';
+    ctx.strokeStyle = '#ff69b4';
+    ctx.lineWidth = 5;
+    ctx.stroke();
+    requestAnimationFrame(drawGlow);
 }
+drawGlow();
 
-///////////////////////
-// Live users
-socket.on('updateUsers', users=>{
-    userList.innerHTML='';
-    users.forEach(u=>{
-        const div = document.createElement('div');
-        div.className='userItem';
-        div.textContent = u.name;
-        userList.appendChild(div);
-    });
-});
-
-///////////////////////
-// Voice Call
-callBtn.onclick = async () => {
-    localStream = await navigator.mediaDevices.getUserMedia({ audio:true });
-    pc = createPeerConnection();
-    localStream.getTracks().forEach(track=>pc.addTrack(track, localStream));
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
-
-    // send offer to all other users in room
-    const usersInRoom = Array.from(document.querySelectorAll('.userItem')).map(u=>u.textContent);
-    usersInRoom.forEach(u=> socket.emit('webrtc-offer', { offer, targetId: u.socketId }));
+// Heart reaction
+const heartBtn = document.getElementById('heartBtn');
+heartBtn.onclick = () => {
+    const heart = document.createElement('div');
+    heart.textContent = '💗';
+    heart.style.position='absolute';
+    heart.style.left='50%';
+    heart.style.top='50%';
+    heart.style.transform='translate(-50%,-50%)';
+    heart.style.fontSize='24px';
+    heart.style.animation='floatHeart 2s ease-out';
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),2000);
 };
 
-hangupBtn.onclick = () => {
-    if(pc){
-        pc.close();
-        pc=null;
-    }
-    if(localStream){
-        localStream.getTracks().forEach(t=>t.stop());
-        localStream=null;
-    }
-};
-
-function createPeerConnection(){
-    const pc = new RTCPeerConnection();
-
-    pc.onicecandidate = e=>{
-        if(e.candidate){
-            // send candidate to other peer
-        }
-    };
-
-    pc.ontrack = e=>{
-        const audio = document.createElement('audio');
-        audio.srcObject = e.streams[0];
-        audio.autoplay = true;
-        document.body.appendChild(audio);
-    };
-
-    return pc;
-}
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes floatHeart {
+    0% { transform: translate(-50%,-50%) scale(1); opacity:1; }
+    100% { transform: translate(-50%,-150%) scale(2); opacity:0; }
+}`;
+document.head.appendChild(style);
