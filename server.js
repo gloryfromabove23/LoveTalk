@@ -8,24 +8,55 @@ const io = new Server(server);
 
 app.use(express.static(__dirname));
 
+let users = {}; // { socketId: { name, room } }
+
 io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
+    console.log('User connected:', socket.id);
 
+    // Set user info
+    socket.on('setName', (name) => {
+        users[socket.id] = { name, room: null };
+        io.emit('updateUsers', Object.values(users));
+    });
+
+    // Join room
     socket.on('joinRoom', (room) => {
-        socket.join(room);
-        console.log(`${socket.id} joined room ${room}`);
-        socket.to(room).emit('message', '💖 A new user joined the chat!');
+        if (users[socket.id]) {
+            const prevRoom = users[socket.id].room;
+            if(prevRoom) socket.leave(prevRoom);
+
+            users[socket.id].room = room;
+            socket.join(room);
+            io.to(room).emit('message', `💖 ${users[socket.id].name} joined ${room}`);
+            io.emit('updateUsers', Object.values(users));
+        }
     });
 
-    socket.on('chatMessage', ({ room, msg }) => {
-        io.to(room).emit('message', msg);
+    // Text chat
+    socket.on('chatMessage', ({ msg }) => {
+        const user = users[socket.id];
+        if(user && user.room){
+            io.to(user.room).emit('message', `${user.name}: ${msg}`);
+        }
     });
 
+    // WebRTC signaling
+    socket.on('webrtc-offer', ({ offer, targetId }) => {
+        io.to(targetId).emit('webrtc-offer', { offer, from: socket.id });
+    });
+    socket.on('webrtc-answer', ({ answer, targetId }) => {
+        io.to(targetId).emit('webrtc-answer', { answer, from: socket.id });
+    });
+    socket.on('webrtc-ice-candidate', ({ candidate, targetId }) => {
+        io.to(targetId).emit('webrtc-ice-candidate', { candidate, from: socket.id });
+    });
+
+    // Disconnect
     socket.on('disconnect', () => {
+        delete users[socket.id];
+        io.emit('updateUsers', Object.values(users));
         console.log('User disconnected:', socket.id);
     });
 });
 
-server.listen(3000, () => {
-    console.log('LoveTalk server running on http://localhost:3000');
-});
+server.listen(3000, () => console.log('LoveTalk running on http://localhost:3000'));
