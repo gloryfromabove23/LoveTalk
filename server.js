@@ -28,7 +28,13 @@ io.on('connection', (socket) => {
             users[socket.id].room = room;
             socket.join(room);
             io.to(room).emit('message', `💖 ${users[socket.id].name} joined ${room}`);
-            io.emit('updateUsers', Object.values(users));
+            io.emit('updateUsers',
+               Object.entries(users).map(([id, data]) => ({
+                 socketId: id,
+                 name: data.name,
+                 room: data.room
+             }))
+);
         }
     });
 
@@ -54,7 +60,13 @@ io.on('connection', (socket) => {
     // Disconnect
     socket.on('disconnect', () => {
         delete users[socket.id];
-        io.emit('updateUsers', Object.values(users));
+        io.emit('updateUsers',
+  Object.entries(users).map(([id, data]) => ({
+    socketId: id,
+    name: data.name,
+    room: data.room
+  }))
+);
         console.log('User disconnected:', socket.id);
     });
 });
