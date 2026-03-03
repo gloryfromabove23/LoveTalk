@@ -47,15 +47,23 @@ io.on('connection', (socket) => {
     });
 
     // WebRTC signaling
-    socket.on('webrtc-offer', ({ offer, targetId }) => {
-        io.to(targetId).emit('webrtc-offer', { offer, from: socket.id });
+   socket.on('webrtc-offer', ({ offer, targetId }) => {
+    io.to(targetId).emit('incoming-call', {
+        offer,
+        from: socket.id,
+        name: users[socket.id]?.name || "Someone"
     });
-    socket.on('webrtc-answer', ({ answer, targetId }) => {
-        io.to(targetId).emit('webrtc-answer', { answer, from: socket.id });
+});
+    socket.on('call-accepted', ({ targetId, answer }) => {
+    io.to(targetId).emit('webrtc-answer', {
+        answer,
+        from: socket.id
     });
-    socket.on('webrtc-ice-candidate', ({ candidate, targetId }) => {
-        io.to(targetId).emit('webrtc-ice-candidate', { candidate, from: socket.id });
-    });
+});
+
+socket.on('call-declined', ({ targetId }) => {
+    io.to(targetId).emit('call-declined');
+});
 
     // Disconnect
     socket.on('disconnect', () => {
