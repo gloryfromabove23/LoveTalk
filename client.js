@@ -2,11 +2,10 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ------------------- DOM Elements -------------------
-    const heartElement = document.getElementById('heartLogo');
+    const heartElement = document.getElementById('heartEmoji');
     const socket = io();
 
     let name = '';
-    let currentRoom = '';
     let pc = null;
     let localStream = null;
     let incomingOffer = null;
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const nameBtn = document.getElementById('nameBtn');
     const mainDiv = document.getElementById('main');
 
-    const roomsBtns = document.querySelectorAll('#rooms button');
     const messages = document.getElementById('messages');
     const msgInput = document.getElementById('msgInput');
     const sendBtn = document.getElementById('sendBtn');
@@ -25,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const callBtn = document.getElementById('callBtn');
     const hangupBtn = document.getElementById('hangupBtn');
-    const autoCall = document.getElementById('autoCall');
+    const randomCallBtn = document.getElementById('randomCall');
+    const autoCallChk = document.getElementById('autoCall');
 
     const incomingPopup = document.getElementById('incomingCallPopup');
     const callerName = document.getElementById('callerName');
@@ -33,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const declineCallBtn = document.getElementById('declineCall');
     const callingStatus = document.getElementById('callingStatus');
 
-    // ------------------- Join Button -------------------
+    // ------------------- Join -------------------
     nameBtn.onclick = () => {
         const val = nameInput.value.trim();
         if(val){
@@ -44,16 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // ------------------- Rooms -------------------
-    roomsBtns.forEach(btn => {
-        btn.onclick = () => {
-            const room = btn.dataset.room;
-            currentRoom = room;
-            socket.emit('joinRoom', room);
-            addMessage(`💖 You joined ${room}`);
-        };
-    });
-
     // ------------------- Chat -------------------
     sendBtn.onclick = () => {
         const msg = msgInput.value.trim();
@@ -63,9 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    socket.on('message', msg => {
-        addMessage(msg);
-    });
+    socket.on('message', msg => addMessage(msg));
 
     function addMessage(msg){
         const p = document.createElement('p');
@@ -75,48 +62,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ------------------- Live Users -------------------
-// ------------------- Live users -------------------
-socket.on('updateUsers', users => {
-    userList.innerHTML = '';
+    socket.on('updateUsers', users => {
+        userList.innerHTML = '';
 
-    // Show only users in the same room, if joined
-    users
-      .filter(u => currentRoom ? u.room === currentRoom : true) 
-      .forEach(u => {
-        if(u.socketId === socket.id) return; // skip yourself
+        users.forEach(u => {
+            if(u.socketId === socket.id) return; // skip yourself
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'userItem';
+            const wrapper = document.createElement('div');
+            wrapper.className = 'userItem';
 
-        const nameDiv = document.createElement('div');
-        nameDiv.textContent = u.name;
-        nameDiv.style.cursor = 'pointer';
+            const nameDiv = document.createElement('div');
+            nameDiv.textContent = u.name;
+            nameDiv.style.cursor = 'pointer';
 
-        const actionBar = document.createElement('div');
-        actionBar.style.display = 'none';
-        actionBar.style.marginTop = '5px';
+            const actionBar = document.createElement('div');
+            actionBar.style.display = 'none';
+            actionBar.style.marginTop = '5px';
 
-        const callUserBtn = document.createElement('button');
-        callUserBtn.textContent = '📞 Call';
-        callUserBtn.onclick = () => startCall(u.socketId); // uses socketId now
+            const callUserBtn = document.createElement('button');
+            callUserBtn.textContent = '📞 Call';
+            callUserBtn.onclick = () => startCall(u.socketId);
 
-        const friendBtn = document.createElement('button');
-        friendBtn.textContent = '🤝 Friend';
-        friendBtn.onclick = () => alert(`Friend request sent to ${u.name}`);
+            const friendBtn = document.createElement('button');
+            friendBtn.textContent = '🤝 Friend';
+            friendBtn.onclick = () => alert(`Friend request sent to ${u.name}`);
 
-        actionBar.appendChild(callUserBtn);
-        actionBar.appendChild(friendBtn);
+            actionBar.appendChild(callUserBtn);
+            actionBar.appendChild(friendBtn);
 
-        nameDiv.onclick = () => {
-            actionBar.style.display = actionBar.style.display === 'none' ? 'block' : 'none';
-        };
+            nameDiv.onclick = () => {
+                actionBar.style.display = actionBar.style.display === 'none' ? 'block' : 'none';
+            };
 
-        wrapper.appendChild(nameDiv);
-        wrapper.appendChild(actionBar);
+            wrapper.appendChild(nameDiv);
+            wrapper.appendChild(actionBar);
 
-        userList.appendChild(wrapper);
+            userList.appendChild(wrapper);
+        });
     });
-});
+
+    // ------------------- Random Call -------------------
+    randomCallBtn.onclick = () => {
+        socket.emit('random-call-request');
+    };
+
+    socket.on('random-call-target', targetSocketId => {
+        if(targetSocketId){
+            startCall(targetSocketId);
+        } else {
+            alert('No available users right now.');
+        }
+    });
 
     // ------------------- Voice Call -------------------
     async function startCall(targetSocketId){
@@ -136,14 +132,8 @@ socket.on('updateUsers', users => {
     }
 
     hangupBtn.onclick = () => {
-        if(pc){
-            pc.close();
-            pc = null;
-        }
-        if(localStream){
-            localStream.getTracks().forEach(t => t.stop());
-            localStream = null;
-        }
+        if(pc){ pc.close(); pc = null; }
+        if(localStream){ localStream.getTracks().forEach(t => t.stop()); localStream = null; }
         stopVoiceDetection();
         callingStatus.style.display = 'none';
     };
@@ -193,7 +183,7 @@ socket.on('updateUsers', users => {
 
         pc.onicecandidate = e => {
             if(e.candidate){
-                // TODO: send ICE candidate via socket
+                // TODO: send ICE candidates if needed
             }
         };
 
