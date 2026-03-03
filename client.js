@@ -1,16 +1,37 @@
+// client.js
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ------------------- DOM Elements -------------------
     const heartElement = document.getElementById('heartLogo');
     const socket = io();
+
     let name = '';
     let currentRoom = '';
     let pc = null;
     let localStream = null;
+    let incomingOffer = null;
+    let callerSocketId = null;
 
     const nameInputDiv = document.getElementById('nameInputDiv');
     const nameInput = document.getElementById('nameInput');
     const nameBtn = document.getElementById('nameBtn');
     const mainDiv = document.getElementById('main');
+
+    const roomsBtns = document.querySelectorAll('#rooms button');
+    const messages = document.getElementById('messages');
+    const msgInput = document.getElementById('msgInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const userList = document.getElementById('userList');
+
+    const callBtn = document.getElementById('callBtn');
+    const hangupBtn = document.getElementById('hangupBtn');
+    const autoCall = document.getElementById('autoCall');
+
+    const incomingPopup = document.getElementById('incomingCallPopup');
+    const callerName = document.getElementById('callerName');
+    const acceptCallBtn = document.getElementById('acceptCall');
+    const declineCallBtn = document.getElementById('declineCall');
+    const callingStatus = document.getElementById('callingStatus');
 
     // ------------------- Join Button -------------------
     nameBtn.onclick = () => {
@@ -23,268 +44,203 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // ...rest of your code goes here...
-    
-});
-// ------------------- Voice Activity Detection -------------------
-let audioContext = null;
-let analyser = null;
-let microphone = null;
-let dataArray = null;
-let animationFrameId = null;
-const heartElement = document.getElementById('heartLogo');
+    // ------------------- Rooms -------------------
+    roomsBtns.forEach(btn => {
+        btn.onclick = () => {
+            const room = btn.dataset.room;
+            currentRoom = room;
+            socket.emit('joinRoom', room);
+            addMessage(`💖 You joined ${room}`);
+        };
+    });
 
-function startVoiceDetection(stream) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioContext.createAnalyser();
-    microphone = audioContext.createMediaStreamSource(stream);
-    microphone.connect(analyser);
-    analyser.fftSize = 512;
-
-    const bufferLength = analyser.frequencyBinCount;
-    dataArray = new Uint8Array(bufferLength);
-
-    function detect() {
-        analyser.getByteFrequencyData(dataArray);
-        const avg = dataArray.reduce((a,b)=>a+b,0)/dataArray.length;
-
-        if(avg > 15){ // threshold for detecting speech
-            heartElement.classList.add('bouncing');
-        } else {
-            heartElement.classList.remove('bouncing');
+    // ------------------- Chat -------------------
+    sendBtn.onclick = () => {
+        const msg = msgInput.value.trim();
+        if(msg){
+            socket.emit('chatMessage', { msg });
+            msgInput.value = '';
         }
-
-        animationFrameId = requestAnimationFrame(detect);
-    }
-
-    detect();
-}
-
-function stopVoiceDetection() {
-    if(animationFrameId) cancelAnimationFrame(animationFrameId);
-    if(audioContext) audioContext.close();
-    heartElement.classList.remove('bouncing');
-}
-// ---------------------------------------------------------------
-
-const socket = io();
-let incomingOffer = null;
-let callerSocketId = null;
-let name = '';
-let currentRoom = '';
-let pc = null; // WebRTC PeerConnection
-let localStream = null;
-
-const nameInputDiv = document.getElementById('nameInputDiv');
-const nameInput = document.getElementById('nameInput');
-const nameBtn = document.getElementById('nameBtn');
-
-const mainDiv = document.getElementById('main');
-const roomsBtns = document.querySelectorAll('#rooms button');
-const messages = document.getElementById('messages');
-const msgInput = document.getElementById('msgInput');
-const sendBtn = document.getElementById('sendBtn');
-const userList = document.getElementById('userList');
-
-const callBtn = document.getElementById('callBtn');
-const hangupBtn = document.getElementById('hangupBtn');
-const autoCall = document.getElementById('autoCall');
-
-///////////////////////
-// Name input
-nameBtn.onclick = () => {
-    const val = nameInput.value.trim();
-    if(val){
-        name = val;
-        socket.emit('setName', name);
-        nameInputDiv.style.display = 'none';
-        mainDiv.style.display = 'flex';
-    }
-};
-
-///////////////////////
-// Join room
-roomsBtns.forEach(btn=>{
-    btn.onclick = () => {
-        const room = btn.dataset.room;
-        currentRoom = room;
-        socket.emit('joinRoom', room);
-        addMessage(`💖 You joined ${room}`);
     };
-});
 
-///////////////////////
-// Chat messages
-sendBtn.onclick = () => {
-    const msg = msgInput.value.trim();
-    if(msg) {
-        socket.emit('chatMessage', { msg });
-        msgInput.value='';
+    socket.on('message', msg => {
+        addMessage(msg);
+    });
+
+    function addMessage(msg){
+        const p = document.createElement('p');
+        p.textContent = msg;
+        messages.appendChild(p);
+        messages.scrollTop = messages.scrollHeight;
     }
-};
 
-socket.on('message', msg=>{
-    addMessage(msg);
-});
+    // ------------------- Live Users -------------------
+    socket.on('updateUsers', users => {
+        userList.innerHTML = '';
+        users
+          .filter(u => u.room === currentRoom)
+          .forEach(u => {
+            if(u.socketId === socket.id) return; // skip yourself
 
-socket.on('incoming-call', ({ offer, from, name })=>{
-    incomingOffer = offer;
-    callerSocketId = from;
+            const wrapper = document.createElement('div');
+            wrapper.className = 'userItem';
 
-    document.getElementById('callerName').textContent =
-        `📞 ${name} is calling...`;
+            const nameDiv = document.createElement('div');
+            nameDiv.textContent = u.name;
+            nameDiv.style.cursor = 'pointer';
 
-    document.getElementById('incomingCallPopup').style.display='block';
-});
+            const actionBar = document.createElement('div');
+            actionBar.style.display = 'none';
+            actionBar.style.marginTop = '5px';
 
-document.getElementById('acceptCall').onclick = async () => {
-    document.getElementById('incomingCallPopup').style.display='none';
+            const callUserBtn = document.createElement('button');
+            callUserBtn.textContent = '📞 Call';
+            callUserBtn.onclick = () => startCall(u.socketId);
 
-    localStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+            const friendBtn = document.createElement('button');
+            friendBtn.textContent = '🤝 Friend';
+            friendBtn.onclick = () => alert(`Friend request sent to ${u.name}`);
 
-    pc = createPeerConnection();
+            actionBar.appendChild(callUserBtn);
+            actionBar.appendChild(friendBtn);
 
-    localStream.getTracks().forEach(track =>
-        pc.addTrack(track, localStream)
-    );
+            nameDiv.onclick = () => {
+                actionBar.style.display = actionBar.style.display === 'none' ? 'block' : 'none';
+            };
 
-    await pc.setRemoteDescription(
-        new RTCSessionDescription(incomingOffer)
-    );
+            wrapper.appendChild(nameDiv);
+            wrapper.appendChild(actionBar);
 
-    document.getElementById('declineCall').onclick = () => {
-    document.getElementById('incomingCallPopup').style.display='none';
-
-    socket.emit('call-declined', {
-        targetId: callerSocketId
+            userList.appendChild(wrapper);
+        });
     });
-};
 
-    socket.on('webrtc-answer', async ({ answer })=>{
-    document.getElementById('callingStatus').style.display='none';
-    await pc.setRemoteDescription(
-        new RTCSessionDescription(answer)
-    );
-});
+    // ------------------- Voice Call -------------------
+    async function startCall(targetSocketId){
+        callingStatus.style.display = 'block';
 
-    socket.on('call-declined', ()=>{
-    document.getElementById('callingStatus').style.display='none';
-    alert("Call declined");
-});
+        localStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+        startVoiceDetection(localStream);
 
-    const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
+        pc = createPeerConnection();
 
-    socket.emit('call-accepted', {
-        targetId: callerSocketId,
-        answer
+        localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+
+        socket.emit('webrtc-offer', { offer, targetId: targetSocketId });
+    }
+
+    hangupBtn.onclick = () => {
+        if(pc){
+            pc.close();
+            pc = null;
+        }
+        if(localStream){
+            localStream.getTracks().forEach(t => t.stop());
+            localStream = null;
+        }
+        stopVoiceDetection();
+        callingStatus.style.display = 'none';
+    };
+
+    // ------------------- Incoming Call -------------------
+    socket.on('incoming-call', ({ offer, from, name }) => {
+        incomingOffer = offer;
+        callerSocketId = from;
+        callerName.textContent = `📞 ${name} is calling...`;
+        incomingPopup.style.display = 'block';
     });
-};
 
-function addMessage(msg){
-    const p = document.createElement('p');
-    p.textContent = msg;
-    messages.appendChild(p);
-    messages.scrollTop = messages.scrollHeight;
-}
+    acceptCallBtn.onclick = async () => {
+        incomingPopup.style.display = 'none';
 
-///////////////////////
-// Live users
-socket.on('updateUsers', users=>{
-    userList.innerHTML='';
+        localStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+        startVoiceDetection(localStream);
 
-    users
-      .filter(u => u.room === currentRoom) // only show same room
-      .forEach(u=>{
-        if(u.socketId === socket.id) return; // don't show yourself
+        pc = createPeerConnection();
+        localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
 
-        const wrapper = document.createElement('div');
-        wrapper.className='userItem';
+        await pc.setRemoteDescription(new RTCSessionDescription(incomingOffer));
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
 
-        const nameDiv = document.createElement('div');
-        nameDiv.textContent = u.name;
-        nameDiv.style.cursor = "pointer";
+        socket.emit('call-accepted', { targetId: callerSocketId, answer });
+    };
 
-        const actionBar = document.createElement('div');
-        actionBar.style.display='none';
-        actionBar.style.marginTop='5px';
+    declineCallBtn.onclick = () => {
+        incomingPopup.style.display = 'none';
+        socket.emit('call-declined', { targetId: callerSocketId });
+    };
 
-        const callUserBtn = document.createElement('button');
-        callUserBtn.textContent='📞 Call';
-        callUserBtn.onclick = ()=> startCall(u.socketId);
+    socket.on('call-declined', () => {
+        callingStatus.style.display = 'none';
+        alert('Call declined');
+    });
 
-        const friendBtn = document.createElement('button');
-        friendBtn.textContent='🤝 Friend';
-        friendBtn.onclick = ()=> alert(`Friend request sent to ${u.name}`);
+    socket.on('webrtc-answer', async ({ answer }) => {
+        callingStatus.style.display = 'none';
+        await pc.setRemoteDescription(new RTCSessionDescription(answer));
+    });
 
-        actionBar.appendChild(callUserBtn);
-        actionBar.appendChild(friendBtn);
+    // ------------------- WebRTC Peer -------------------
+    function createPeerConnection(){
+        const pc = new RTCPeerConnection();
 
-        nameDiv.onclick = ()=>{
-            actionBar.style.display =
-              actionBar.style.display==='none' ? 'block':'none';
+        pc.onicecandidate = e => {
+            if(e.candidate){
+                // TODO: send ICE candidate via socket
+            }
         };
 
-        wrapper.appendChild(nameDiv);
-        wrapper.appendChild(actionBar);
+        pc.ontrack = e => {
+            const audio = document.createElement('audio');
+            audio.srcObject = e.streams[0];
+            audio.autoplay = true;
+            document.body.appendChild(audio);
+        };
 
-        userList.appendChild(wrapper);
-    });
-});
-///////////////////////
-// Voice Call
-async function startCall(targetSocketId){
-    document.getElementById('callingStatus').style.display='block';
-
-    localStream = await navigator.mediaDevices.getUserMedia({ audio:true });
-
-    pc = createPeerConnection();
-
-    localStream.getTracks().forEach(track =>
-        pc.addTrack(track, localStream)
-    );
-
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
-
-    socket.emit('webrtc-offer', {
-        offer,
-        targetId: targetSocketId
-    });
-}
-
-};
-
-hangupBtn.onclick = () => {
-    if(pc){
-        pc.close();
-        pc=null;
-    }
-    if(localStream){
-        localStream.getTracks().forEach(t=>t.stop());
-        localStream=null;
+        return pc;
     }
 
-    // ------------------- Stop Heart Bounce -------------------
-    stopVoiceDetection();
-    // ----------------------------------------------------------
-};
+    // ------------------- Voice Activity Detection -------------------
+    let audioContext = null;
+    let analyser = null;
+    let microphone = null;
+    let dataArray = null;
+    let animationFrameId = null;
 
-function createPeerConnection(){
-    const pc = new RTCPeerConnection();
+    function startVoiceDetection(stream){
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        microphone = audioContext.createMediaStreamSource(stream);
+        microphone.connect(analyser);
+        analyser.fftSize = 512;
 
-    pc.onicecandidate = e=>{
-        if(e.candidate){
-            // send candidate to other peer
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        function detect(){
+            analyser.getByteFrequencyData(dataArray);
+            const avg = dataArray.reduce((a,b) => a+b, 0) / dataArray.length;
+
+            if(avg > 15){
+                heartElement.classList.add('bouncing');
+            } else {
+                heartElement.classList.remove('bouncing');
+            }
+
+            animationFrameId = requestAnimationFrame(detect);
         }
-    };
 
-    pc.ontrack = e=>{
-        const audio = document.createElement('audio');
-        audio.srcObject = e.streams[0];
-        audio.autoplay = true;
-        document.body.appendChild(audio);
-    };
+        detect();
+    }
 
-    return pc;
-}
+    function stopVoiceDetection(){
+        if(animationFrameId) cancelAnimationFrame(animationFrameId);
+        if(audioContext) audioContext.close();
+        heartElement.classList.remove('bouncing');
+    }
+
+});
