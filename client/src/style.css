@@ -1,0 +1,49 @@
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  background-color: #1a1a1a;
+  font-family: Arial, sans-serif;
+}
+
+.app-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 150px;
+  transform-origin: center bottom;
+  transition: transform 0.2s ease;
+}
+
+.bouncing {
+  animation: bounce 0.5s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.controls {
+  margin-top: 40px;
+  display: flex;
+  gap: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #555;
+}
