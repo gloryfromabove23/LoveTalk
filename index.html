@@ -2,125 +2,106 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LoveTalk 💖</title>
-<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+<title>LoveTalk</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 body{
     margin:0;
-    font-family:'Bubblegum Sans', cursive;
-    background:#491121;
+    font-family:'Inter',sans-serif;
+    background:#1e1f23;
+    color:white;
+    display:flex;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* ---------------- LAYOUT ---------------- */
+#leftPanel{
+    width:400px;
+    background:#24252b;
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    position:relative;
+}
+
+#centerPanel{
+    flex:1;
     display:flex;
     flex-direction:column;
     align-items:center;
-    height:100vh;
-    overflow:hidden;
-    color:white;
-}
-
-/* ---------------- CENTER LOGO SECTION ---------------- */
-#centerSection{
+    justify-content:center;
     position:relative;
-    margin-top:80px;
+}
+
+#rightPanel{
+    width:280px;
+    background:#24252b;
+    padding:20px;
+    overflow-y:auto;
+}
+
+/* ---------------- LOGO ---------------- */
+#logoContainer{
     text-align:center;
-    transition: all 0.5s ease;
 }
 
-#logo{
-    width:180px;
+#mainLogo{
+    width:220px;
+    transition:transform 0.1s linear;
 }
 
-#voiceButtons{
-    margin-top:20px;
-    display:flex;
-    gap:20px;
-    justify-content:center;
-    transition: all 0.5s ease;
-}
-
-#voiceButtons button{
-    padding:15px 30px;
-    border-radius:15px;
-    border:none;
-    font-size:1.1rem;
-    background:linear-gradient(45deg,#f7d68f,#fff7cc);
-    color:#491121;
-    cursor:pointer;
-    box-shadow:0 0 15px #f7d68f88;
-    transition:0.3s;
-}
-
-#voiceButtons button:hover{
-    box-shadow:0 0 25px #f7d68f,0 0 50px #f7d68f;
-    transform:scale(1.05);
-}
-
-/* ---------------- ONLINE STATUS ---------------- */
-#myStatus{
-    margin-top:15px;
-    font-size:1rem;
-}
-
-.statusDot{
-    display:inline-block;
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    margin-right:6px;
-}
-
-.online{ background:#4caf50; }
-.offline{ background:#ff4c4c; }
-
-/* ---------------- CHAT ICON ---------------- */
-#chatIcon{
-    position:absolute;
-    right:-120px;
-    top:0;
-    width:60px;
-    height:60px;
-    background:#f7d68f;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    font-size:24px;
-    color:#491121;
-    box-shadow:0 0 20px #f7d68f;
-    transition:0.4s;
-}
-
-#chatIcon:hover{
-    box-shadow:0 0 35px #f7d68f,0 0 60px #f7d68f;
-}
-
-/* ---------------- CHAT PANEL ---------------- */
-#chatPanel{
-    position:absolute;
-    right:-450px;
-    top:0;
-    width:400px;
-    height:500px;
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(10px);
+/* ---------------- CHAT ---------------- */
+#chatBox{
+    flex:1;
     border-radius:20px;
+    background:rgba(255,255,255,0.04);
     display:flex;
     flex-direction:column;
     padding:15px;
-    transition:0.5s;
+    position:relative;
+    overflow:hidden;
 }
 
-#chatPanel.open{
-    right:-20px;
+/* wallpaper heart */
+#chatBox::before{
+    content:"";
+    position:absolute;
+    width:300px;
+    height:300px;
+    background: url('data:image/svg+xml;utf8,\
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black">\
+    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 \
+    4 4 6.5 4c1.74 0 3.41 1 4.22 2.44C11.59 5 13.26 4 15 4 \
+    17.5 4 19.5 6 19.5 8.5c0 3.78-3.4 6.86-8.55 \
+    11.54L12 21.35z"/>\
+    </svg>');
+    background-repeat:no-repeat;
+    background-size:contain;
+    opacity:0.03;
+    bottom:-50px;
+    right:-50px;
 }
 
+/* chat bubble stem */
+#chatBox::after{
+    content:"";
+    position:absolute;
+    width:40px;
+    height:40px;
+    background:#24252b;
+    bottom:-10px;
+    left:30px;
+    transform:rotate(45deg);
+}
+
+/* ---------------- MESSAGES ---------------- */
 #messages{
     flex:1;
     overflow-y:auto;
-    border:1px solid #f7d68f;
-    border-radius:10px;
-    padding:10px;
+    font-size:0.95rem;
 }
 
 #chatControls{
@@ -131,85 +112,134 @@ body{
 
 #chatControls input{
     flex:1;
-    padding:8px;
-    border-radius:8px;
+    padding:10px;
+    border-radius:10px;
     border:none;
-    background:rgba(255,255,255,0.2);
+    background:#2f3036;
     color:white;
 }
 
 #chatControls button{
-    padding:8px 12px;
-    border-radius:8px;
+    padding:10px 15px;
+    border-radius:10px;
     border:none;
-    background:#f7d68f;
-    color:#491121;
+    background:black;
+    color:white;
+    font-weight:600;
     cursor:pointer;
 }
 
-/* when chat opens move buttons */
-.chatOpen #voiceButtons{
-    transform:translateY(-40px);
+/* ---------------- USERS ---------------- */
+#rightPanel h3{
+    margin-top:0;
+    font-weight:800;
 }
+
+.userItem{
+    display:flex;
+    justify-content:space-between;
+    padding:10px;
+    border-radius:10px;
+    background:#2f3036;
+    margin-bottom:8px;
+}
+
+.statusDot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#4caf50;
+}
+
+/* ---------------- STATUS ---------------- */
+#myStatus{
+    margin-top:20px;
+    font-weight:600;
+}
+
 </style>
 </head>
 
 <body>
 
-<div id="centerSection">
-
-    <img id="logo" src="YOUR_LOGO_URL_HERE.png">
-
-    <div id="voiceButtons">
-        <button id="newChat">🔄 New</button>
-        <button id="leaveChat">❌ Leave</button>
-    </div>
-
-    <div id="myStatus">
-        <span id="statusDot" class="statusDot online"></span>
-        <span id="statusText">Online</span>
-    </div>
-
-    <div id="chatIcon">💬</div>
-
-    <div id="chatPanel">
+<!-- LEFT CHAT -->
+<div id="leftPanel">
+    <div id="chatBox">
         <div id="messages"></div>
         <div id="chatControls">
             <input id="msgInput" placeholder="Type message...">
             <button id="sendBtn">Send</button>
         </div>
     </div>
+</div>
 
+<!-- CENTER LOGO -->
+<div id="centerPanel">
+    <div id="logoContainer">
+
+        <!-- BLACK HEART SVG -->
+        <svg id="mainLogo" viewBox="0 0 24 24" fill="black">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+            2 6 4 4 6.5 4c1.74 0 3.41 1 4.22 2.44C11.59 5 
+            13.26 4 15 4 17.5 4 19.5 6 19.5 
+            8.5c0 3.78-3.4 6.86-8.55 
+            11.54L12 21.35z"/>
+        </svg>
+
+        <div id="myStatus">Online</div>
+
+    </div>
+</div>
+
+<!-- RIGHT USERS -->
+<div id="rightPanel">
+    <h3>Online Users</h3>
+    <div id="userList"></div>
 </div>
 
 <script>
-const chatIcon = document.getElementById("chatIcon");
-const chatPanel = document.getElementById("chatPanel");
-const body = document.body;
+/* ---------------- LOGO PULSATE TO DECIBEL ---------------- */
+let audioContext, analyser, microphone, dataArray;
 
-chatIcon.onclick = () => {
-    chatPanel.classList.toggle("open");
-    body.classList.toggle("chatOpen");
-};
+navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    microphone = audioContext.createMediaStreamSource(stream);
+    microphone.connect(analyser);
+    analyser.fftSize = 256;
 
-/* ---------------- TAB ONLINE / OFFLINE ---------------- */
-const statusDot = document.getElementById("statusDot");
-const statusText = document.getElementById("statusText");
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    const logo = document.getElementById("mainLogo");
+
+    function animate(){
+        analyser.getByteFrequencyData(dataArray);
+        let avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
+
+        let scale = 1 + avg/150;
+        logo.style.transform = `scale(${scale})`;
+
+        requestAnimationFrame(animate);
+    }
+    animate();
+});
+
+/* ---------------- TAB ONLINE STATUS ---------------- */
+const myStatus = document.getElementById("myStatus");
 
 function updateStatus(){
     if(document.hidden){
-        statusDot.className="statusDot offline";
-        statusText.textContent="Offline";
-    } else {
-        statusDot.className="statusDot online";
-        statusText.textContent="Online";
+        myStatus.textContent="Offline";
+        myStatus.style.color="#ff4c4c";
+    }else{
+        myStatus.textContent="Online";
+        myStatus.style.color="#4caf50";
     }
 }
-
 document.addEventListener("visibilitychange", updateStatus);
 updateStatus();
 
-/* ---------------- CHAT DEMO ---------------- */
+/* ---------------- SIMPLE CHAT ---------------- */
 const sendBtn = document.getElementById("sendBtn");
 const msgInput = document.getElementById("msgInput");
 const messages = document.getElementById("messages");
