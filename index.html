@@ -97,15 +97,14 @@ body{
     letter-spacing:-1px;
 }
 
-.accent{
-    color:black; /* Talk is black */
+.accent { color:#222222; } /* slightly lighter than pure black */
 }
 
 /* ---------------- STATUS ---------------- */
 #status{
     margin-top:10px;
     font-weight:600;
-    color:black; /* Online/Offline is black */
+    color:#333333; } /* dark gray, more visible */
 }
 
 /* ---------------- CHAT BOX ---------------- */
@@ -119,25 +118,6 @@ body{
     padding:20px;
     position:relative;
     overflow:hidden;
-}
-
-/* ---------------- CHAT WALLPAPER LOGO ---------------- */
-#chatBox::before{
-    content:"";
-    position:absolute;
-    width:350px;
-    height:350px;
-    background:url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">\
-<rect x="10" y="10" width="70" height="70" rx="20" fill="white"/>\
-<path d="M50 65 C35 50,30 40,40 35 C45 32,50 38,50 38 C50 38,55 32,60 35 C70 40,65 50,50 65Z" fill="transparent" stroke="white" stroke-width="2"/>\
-<polygon points="30,80 45,95 45,80" fill="white"/>\
-</svg>');
-    background-repeat:no-repeat;
-    background-size:contain;
-    opacity:0.05;
-    bottom:-60px;
-    right:-60px;
 }
 
 /* ---------------- CHAT BUBBLES ---------------- */
@@ -233,26 +213,41 @@ body{
 <div id="centerPanel">
 
     <!-- CUSTOM SPEECH BUBBLE LOGO -->
-    <svg id="mainLogo" viewBox="0 0 100 100">
-        <!-- White square for logo -->
-        <rect x="10" y="10" width="70" height="70" rx="20" fill="white"/>
-        <!-- Transparent heart -->
-        <path d="M50 65
-        C35 50,30 40,40 35
-        C45 32,50 38,50 38
-        C50 38,55 32,60 35
-        C70 40,65 50,50 65Z" fill="transparent" stroke="white" stroke-width="2"/>
-        <!-- Speech bubble tail -->
-        <polygon points="30,80 45,95 45,80" fill="white"/>
-    </svg>
+<svg id="mainLogo" viewBox="0 0 100 100">
 
-    <div id="brandName">
-        Love<span class="accent">Talk</span>
-    </div>
+  <!-- Bubble with heart cut out -->
+  <path
+    fill="white"
+    fill-rule="evenodd"
+    d="
+      M10 30
+      Q10 10 30 10
+      H70
+      Q90 10 90 30
+      V70
+      Q90 90 70 90
+      H30
+      Q10 90 10 70
+      Z
 
-    <div id="status">Online</div>
+      M50 65
+      C35 50,30 40,40 35
+      C45 32,50 38,50 38
+      C50 38,55 32,60 35
+      C70 40,65 50,50 65Z
+    "
+  />
 
+  <!-- Bubble tail -->
+  <polygon points="30,80 45,95 45,80" fill="white"/>
+
+</svg>
+
+<div id="brandName">
+    Love<span class="accent">Talk</span>
 </div>
+
+<div id="status">Online</div>
     
 <!-- RIGHT USERS -->
 <div id="rightPanel">
