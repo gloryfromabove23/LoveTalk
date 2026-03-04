@@ -98,7 +98,14 @@ body{
 }
 
 .accent{
-    color:#F0A2A4;
+    color:black; /* Talk is black */
+}
+
+/* ---------------- STATUS ---------------- */
+#status{
+    margin-top:10px;
+    font-weight:600;
+    color:black; /* Online/Offline is black */
 }
 
 /* ---------------- CHAT BOX ---------------- */
@@ -122,8 +129,9 @@ body{
     height:350px;
     background:url('data:image/svg+xml;utf8,\
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">\
-<rect x="10" y="10" width="70" height="70" rx="20" fill="%23F0A2A4"/>\
-<polygon points="30,80 45,95 45,80" fill="%23F0A2A4"/>\
+<rect x="10" y="10" width="70" height="70" rx="20" fill="white"/>\
+<path d="M50 65 C35 50,30 40,40 35 C45 32,50 38,50 38 C50 38,55 32,60 35 C70 40,65 50,50 65Z" fill="transparent" stroke="white" stroke-width="2"/>\
+<polygon points="30,80 45,95 45,80" fill="white"/>\
 </svg>');
     background-repeat:no-repeat;
     background-size:contain;
@@ -201,13 +209,6 @@ body{
     border-radius:50%;
     background:#F0A2A4;
 }
-
-/* ---------------- STATUS ---------------- */
-#status{
-    margin-top:10px;
-    font-weight:600;
-    color:#F0A2A4;
-}
 </style>
 </head>
 
@@ -233,13 +234,16 @@ body{
 
     <!-- CUSTOM SPEECH BUBBLE LOGO -->
     <svg id="mainLogo" viewBox="0 0 100 100">
-        <rect x="10" y="10" width="70" height="70" rx="20" fill="#F0A2A4"/>
-        <polygon points="30,80 45,95 45,80" fill="#F0A2A4"/>
+        <!-- White square for logo -->
+        <rect x="10" y="10" width="70" height="70" rx="20" fill="white"/>
+        <!-- Transparent heart -->
         <path d="M50 65
         C35 50,30 40,40 35
         C45 32,50 38,50 38
         C50 38,55 32,60 35
-        C70 40,65 50,50 65Z" fill="white"/>
+        C70 40,65 50,50 65Z" fill="transparent" stroke="white" stroke-width="2"/>
+        <!-- Speech bubble tail -->
+        <polygon points="30,80 45,95 45,80" fill="white"/>
     </svg>
 
     <div id="brandName">
@@ -249,7 +253,7 @@ body{
     <div id="status">Online</div>
 
 </div>
-
+    
 <!-- RIGHT USERS -->
 <div id="rightPanel">
     <h3>People Online</h3>
@@ -303,10 +307,10 @@ const status=document.getElementById("status");
 function updateStatus(){
     if(document.hidden){
         status.textContent="Offline";
-        status.style.color="#777";
+        status.style.color="black";
     }else{
         status.textContent="Online";
-        status.style.color="#F0A2A4";
+        status.style.color="black";
     }
 }
 document.addEventListener("visibilitychange",updateStatus);
