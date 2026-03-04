@@ -12,12 +12,13 @@
 body {
     margin:0;
     font-family:'Bubblegum Sans', cursive;
-    background-color: #491121; /* dark background */
+    background-color: #491121;
     display:flex;
     flex-direction:column;
     align-items:center;
     min-height:100vh;
     position: relative;
+    overflow-x:hidden;
 }
 
 /* -------------------- Top Bar -------------------- */
@@ -33,7 +34,6 @@ body {
     position: relative;
     z-index: 10;
 }
-
 .top-bar img.logo {
     height: 60px;
     object-fit: contain;
@@ -42,30 +42,30 @@ body {
 /* -------------------- Cascading Light -------------------- */
 .cascading-light {
     position: absolute;
-    top: 80px; /* below top bar */
-    left: 0;
-    width: 100%;
-    height: 200px;
-    background: linear-gradient(45deg, rgba(247,214,143,0.3), rgba(247,214,143,0.1));
-    animation: cascade 5s linear infinite;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(247,214,143,0.6) 0%, rgba(247,214,143,0.1) 70%);
+    border-radius: 50%;
+    filter: blur(50px);
+    animation: pulseLight 3s ease-in-out infinite alternate;
     pointer-events: none;
+    z-index: 1;
+}
+@keyframes pulseLight {
+    0% { transform: translateX(-50%) scale(0.9); opacity:0.7; }
+    100% { transform: translateX(-50%) scale(1.1); opacity:1; }
 }
 
-@keyframes cascade {
-    0% { background-position: 0 0; }
-    100% { background-position: 200px 200px; }
-}
-
-/* -------------------- Page Content -------------------- */
-#heartEmoji {
-    font-size:100px;
-    text-align:center;
+/* -------------------- Heart -------------------- */
+#heartImage {
+    width:100px;
     margin:20px auto;
-    transition: transform 0.2s ease;
-    color: #f7d68f;
+    display:block;
+    transition: transform 0.1s ease;
 }
-.bouncing { animation: bounce 0.5s infinite; }
-@keyframes bounce {0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
 
 /* -------------------- Name Input -------------------- */
 #nameInputDiv {
@@ -84,16 +84,33 @@ body {
     background:linear-gradient(45deg,#f7d68f,#fff7cc); color:#491121; cursor:pointer; 
     box-shadow:0 0 15px #f7d68faa; 
 }
+button:hover {
+    box-shadow: 0 0 20px #f7d68f, 0 0 40px #f7d68f, 0 0 60px #f7d68f;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
 
 /* -------------------- Main Chat -------------------- */
 #main { display:flex; width:95%; max-width:1200px; flex:1; gap:15px; }
-#chatArea { 
-    flex:2; display:flex; flex-direction:column; background: rgba(255,255,255,0.1); 
-    border-radius:15px; padding:10px; min-width:0; color:white;
+#chatArea {
+    flex:2;
+    display:flex; 
+    flex-direction:column; 
+    background: rgba(255,255,255,0.05); 
+    border-radius:15px; 
+    padding:5px; 
+    min-width:0; 
+    color:white; 
+    max-width:700px;
 }
 #messages { 
-    flex:1; overflow-y:auto; border:2px solid #f7d68f; border-radius:10px; 
-    padding:10px; background: rgba(255,255,255,0.1); font-size:1rem; 
+    flex:1; 
+    overflow-y:auto; 
+    border:1px solid #f7d68f; 
+    border-radius:10px; 
+    padding:5px; 
+    background: rgba(255,255,255,0.1); 
+    font-size:0.95rem; 
 }
 #chatControls { display:flex; gap:10px; margin-top:10px; }
 #chatControls input { 
@@ -108,7 +125,24 @@ body {
 /* -------------------- Users -------------------- */
 #users { flex:1; background: rgba(255,255,255,0.1); border-radius:15px; padding:10px; max-width:250px; color:white; }
 #users h3 { margin-top:0; text-align:center; color:#f7d68f; }
-.userItem { padding:5px; background:rgba(255,255,255,0.2); margin:5px 0; border-radius:5px; text-align:center; cursor:pointer; }
+.userItem {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:5px 10px;
+    background:rgba(255,255,255,0.2);
+    margin:5px 0;
+    border-radius:5px;
+    cursor:pointer;
+}
+.userItem .status {
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:red;
+    margin-right:5px;
+}
+.userItem.online .status { background:#4caf50; } /* green online */
 
 /* -------------------- Voice Controls -------------------- */
 #voiceControls { margin-top:10px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap; }
@@ -132,7 +166,7 @@ body {
     #main { flex-direction:column; width:95%; }
     #chatArea { width:100%; }
     #users { width:100%; max-width:100%; margin-top:10px; }
-    #heartEmoji { font-size:80px; }
+    #heartImage { width:80px; }
     #voiceControls button { flex:1; font-size:1.3rem; padding:15px; }
 }
 </style>
@@ -147,8 +181,8 @@ body {
 <!-- Cascading Light -->
 <div class="cascading-light"></div>
 
-<!-- Heart Emoji -->
-<div id="heartEmoji">💖</div>
+<!-- Heart Emoji (replaced with pulsating image) -->
+<img id="heartImage" src="YOUR_HEART_IMAGE.png" alt="Heart">
 
 <!-- Name Input -->
 <div id="nameInputDiv">
@@ -174,7 +208,17 @@ body {
 
     <div id="users">
         <h3>Live Users</h3>
-        <div id="userList"></div>
+        <div id="userList">
+            <!-- Example Users -->
+            <div class="userItem online">
+                <span class="status"></span>
+                <span class="userName">Alice</span>
+            </div>
+            <div class="userItem">
+                <span class="status"></span>
+                <span class="userName">Bob</span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -185,6 +229,32 @@ body {
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="client.js"></script>
+<script>
+/* -------------------- Heart Pulsate -------------------- */
+navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    const audioCtx = new AudioContext();
+    const source = audioCtx.createMediaStreamSource(stream);
+    const analyser = audioCtx.createAnalyser();
+    source.connect(analyser);
+    analyser.fftSize = 256;
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    const heart = document.getElementById('heartImage');
+
+    function animateHeart() {
+        analyser.getByteFrequencyData(dataArray);
+        let avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
+        let scale = 1 + avg/200; 
+        heart.style.transform = `scale(${scale})`;
+        requestAnimationFrame(animateHeart);
+    }
+    animateHeart();
+});
+
+/* -------------------- Name Join Example -------------------- */
+document.getElementById('nameBtn').addEventListener('click', ()=>{
+    document.getElementById('main').style.display = 'flex';
+    document.getElementById('nameInputDiv').style.display = 'none';
+});
+</script>
 </body>
 </html>
