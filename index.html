@@ -6,144 +6,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-
-    <!-- CENTER PANEL -->
-<div id="centerPanel">
-
-<svg id="mainLogo" viewBox="0 0 100 100">
-  <path
-    fill="white"
-    fill-rule="evenodd"
-    d="
-      M10 30
-      Q10 10 30 10
-      H70
-      Q90 10 90 30
-      V70
-      Q90 90 70 90
-      H30
-      Q10 90 10 70
-      Z
-
-      M50 65
-      C35 50,30 40,40 35
-      C45 32,50 38,50 38
-      C50 38,55 32,60 35
-      C70 40,65 50,50 65Z
-    "
-  />
-  <polygon points="30,80 45,95 45,80" fill="white"/>
-</svg>
-
-<div id="brandName">
-    Love<span class="accent">Talk</span>
-</div>
-
-<div id="status">Online</div>
-
-<!-- CALL CONTROLS -->
-<div id="callControls">
-
-  <div class="callButtons">
-    <!-- CALL / HANG UP BUTTON -->
-    <button id="callBtn" class="circleBtn" title="Call">
-      <svg viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="40" fill="white"/>
-        <path id="callIcon" fill="transparent" stroke="white" stroke-width="4" stroke-linecap="round" 
-          d="M35 40 Q45 30 55 40 L60 45 Q65 50 60 55 L55 60 Q50 65 45 60 L40 55 Q35 50 40 45 Z"/>
-      </svg>
-      <div id="callLoader"></div>
-    </button>
-
-    <!-- MUTE BUTTON -->
-    <button id="muteBtn" class="circleBtn smallBtn" title="Mute">
-      <svg viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="35" fill="white"/>
-        <path d="M40 35 L60 65 M60 35 L40 65" stroke="transparent" stroke-width="5"/>
-      </svg>
-    </button>
-
-    <!-- ADD FRIEND BUTTON -->
-    <button id="addFriendBtn" class="circleBtn smallBtn" title="Add Friend">
-      <svg viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="35" fill="white"/>
-        <path d="M50 35 L50 65 M35 50 L65 50" stroke="transparent" stroke-width="5"/>
-      </svg>
-    </button>
-  </div>
-
-  <!-- Auto Call Checkbox -->
-  <label class="autoCallWrap">
-    <input type="checkbox" id="autoCall"> Auto Call
-  </label>
-
-</div>
-
-<style>
-/* --- Call controls styling --- */
-#callControls{
-    margin-top:20px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-}
-
-.callButtons{
-    display:flex;
-    gap:15px;
-    align-items:center;
-}
-
-.circleBtn{
-    width:90px;
-    height:90px;
-    border:none;
-    background:none;
-    cursor:pointer;
-    padding:0;
-    position:relative;
-    transition:0.2s ease;
-}
-
-.smallBtn{
-    width:60px;
-    height:60px;
-}
-
-.circleBtn svg{
-    width:100%;
-    height:100%;
-}
-
-.circleBtn:hover{
-    transform:scale(1.05);
-}
-
-/* Loading animation for call button */
-#callLoader{
-    position:absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    border-radius:50%;
-    border:4px solid rgba(255,255,255,0.3);
-    border-top-color:#F0A2A4;
-    display:none;
-    animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-    0%{ transform:rotate(0deg);}
-    100%{ transform:rotate(360deg);}
-}
-
-.autoCallWrap{
-    color:#888;
-    font-size:14px;
-    margin-top:4px;
-}
-</style>
-
 /* ---------------- BASE ---------------- */
 body{
     margin:0;
@@ -320,6 +182,69 @@ body{
     font-weight:600;
     color:#555;
 }
+
+/* ---------------- CALL CONTROLS ---------------- */
+#callControls{
+    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+}
+
+.callButtons{
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
+
+.circleBtn{
+    width:90px;
+    height:90px;
+    border:none;
+    background:none;
+    cursor:pointer;
+    padding:0;
+    position:relative;
+    transition:0.2s ease;
+}
+
+.smallBtn{
+    width:60px;
+    height:60px;
+}
+
+.circleBtn svg{
+    width:100%;
+    height:100%;
+}
+
+.circleBtn:hover{
+    transform:scale(1.05);
+}
+
+/* Loading animation for call button */
+#callLoader{
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    border-radius:50%;
+    border:4px solid rgba(255,255,255,0.3);
+    border-top-color:#F0A2A4;
+    display:none;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    0%{ transform:rotate(0deg);}
+    100%{ transform:rotate(360deg);}
+}
+
+.autoCallWrap{
+    color:#888;
+    font-size:14px;
+    margin-top:4px;
+}
 </style>
 </head>
 
@@ -329,7 +254,6 @@ body{
 
 <!-- LEFT PANEL -->
 <div id="leftPanel">
-
     <div id="onlineHeader">
         <div id="onlineTop">
             <span id="onlineCount">People Online (0)</span>
@@ -345,49 +269,54 @@ body{
             <button id="sendBtn">Send</button>
         </div>
     </div>
-
 </div>
 
 <!-- CENTER PANEL -->
 <div id="centerPanel">
 
 <svg id="mainLogo" viewBox="0 0 100 100">
-  <path
-    fill="white"
-    fill-rule="evenodd"
-    d="
-      M10 30
-      Q10 10 30 10
-      H70
-      Q90 10 90 30
-      V70
-      Q90 90 70 90
-      H30
-      Q10 90 10 70
-      Z
-
-      M50 65
-      C35 50,30 40,40 35
-      C45 32,50 38,50 38
-      C50 38,55 32,60 35
-      C70 40,65 50,50 65Z
-    "
-  />
+  <path fill="white" fill-rule="evenodd"
+        d="M10 30 Q10 10 30 10 H70 Q90 10 90 30 V70 Q90 90 70 90 H30 Q10 90 10 70 Z
+           M50 65 C35 50,30 40,40 35 C45 32,50 38,50 38 C50 38,55 32,60 35 C70 40,65 50,50 65Z"/>
   <polygon points="30,80 45,95 45,80" fill="white"/>
 </svg>
 
-<div id="brandName">
-    Love<span class="accent">Talk</span>
-</div>
-
+<div id="brandName">Love<span class="accent">Talk</span></div>
 <div id="status">Online</div>
 
+<!-- CALL CONTROLS -->
+<div id="callControls">
+  <div class="callButtons">
+    <button id="callBtn" class="circleBtn" title="Call">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" fill="white"/>
+        <path id="callIcon" fill="transparent" stroke="white" stroke-width="4" stroke-linecap="round"
+              d="M35 40 Q45 30 55 40 L60 45 Q65 50 60 55 L55 60 Q50 65 45 60 L40 55 Q35 50 40 45 Z"/>
+      </svg>
+      <div id="callLoader"></div>
+    </button>
+
+    <button id="muteBtn" class="circleBtn smallBtn" title="Mute">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="35" fill="white"/>
+        <path d="M40 35 L60 65 M60 35 L40 65" stroke="transparent" stroke-width="5"/>
+      </svg>
+    </button>
+
+    <button id="addFriendBtn" class="circleBtn smallBtn" title="Add Friend">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="35" fill="white"/>
+        <path d="M50 35 L50 65 M35 50 L65 50" stroke="transparent" stroke-width="5"/>
+      </svg>
+    </button>
+  </div>
+  <label class="autoCallWrap"><input type="checkbox" id="autoCall"> Auto Call</label>
 </div>
 
 <script>
-/* RANDOM USER GENERATION */
-const adjectives = ["Nova","Echo","Pixel","Solar","Cloud","Neon","Sage","Drift","Vibe","Orbit"];
-const nouns = ["Wave","Signal","Flux","Bloom","Pulse","Frame","Core","Shift","Glow","Phase"];
+/* ---------------- RANDOM USER GENERATION ---------------- */
+const adjectives = ["Neo","Luxe","Echo","Pixel","Nova","Vibe","Drift","Quantum","Hyper","Aurora"];
+const nouns = ["Wave","Pulse","Phase","Drift","Core","Orbit","Flux","Spark","Blade","Shade"];
 
 function generateUsername(){
   return adjectives[Math.floor(Math.random()*adjectives.length)] +
@@ -421,12 +350,10 @@ addUser(generateUsername());
 toggleUsers.onclick=()=>{
     onlineDropdown.classList.toggle("open");
     toggleUsers.style.transform =
-        onlineDropdown.classList.contains("open")
-        ? "rotate(180deg)"
-        : "rotate(0deg)";
+        onlineDropdown.classList.contains("open") ? "rotate(180deg)" : "rotate(0deg)";
 };
 
-/* CHAT */
+/* ---------------- CHAT ---------------- */
 sendBtn.onclick=()=>{
     if(msgInput.value.trim()){
         let p=document.createElement("p");
@@ -436,27 +363,24 @@ sendBtn.onclick=()=>{
         messages.scrollTop=messages.scrollHeight;
     }
 };
-  </script>
-// --- Call button toggle ---
+
+/* ---------------- CALL BUTTON LOGIC ---------------- */
 const callBtn = document.getElementById('callBtn');
 const callIcon = document.getElementById('callIcon');
 const callLoader = document.getElementById('callLoader');
-
 let calling = false;
 
 callBtn.addEventListener('click', () => {
     if(!calling){
         callLoader.style.display = 'block';
-        callIcon.setAttribute('stroke', 'white');
         setTimeout(() => {
             callLoader.style.display = 'none';
             // Hang up icon
-            callIcon.setAttribute('d', 'M30 60 Q50 75 70 60 L65 55 Q50 65 35 55 Z');
+            callIcon.setAttribute('d','M30 60 Q50 75 70 60 L65 55 Q50 65 35 55 Z');
             calling = true;
-        }, 2000); // simulate connection delay
+        }, 2000); // simulate connection
     } else {
-        // Reset to call icon
-        callIcon.setAttribute('d', 'M35 40 Q45 30 55 40 L60 45 Q65 50 60 55 L55 60 Q50 65 45 60 L40 55 Q35 50 40 45 Z');
+        callIcon.setAttribute('d','M35 40 Q45 30 55 40 L60 45 Q65 50 60 55 L55 60 Q50 65 45 60 L40 55 Q35 50 40 45 Z');
         calling = false;
     }
 });
