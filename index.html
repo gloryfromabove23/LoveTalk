@@ -2,259 +2,228 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="description" content="LoveTalk: Chat and make random voice calls!">
-<meta name="keywords" content="chat, voice call, live users, stranger, random call">
-<meta name="robots" content="index, follow">
 <title>LoveTalk 💖</title>
 <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+
 <style>
-/* -------------------- Global -------------------- */
-body {
+body{
     margin:0;
     font-family:'Bubblegum Sans', cursive;
-    background-color: #491121;
+    background:#491121;
     display:flex;
     flex-direction:column;
     align-items:center;
-    min-height:100vh;
-    position: relative;
-    overflow-x:hidden;
+    height:100vh;
+    overflow:hidden;
+    color:white;
 }
 
-/* -------------------- Top Bar -------------------- */
-.top-bar {
-    width: 100%;
-    background-color: white;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    box-sizing: border-box;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 10;
-}
-.top-bar img.logo {
-    height: 60px;
-    object-fit: contain;
+/* ---------------- CENTER LOGO SECTION ---------------- */
+#centerSection{
+    position:relative;
+    margin-top:80px;
+    text-align:center;
+    transition: all 0.5s ease;
 }
 
-/* -------------------- Cascading Light -------------------- */
-.cascading-light {
-    position: absolute;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(247,214,143,0.6) 0%, rgba(247,214,143,0.1) 70%);
-    border-radius: 50%;
-    filter: blur(50px);
-    animation: pulseLight 3s ease-in-out infinite alternate;
-    pointer-events: none;
-    z-index: 1;
-}
-@keyframes pulseLight {
-    0% { transform: translateX(-50%) scale(0.9); opacity:0.7; }
-    100% { transform: translateX(-50%) scale(1.1); opacity:1; }
+#logo{
+    width:180px;
 }
 
-/* -------------------- Heart -------------------- */
-#heartImage {
-    width:100px;
-    margin:20px auto;
-    display:block;
-    transition: transform 0.1s ease;
-}
-
-/* -------------------- Name Input -------------------- */
-#nameInputDiv {
+#voiceButtons{
+    margin-top:20px;
     display:flex;
-    gap:10px;
-    margin:20px 0;
-    flex-wrap:wrap;
-}
-#nameInput { 
-    padding:15px; font-size:1.2rem; border-radius:15px; border:none; outline:none; 
-    box-shadow:0 0 10px #f7d68faa; flex:1; min-width:150px; 
-    background: rgba(255,255,255,0.2); color:white;
-}
-#nameBtn { 
-    padding:15px 25px; font-size:1.2rem; border-radius:15px; border:none; 
-    background:linear-gradient(45deg,#f7d68f,#fff7cc); color:#491121; cursor:pointer; 
-    box-shadow:0 0 15px #f7d68faa; 
-}
-button:hover {
-    box-shadow: 0 0 20px #f7d68f, 0 0 40px #f7d68f, 0 0 60px #f7d68f;
-    transform: scale(1.05);
-    transition: all 0.3s ease;
+    gap:20px;
+    justify-content:center;
+    transition: all 0.5s ease;
 }
 
-/* -------------------- Main Chat -------------------- */
-#main { display:flex; width:95%; max-width:1200px; flex:1; gap:15px; }
-#chatArea {
-    flex:2;
-    display:flex; 
-    flex-direction:column; 
-    background: rgba(255,255,255,0.05); 
-    border-radius:15px; 
-    padding:5px; 
-    min-width:0; 
-    color:white; 
-    max-width:700px;
-}
-#messages { 
-    flex:1; 
-    overflow-y:auto; 
-    border:1px solid #f7d68f; 
-    border-radius:10px; 
-    padding:5px; 
-    background: rgba(255,255,255,0.1); 
-    font-size:0.95rem; 
-}
-#chatControls { display:flex; gap:10px; margin-top:10px; }
-#chatControls input { 
-    flex:1; padding:10px; border-radius:10px; border:none; outline:none; font-size:1rem; 
-    background: rgba(255,255,255,0.2); color:white;
-}
-#chatControls button { 
-    padding:10px 15px; border:none; border-radius:10px; 
-    background: #f7d68f; color:#491121; cursor:pointer; font-size:1rem; 
-}
-
-/* -------------------- Users -------------------- */
-#users { flex:1; background: rgba(255,255,255,0.1); border-radius:15px; padding:10px; max-width:250px; color:white; }
-#users h3 { margin-top:0; text-align:center; color:#f7d68f; }
-.userItem {
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:5px 10px;
-    background:rgba(255,255,255,0.2);
-    margin:5px 0;
-    border-radius:5px;
+#voiceButtons button{
+    padding:15px 30px;
+    border-radius:15px;
+    border:none;
+    font-size:1.1rem;
+    background:linear-gradient(45deg,#f7d68f,#fff7cc);
+    color:#491121;
     cursor:pointer;
+    box-shadow:0 0 15px #f7d68f88;
+    transition:0.3s;
 }
-.userItem .status {
+
+#voiceButtons button:hover{
+    box-shadow:0 0 25px #f7d68f,0 0 50px #f7d68f;
+    transform:scale(1.05);
+}
+
+/* ---------------- ONLINE STATUS ---------------- */
+#myStatus{
+    margin-top:15px;
+    font-size:1rem;
+}
+
+.statusDot{
+    display:inline-block;
     width:10px;
     height:10px;
     border-radius:50%;
-    background:red;
-    margin-right:5px;
-}
-.userItem.online .status { background:#4caf50; } /* green online */
-
-/* -------------------- Voice Controls -------------------- */
-#voiceControls { margin-top:10px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap; }
-#voiceControls button { 
-    padding:20px 30px; font-size:1.2rem; border-radius:15px; border:none; 
-    background:linear-gradient(45deg,#f7d68f,#fff7cc); color:#491121; cursor:pointer; 
-    box-shadow:0 0 20px #f7d68faa; 
+    margin-right:6px;
 }
 
-/* -------------------- Incoming Call -------------------- */
-#incomingCallPopup { 
-    display:none; position:fixed; bottom:30px; right:30px; 
-    background:white; padding:20px; border-radius:15px; 
-    box-shadow:0 5px 20px rgba(0,0,0,0.3); 
+.online{ background:#4caf50; }
+.offline{ background:#ff4c4c; }
+
+/* ---------------- CHAT ICON ---------------- */
+#chatIcon{
+    position:absolute;
+    right:-120px;
+    top:0;
+    width:60px;
+    height:60px;
+    background:#f7d68f;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:24px;
     color:#491121;
+    box-shadow:0 0 20px #f7d68f;
+    transition:0.4s;
 }
-#callingStatus { display:none; color:#f7d68f; margin-top:10px; text-align:center; font-weight:bold; }
 
-/* -------------------- Mobile -------------------- */
-@media screen and (max-width:768px){
-    #main { flex-direction:column; width:95%; }
-    #chatArea { width:100%; }
-    #users { width:100%; max-width:100%; margin-top:10px; }
-    #heartImage { width:80px; }
-    #voiceControls button { flex:1; font-size:1.3rem; padding:15px; }
+#chatIcon:hover{
+    box-shadow:0 0 35px #f7d68f,0 0 60px #f7d68f;
+}
+
+/* ---------------- CHAT PANEL ---------------- */
+#chatPanel{
+    position:absolute;
+    right:-450px;
+    top:0;
+    width:400px;
+    height:500px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    border-radius:20px;
+    display:flex;
+    flex-direction:column;
+    padding:15px;
+    transition:0.5s;
+}
+
+#chatPanel.open{
+    right:-20px;
+}
+
+#messages{
+    flex:1;
+    overflow-y:auto;
+    border:1px solid #f7d68f;
+    border-radius:10px;
+    padding:10px;
+}
+
+#chatControls{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+#chatControls input{
+    flex:1;
+    padding:8px;
+    border-radius:8px;
+    border:none;
+    background:rgba(255,255,255,0.2);
+    color:white;
+}
+
+#chatControls button{
+    padding:8px 12px;
+    border-radius:8px;
+    border:none;
+    background:#f7d68f;
+    color:#491121;
+    cursor:pointer;
+}
+
+/* when chat opens move buttons */
+.chatOpen #voiceButtons{
+    transform:translateY(-40px);
 }
 </style>
 </head>
+
 <body>
 
-<!-- Top White Bar -->
-<div class="top-bar">
-    <img src="YOUR_LOGO_URL_HERE.png" alt="Logo" class="logo">
-</div>
+<div id="centerSection">
 
-<!-- Cascading Light -->
-<div class="cascading-light"></div>
+    <img id="logo" src="YOUR_LOGO_URL_HERE.png">
 
-<!-- Heart Emoji (replaced with pulsating image) -->
-<img id="heartImage" src="YOUR_HEART_IMAGE.png" alt="Heart">
+    <div id="voiceButtons">
+        <button id="newChat">🔄 New</button>
+        <button id="leaveChat">❌ Leave</button>
+    </div>
 
-<!-- Name Input -->
-<div id="nameInputDiv">
-    <input id="nameInput" placeholder="Enter your name..." />
-    <button id="nameBtn">Join</button>
-</div>
+    <div id="myStatus">
+        <span id="statusDot" class="statusDot online"></span>
+        <span id="statusText">Online</span>
+    </div>
 
-<!-- Main Chat Area -->
-<div id="main" style="display:none;">
-    <div id="chatArea">
+    <div id="chatIcon">💬</div>
+
+    <div id="chatPanel">
         <div id="messages"></div>
         <div id="chatControls">
-            <input id="msgInput" placeholder="Type your message..." />
+            <input id="msgInput" placeholder="Type message...">
             <button id="sendBtn">Send</button>
         </div>
-        <div id="voiceControls">
-            <button id="newChat">🔄 New</button>
-            <button id="leaveChat">❌ Leave</button>
-            <label><input type="checkbox" id="autoCall" /> Auto-Call</label>
-        </div>
-        <div id="callingStatus">📞 Calling...</div>
     </div>
 
-    <div id="users">
-        <h3>Live Users</h3>
-        <div id="userList">
-            <!-- Example Users -->
-            <div class="userItem online">
-                <span class="status"></span>
-                <span class="userName">Alice</span>
-            </div>
-            <div class="userItem">
-                <span class="status"></span>
-                <span class="userName">Bob</span>
-            </div>
-        </div>
-    </div>
 </div>
 
-<div id="incomingCallPopup">
-    <p id="callerName"></p>
-    <button id="acceptCall">✅ Accept</button>
-    <button id="declineCall">❌ Decline</button>
-</div>
-
-<script src="/socket.io/socket.io.js"></script>
 <script>
-/* -------------------- Heart Pulsate -------------------- */
-navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-    const audioCtx = new AudioContext();
-    const source = audioCtx.createMediaStreamSource(stream);
-    const analyser = audioCtx.createAnalyser();
-    source.connect(analyser);
-    analyser.fftSize = 256;
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    const heart = document.getElementById('heartImage');
+const chatIcon = document.getElementById("chatIcon");
+const chatPanel = document.getElementById("chatPanel");
+const body = document.body;
 
-    function animateHeart() {
-        analyser.getByteFrequencyData(dataArray);
-        let avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
-        let scale = 1 + avg/200; 
-        heart.style.transform = `scale(${scale})`;
-        requestAnimationFrame(animateHeart);
+chatIcon.onclick = () => {
+    chatPanel.classList.toggle("open");
+    body.classList.toggle("chatOpen");
+};
+
+/* ---------------- TAB ONLINE / OFFLINE ---------------- */
+const statusDot = document.getElementById("statusDot");
+const statusText = document.getElementById("statusText");
+
+function updateStatus(){
+    if(document.hidden){
+        statusDot.className="statusDot offline";
+        statusText.textContent="Offline";
+    } else {
+        statusDot.className="statusDot online";
+        statusText.textContent="Online";
     }
-    animateHeart();
-});
+}
 
-/* -------------------- Name Join Example -------------------- */
-document.getElementById('nameBtn').addEventListener('click', ()=>{
-    document.getElementById('main').style.display = 'flex';
-    document.getElementById('nameInputDiv').style.display = 'none';
-});
+document.addEventListener("visibilitychange", updateStatus);
+updateStatus();
+
+/* ---------------- CHAT DEMO ---------------- */
+const sendBtn = document.getElementById("sendBtn");
+const msgInput = document.getElementById("msgInput");
+const messages = document.getElementById("messages");
+
+sendBtn.onclick = ()=>{
+    if(msgInput.value.trim()){
+        const p=document.createElement("p");
+        p.textContent=msgInput.value;
+        messages.appendChild(p);
+        msgInput.value="";
+        messages.scrollTop=messages.scrollHeight;
+    }
+};
 </script>
+
 </body>
 </html>
