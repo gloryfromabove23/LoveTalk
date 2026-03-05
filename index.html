@@ -276,7 +276,7 @@ function generateUsername(){
 const username=generateUsername();
 
 /* ---------------- WEBSOCKET ---------------- */
-const ws=new WebSocket("ws://localhost:8080");
+const ws = new WebSocket(`wss://${window.location.host}`);
 let users=[];
 let inCall=false;
 
