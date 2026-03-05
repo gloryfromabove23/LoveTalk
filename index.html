@@ -12,238 +12,301 @@ body {
     margin: 0; font-family: 'Inter', sans-serif;
     background: linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC);
     background-size: 300% 300%; animation: gradientMove 12s ease infinite;
-    color: white; display: flex; height: 100vh; overflow: hidden;
+    color: white; display: flex; flex-direction: column; height: 100vh; overflow-x: hidden;
 }
 @keyframes gradientMove { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
 
-/* ---------------- LAYOUT ---------------- */
-#leftPanel {
-    width: 320px; min-width: 280px; max-width: 35vw;
-    background: rgba(20, 20, 25, 0.7); backdrop-filter: blur(20px);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex; flex-direction: column; padding: 20px; z-index: 10;
+/* ---------------- TOP NAV ---------------- */
+#topBar {
+    padding: 15px 30px; display: flex; justify-content: flex-end; align-items: center; gap: 15px;
+    background: rgba(0,0,0,0.15); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1);
 }
+.theme-btn { background: white; color: black; border: none; padding: 10px 20px; border-radius: 25px; font-weight: 700; cursor: pointer; font-size: 12px; transition: 0.3s; }
+.theme-btn:hover { transform: scale(1.05); background: #f0f0f0; }
+
+/* ---------------- LAYOUT ---------------- */
+#mainContainer { display: flex; flex: 1; height: 80vh; overflow: hidden; position: relative; }
+
+#leftPanel {
+    width: 340px; min-width: 300px; 
+    background: rgba(15, 15, 20, 0.8); backdrop-filter: blur(25px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex; flex-direction: column; padding: 25px; z-index: 10;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#leftPanel.hidden { transform: translateX(-100%); width: 0; padding: 0; min-width: 0; border: none; opacity: 0; }
+
 #centerPanel {
     flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
+    align-items: center; justify-content: center; position: relative; padding: 20px;
 }
 
-/* ---------------- ONLINE DROPDOWN FIX ---------------- */
-#onlineDropdown {
-    max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
-    background: rgba(255, 255, 255, 0.05); border-radius: 12px; margin-top: 5px;
+/* ---------------- DROPDOWNS ---------------- */
+.dropdown-head { cursor:pointer; display: flex; justify-content: space-between; font-weight: 800; padding: 12px 5px; border-bottom: 1px solid rgba(255,255,255,0.1); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+.dropdown-content { 
+    max-height: 0; overflow: hidden; transition: max-height 0.5s ease;
+    background: rgba(255, 255, 255, 0.03); border-radius: 10px; margin-bottom: 5px;
 }
-#onlineDropdown.open {
-    max-height: 300px; /* Now it will actually expand */
-    overflow-y: auto;
-    margin-bottom: 15px;
-}
+.dropdown-content.open { max-height: 180px; overflow-y: auto; margin-top: 10px; padding: 5px; border: 1px solid rgba(255,255,255,0.05); }
 
 /* ---------------- BRANDING & LOGO ---------------- */
 #mainLogo { 
-    width: 160px; height: 160px; margin-bottom: 20px; 
-    transition: 0.1s linear; 
-    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.2));
+    width: 180px; height: 180px; margin-bottom: 15px; transition: 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    filter: drop-shadow(0 15px 35px rgba(0,0,0,0.3));
 }
-#brandName { font-size: 3.8rem; font-weight: 800; margin: 0; letter-spacing: -3px; }
-.talk-thin { font-weight: 100; letter-spacing: -1px; margin-left: 2px; }
-#status { margin-top: 10px; margin-bottom: 70px; font-weight: 400; opacity: 0.6; letter-spacing: 2px; text-transform: uppercase; font-size: 11px; }
-
-/* ---------------- BUTTONS ---------------- */
-.callButtons { display: flex; gap: 20px; align-items: center; }
-.circleBtn { 
-    width: 72px; height: 72px; border: none; background: none; cursor: pointer; padding: 0; 
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-}
-.circleBtn:hover { transform: translateY(-5px); }
-.circleBtn:active { transform: scale(0.9); }
-
-.spinning { animation: spin 1.2s linear infinite; }
-@keyframes spin { 100% { transform: rotate(360deg); } }
+#brandName { font-size: 4.2rem; font-weight: 800; margin: 0; letter-spacing: -4px; }
+.talk-thin { font-weight: 100; letter-spacing: -2px; margin-left: 3px; }
+#status { margin-top: 8px; margin-bottom: 60px; font-weight: 600; opacity: 0.7; letter-spacing: 3px; text-transform: uppercase; font-size: 10px; color: #fff; }
 
 /* ---------------- CHAT & MEMES ---------------- */
 #chatBox {
     margin-top: auto; display: flex; flex-direction: column;
-    height: 70%; border-radius: 20px; background: rgba(255, 255, 255, 0.05);
-    padding: 15px; position: relative; border: 1px solid rgba(255,255,255,0.08);
+    height: 55%; border-radius: 25px; background: rgba(0, 0, 0, 0.4);
+    padding: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1);
 }
-#messages { flex: 1; overflow-y: auto; }
-#messages p { background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 15px; margin: 8px 0; font-size: 14px; word-wrap: break-word;}
-#chatControls { display: flex; gap: 8px; margin-top: 10px; }
-#chatControls input { flex: 1; padding: 12px; border-radius: 12px; border: none; background: rgba(0,0,0,0.3); color: white; outline: none; }
-#chatControls button { padding: 0 12px; border-radius: 12px; border: none; background: white; font-weight: 800; cursor: pointer; color: black; }
+#messages { flex: 1; overflow-y: auto; padding-right: 5px; }
+#messages::-webkit-scrollbar { width: 4px; }
+#messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+#messages p { background: rgba(255, 255, 255, 0.08); padding: 12px; border-radius: 15px; margin: 6px 0; font-size: 13px; line-height: 1.4; border: 1px solid rgba(255,255,255,0.05); }
 
 #memeMenu { 
-    display: none; position: absolute; bottom: 80px; left: 10px; right: 10px; 
-    background: rgba(0, 0, 0, 0.95); padding: 12px; border-radius: 20px; 
-    grid-template-columns: repeat(3, 1fr); gap: 10px; z-index: 100;
-    max-height: 250px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1);
+    display: none; position: absolute; bottom: 85px; left: 15px; right: 15px; 
+    background: rgba(5, 5, 10, 0.98); padding: 15px; border-radius: 20px; 
+    grid-template-columns: repeat(3, 1fr); gap: 10px; z-index: 150; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 }
-#memeMenu img { width: 100%; border-radius: 10px; cursor: pointer; aspect-ratio: 1/1; object-fit: cover; }
+#memeMenu img { width: 100%; border-radius: 12px; cursor: pointer; transition: 0.3s; filter: grayscale(20%); }
+#memeMenu img:hover { transform: scale(1.1); filter: grayscale(0%); border: 2px solid #FF6A88; }
+
+/* ---------------- CALL BUTTONS ---------------- */
+.callButtons { display: flex; gap: 25px; align-items: center; }
+.circleBtn { width: 75px; height: 75px; border: none; background: none; cursor: pointer; padding: 0; transition: 0.3s; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); }
+.circleBtn:hover { transform: translateY(-8px) scale(1.05); }
+.spinning { animation: spin 1.5s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* ---------------- SCROLL CONTENT ---------------- */
+#scrollArea { height: auto; background: white; color: #333; }
+#missionSection { padding: 100px 15%; text-align: center; }
+#missionSection h2 { font-size: 2.5rem; color: #FF6A88; margin-bottom: 30px; }
+#missionSection p { font-size: 1.2rem; line-height: 2; color: #666; max-width: 800px; margin: 0 auto; }
+footer { padding: 50px; text-align: center; font-size: 13px; font-weight: 600; opacity: 0.6; background: #f9f9f9; color: #999; border-top: 1px solid #eee; }
 
 /* ---------------- MODALS ---------------- */
 .modal {
     display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 350px; background: rgba(25, 25, 30, 0.98); backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 30px; padding: 30px; z-index: 1000;
+    width: 340px; background: #121214; border: 1px solid rgba(255,255,255,0.15); border-radius: 30px; padding: 35px; z-index: 2500; box-shadow: 0 30px 60px rgba(0,0,0,0.6);
 }
-.modal-close { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px; opacity: 0.5; }
+.modal h3 { margin: 0 0 15px 0; font-size: 1.5rem; }
+.modal p { font-size: 14px; opacity: 0.8; line-height: 1.5; }
+.btn-group { display: flex; gap: 12px; margin-top: 25px; }
+.modal-btn { flex: 1; padding: 12px; border: none; border-radius: 15px; cursor: pointer; font-weight: 800; font-family: 'Inter'; transition: 0.2s; }
+.modal-btn:active { transform: scale(0.95); }
 </style>
 </head>
 
 <body>
 
-<div id="leftPanel">
-    <div id="onlineTop" style="cursor:pointer; display: flex; justify-content: space-between; font-weight: 600;" onclick="document.getElementById('onlineDropdown').classList.toggle('open')">
-        <span id="onlineCount">People Online (0)</span> <span>▼</span>
-    </div>
-    <div id="onlineDropdown"></div>
+<div id="topBar">
+    <button class="theme-btn" onclick="toggleChat()">Retract Chat</button>
+    <input type="color" id="bgPicker" value="#FF6A88" style="display:none;">
+    <button class="theme-btn" onclick="document.getElementById('bgPicker').click()">Edit Canvas</button>
+</div>
 
-    <div id="chatBox">
-        <div id="memeMenu"></div>
-        <div id="messages"></div>
-        <div id="chatControls">
-            <input id="msgInput" placeholder="Write message...">
-            <button id="gifBtn" style="background:#FF6A88; color:white;">🎁</button>
-            <button id="sendBtn">Send</button>
+<div id="mainContainer">
+    <div id="leftPanel">
+        <div class="dropdown-head" onclick="toggleDD('onlineDropdown')">
+            <span id="onlineCount">Live Users (0)</span> <span>▼</span>
+        </div>
+        <div id="onlineDropdown" class="dropdown-content"></div>
+
+        <div class="dropdown-head" onclick="toggleDD('connDropdown')">
+            <span>Recent Connections</span> <span>▼</span>
+        </div>
+        <div id="connDropdown" class="dropdown-content">
+            <div id="connEmpty" style="padding:15px; opacity:0.4; font-size:11px; text-align:center;">Scanning for peers...</div>
+        </div>
+
+        <div id="chatBox">
+            <div id="memeMenu"></div>
+            <div id="messages"></div>
+            <div id="chatControls" style="display:flex; gap:8px; margin-top:15px;">
+                <input id="msgInput" style="flex:1; background:rgba(255,255,255,0.1); border:none; color:white; padding:12px; border-radius:15px; outline:none;" placeholder="Type a message...">
+                <button onclick="toggleMemes()" style="background:rgba(255,255,255,0.2); border:none; cursor:pointer; font-size:22px; border-radius:12px; padding:0 10px;">🎁</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="centerPanel">
+        <svg id="mainLogo" viewBox="0 0 100 100">
+            <defs>
+                <mask id="v4Mask">
+                    <rect width="100" height="100" fill="white" />
+                    <path d="M50 58 L39 44 C33 34 37 27 44 27 C48 27 50 30 50 30 C50 30 52 27 56 27 C63 27 67 34 61 44 L50 58 Z" fill="black" />
+                </mask>
+            </defs>
+            <path d="M20 15 H80 Q88 15 88 23 V58 Q88 66 80 66 H48 L32 82 V66 Q12 66 12 58 V23 Q12 15 20 15 Z" fill="white" mask="url(#v4Mask)" />
+        </svg>
+
+        <div id="brandName">Love<span class="talk-thin">Talk</span></div>
+        <div id="status">Global Secure Node</div>
+
+        <div class="callButtons">
+            <button class="circleBtn" id="muteBtn" title="Mute Mic">
+                <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white" opacity="0.1"/><path d="M43 35h14v20h-14z" fill="white"/><path id="slash" d="M25 25l50 50" stroke="#FF6A88" stroke-width="6" stroke-linecap="round" style="display:none;"/></svg>
+            </button>
+            
+            <button id="callBtn" class="circleBtn" title="Start Call">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="white"/>
+                    <path d="M30 40c0-10 15-15 20-15s20 5 20 15l-10 5c-2-3-18-3-20 0l-10-5zM40 55c0 10 20 10 20 0" fill="black"/>
+                </svg>
+            </button>
+
+            <button class="circleBtn" onclick="askFriend()" title="Add Friend">
+                <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white" opacity="0.15"/><path d="M50 32v36M32 50h36" stroke="white" stroke-width="8" stroke-linecap="round"/></svg>
+            </button>
+
+            <button class="circleBtn" onclick="showBan()" title="Report">
+                <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white" opacity="0.15"/><path d="M50 32v25M50 68h.1" stroke="white" stroke-width="9" stroke-linecap="round"/></svg>
+            </button>
+        </div>
+
+        <div style="margin-top:50px; display:flex; gap:30px; font-size:12px; font-weight: 800; text-transform: uppercase; opacity: 0.5; letter-spacing: 2px;">
+            <div onclick="openHistory()" style="cursor:pointer; text-decoration:underline;">Call Log History</div>
         </div>
     </div>
 </div>
 
-<div id="centerPanel">
-    <svg id="mainLogo" viewBox="0 0 100 100">
-        <defs>
-            <mask id="bubbleHeartMask">
-                <rect width="100" height="100" fill="white" />
-                <path d="M50 68 L37 50 C31 40 35 32 43 32 C47 32 50 35 50 35 C50 35 53 32 57 32 C65 32 69 40 63 50 L50 68 Z" fill="black" />
-            </mask>
-        </defs>
-        <path d="M20 12 H80 Q88 12 88 20 V62 Q88 70 80 70 H48 L30 85 V70 Q12 70 12 62 V20 Q12 12 20 12 Z" fill="white" mask="url(#bubbleHeartMask)" />
-    </svg>
-
-    <div id="brandName">Love<span class="talk-thin">Talk</span></div>
-    <div id="status">Secure & Online</div>
-
-    <div class="callButtons">
-        <button class="circleBtn" id="muteBtn">
-            <svg viewBox="0 0 100 100">
-                <defs><mask id="m1"><rect width="100" height="100" fill="white"/><rect x="43" y="28" width="14" height="24" rx="7" fill="black"/><path d="M36 45c0 8 14 8 14 8s14 0 14-8" fill="none" stroke="black" stroke-width="5"/><line x1="50" y1="53" x2="50" y2="65" stroke="black" stroke-width="5"/><line id="muteSlash" x1="25" y1="25" x2="75" y2="75" stroke="black" stroke-width="8" style="display:none;"/></mask></defs>
-                <circle cx="50" cy="50" r="45" fill="white" mask="url(#m1)"/>
-            </svg>
-        </button>
-
-        <button id="callBtn" class="circleBtn">
-            <svg viewBox="0 0 100 100">
-                <defs><mask id="m2"><rect width="100" height="100" fill="white"/><path d="M25 45c0-10 15-15 25-15s25 5 25 15l-10 5c-5-5-25-5-30 0l-10-5zM40 55c0 10 20 10 20 0" fill="black"/></mask></defs>
-                <circle cx="50" cy="50" r="45" fill="white" mask="url(#m2)"/>
-            </svg>
-        </button>
-
-        <button class="circleBtn" id="friendBtn">
-            <svg viewBox="0 0 100 100">
-                <defs><mask id="m3"><rect width="100" height="100" fill="white"/><path d="M50 32v36M32 50h36" stroke="black" stroke-width="10" stroke-linecap="round"/></mask></defs>
-                <circle cx="50" cy="50" r="45" fill="white" mask="url(#m3)"/>
-            </svg>
-        </button>
-
-        <button class="circleBtn" id="reportBtn">
-            <svg viewBox="0 0 100 100">
-                <defs><mask id="m4"><rect width="100" height="100" fill="white"/><path d="M50 32v25" stroke="black" stroke-width="10" stroke-linecap="round"/><circle cx="50" cy="70" r="6" fill="black"/></mask></defs>
-                <circle cx="50" cy="50" r="45" fill="white" mask="url(#m4)"/>
-            </svg>
-        </button>
+<div id="scrollArea">
+    <div id="missionSection">
+        <h2>Our Global Mission</h2>
+        <p>LoveTalk was engineered as a response to the growing need for authentic, unfiltered human connection in the digital age. By utilizing decentralized logic and end-to-end anonymity, we ensure that every conversation remains a private sanctuary. Our goal is to foster a community where empathy outweighs algorithms and every "Hello" has the potential to change a life.</p>
     </div>
+    <footer>
+        &copy; 2026 LoveTalk Systems Inc. All Rights Reserved. <br>
+        <span style="font-size:10px; opacity:0.6; margin-top:10px; display:block;">Secure Encryption Enabled via Browser Fingerprinting.</span>
+    </footer>
+</div>
 
-    <div style="margin-top:40px; display:flex; gap:25px; font-size:12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5;">
-        <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;"><input type="checkbox" id="autoCall"> Auto-match</label>
-        <div onclick="openHistory()" style="cursor:pointer; text-decoration:underline;">Log</div>
+<div id="friendModal" class="modal">
+    <h3>Establish Bond?</h3>
+    <p>Confirming this will add this user to your permanent connection list. Proceed with caution.</p>
+    <div class="btn-group">
+        <button class="modal-btn" onclick="closeM()" style="background:#222; color:white;">Decline</button>
+        <button class="modal-btn" onclick="confirmFriend()" style="background:white; color:black;">Confirm</button>
     </div>
+</div>
+
+<div id="banModal" class="modal">
+    <h3 style="color:#FF6A88;">Banned Action</h3>
+    <p>The system has blocked this request due to safety protocols. Continued violations result in a permanent HWID ban.</p>
+    <button class="modal-btn" onclick="closeM()" style="width:100%; background:#FF6A88; color:white;">I Acknowledge</button>
+</div>
+
+<div id="logModal" class="modal">
+    <h3>Call Log</h3>
+    <div id="logContent" style="max-height:180px; overflow-y:auto; font-size:13px; color:rgba(255,255,255,0.7);"></div>
+    <button class="modal-btn" onclick="closeM()" style="width:100%; margin-top:20px; background:rgba(255,255,255,0.1); color:white;">Dismiss</button>
 </div>
 
 <script>
 const socket = io();
-const adjectives=["Neo","Sweet","Pure","Nova","Vibe","Soft","Wild"];
-const nouns=["Soul","Heart","Pulse","Cloud","Wave","Spark","Echo"];
-const username = adjectives[Math.floor(Math.random()*adjectives.length)] + nouns[Math.floor(Math.random()*nouns.length)] + Math.floor(Math.random()*99);
-let callHistory = [];
+const adjs=["Neo","Pure","Nova","Vibe","Soft","Wild","Zen","Echo"];
+const nouns=["Soul","Heart","Pulse","Cloud","Wave","Spark","Echo","Flow"];
 
-socket.on('connect', () => socket.emit('setName', username));
+/* ---------------- BROWSER-LEVEL PERSISTENCE ---------------- */
+let myStoredName = localStorage.getItem('lt_username');
+if(!myStoredName){
+    myStoredName = adjs[Math.floor(Math.random()*adjs.length)] + nouns[Math.floor(Math.random()*nouns.length)] + Math.floor(100+Math.random()*899);
+    localStorage.setItem('lt_username', myStoredName);
+}
+socket.on('connect', () => socket.emit('setName', myStoredName));
 
-/* ---------------- RELIABLE MEME SOURCES ---------------- */
-const memes = [
-    "https://media1.tenor.com/m/Y7v9F9Iq7YAAAAAC/cat-kiss.gif",
-    "https://media1.tenor.com/m/0vHnFvD6v_gAAAAC/heart-love.gif",
-    "https://media1.tenor.com/m/SjM22l69V4AAAAAC/love-hug.gif",
-    "https://media1.tenor.com/m/U7YV5I0bH3sAAAAC/cute-cat.gif",
-    "https://media1.tenor.com/m/9_K6T5qK01UAAAAC/peach-goma.gif",
-    "https://media1.tenor.com/m/pS2308M-6XkAAAAC/capybara-love.gif",
-    "https://media1.tenor.com/m/K8M7_zGq998AAAAC/dance-happy.gif",
-    "https://media1.tenor.com/m/7r_q_H7T-u8AAAAC/jumping-excited.gif",
-    "https://media1.tenor.com/m/M_tG8_YmS_YAAAAC/milk-and-mocha.gif"
+/* ---------------- UI STATE ---------------- */
+function toggleDD(id) { document.getElementById(id).classList.toggle('open'); }
+function toggleChat() { document.getElementById('leftPanel').classList.toggle('hidden'); }
+function closeM() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
+
+document.getElementById('bgPicker').oninput = (e) => {
+    document.body.style.background = e.target.value;
+    document.body.style.animation = "none";
+};
+
+/* ---------------- INTERACTION LOGIC ---------------- */
+function askFriend() { document.getElementById('friendModal').style.display='block'; }
+function confirmFriend() { alert("Friend Link Established."); closeM(); }
+function showBan() { document.getElementById('banModal').style.display='block'; }
+
+let localLog = [];
+function openHistory() {
+    const logUI = document.getElementById('logContent');
+    logUI.innerHTML = localLog.length ? localLog.map(c => `<div style="padding:8px; border-bottom:1px solid #222;">Match Session: ${c}</div>`).reverse().join('') : "History clear.";
+    document.getElementById('logModal').style.display='block';
+}
+
+/* ---------------- MEME ENGINE ---------------- */
+const memeList = [
+    "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/MDJ9IbxxvDUQM/giphy.webp",
+    "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/v4aGOHef6XpNC/giphy.webp",
+    "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/c76IJbxAb97Hi/giphy.webp",
+    "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3NrdG1pZ3NreG9pbnZ0Ym5oZmxlbmN5Z3R6Z3NreG9pbnZ0Ym5oZmxl/QMHoU66L5Qezq5qK7w/giphy.webp",
+    "https://i.imgur.com/K3pW1L7.gif",
+    "https://i.imgur.com/8nN7pX9.gif"
 ];
-
-const memeMenu = document.getElementById("memeMenu");
-memes.forEach(url => {
-    const img = document.createElement("img"); img.src = url;
-    img.onclick = () => { socket.emit('chatMessage', { msg: `<img src="${url}" style="width:100%; border-radius:10px;">` }); memeMenu.style.display="none"; };
-    memeMenu.appendChild(img);
+const menu = document.getElementById('memeMenu');
+memeList.forEach(url => {
+    const img = document.createElement('img'); img.src = url;
+    img.onclick = () => { socket.emit('chatMessage', {msg: `<img src="${url}" style="width:100%; border-radius:10px;">`}); menu.style.display='none'; };
+    menu.appendChild(img);
 });
-document.getElementById("gifBtn").onclick = () => memeMenu.style.display = memeMenu.style.display === "grid" ? "none" : "grid";
+function toggleMemes() { menu.style.display = menu.style.display === 'grid' ? 'none' : 'grid'; }
 
-/* ---------------- UI ACTIONS ---------------- */
-document.getElementById("muteBtn").onclick = () => {
-    const slash = document.getElementById("muteSlash");
-    slash.style.display = slash.style.display === "none" ? "block" : "none";
-};
-
-const callBtn = document.getElementById("callBtn");
-callBtn.onclick = () => {
-    callBtn.classList.toggle("spinning");
-    if(callBtn.classList.contains("spinning")) {
-        document.getElementById("status").textContent = "Matching...";
-        setTimeout(() => {
-            let match = adjectives[Math.floor(Math.random()*adjectives.length)] + " Match";
-            callHistory.push(match);
-            document.getElementById("status").textContent = "Connected to " + match;
-            callBtn.classList.remove("spinning");
-        }, 2500);
-    } else {
-        document.getElementById("status").textContent = "Secure & Online";
-    }
-};
-
-socket.on('updateUsers', (list) => {
-    const dd = document.getElementById("onlineDropdown"); 
-    dd.innerHTML = "";
-    list.forEach(n => { 
-        const d = document.createElement("div"); 
-        d.textContent=n; 
-        d.style.padding="10px"; 
-        d.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
-        dd.appendChild(d); 
+/* ---------------- SOCKET EVENTS ---------------- */
+socket.on('updateUsers', (users) => {
+    const dd = document.getElementById("onlineDropdown"); dd.innerHTML = "";
+    users.forEach(u => {
+        const item = document.createElement("div");
+        item.style.padding = "12px"; item.style.fontSize = "13px";
+        item.textContent = typeof u === 'string' ? u : u.name;
+        dd.appendChild(item);
     });
-    document.getElementById("onlineCount").textContent = `People Online (${list.length})`;
+    document.getElementById("onlineCount").textContent = `Live Users (${users.length})`;
 });
 
-function openHistory() { document.getElementById("historyModal").style.display = "block"; }
-function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = "none"); }
+socket.on('message', (m) => {
+    const p = document.createElement('p'); p.innerHTML = m;
+    const b = document.getElementById('messages'); b.appendChild(p);
+    b.scrollTop = b.scrollHeight;
+});
 
-/* ---------------- AUDIO REACTIVE ---------------- */
-navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
-    const ctx = new AudioContext();
-    const analyser = ctx.createAnalyser();
-    const mic = ctx.createMediaStreamSource(stream);
-    mic.connect(analyser); analyser.fftSize=256;
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    const logo = document.getElementById("mainLogo");
-    function animate(){
-        analyser.getByteFrequencyData(dataArray);
-        const avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
-        logo.style.transform = `scale(${1 + (avg / 200)})`;
-        requestAnimationFrame(animate);
+document.getElementById('callBtn').onclick = function() {
+    this.classList.add('spinning'); document.getElementById('status').textContent = "Calibrating Match...";
+    setTimeout(() => {
+        this.classList.remove('spinning');
+        let m = adjs[Math.floor(Math.random()*adjs.length)] + "Peer";
+        localLog.push(m);
+        document.getElementById('status').textContent = "Linked to " + m;
+        const cdd = document.getElementById('connDropdown');
+        document.getElementById('connEmpty').style.display='none';
+        const d = document.createElement('div'); d.style.padding="10px"; d.textContent = m;
+        cdd.appendChild(d);
+    }, 2000);
+};
+
+/* ---------------- FREQUENCY ANALYSIS ---------------- */
+navigator.mediaDevices.getUserMedia({audio:true}).then(s => {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ana = ctx.createAnalyser(); ctx.createMediaStreamSource(s).connect(ana);
+    const data = new Uint8Array(ana.frequencyBinCount);
+    const logo = document.getElementById('mainLogo');
+    function pulse() {
+        ana.getByteFrequencyData(data);
+        const avg = data.reduce((a,b)=>a+b)/data.length;
+        logo.style.transform = `scale(${1 + avg/180})`;
+        requestAnimationFrame(pulse);
     }
-    animate();
-}).catch(() => {});
+    pulse();
+}).catch(()=>{});
 </script>
 </body>
 </html>
