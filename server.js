@@ -7,44 +7,33 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Serve frontend files from 'public' folder
-app.use(express.static(path.join(__dirname, 'public')));
+// CHANGED: Look in the current folder instead of 'public'
+app.use(express.static(__dirname));
 
-let users = {}; // { socketId: { name, room } }
+let users = {}; 
 
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
+    // Matches the frontend "setName" call
     socket.on('setName', (name) => {
-        users[socket.id] = { name, room: null };
+        users[socket.id] = { name, room: "Main Lounge" }; // Default room
+        socket.join("Main Lounge");
+        
+        // Send updated list to everyone
         io.emit('updateUsers', Object.values(users));
+        console.log(`${name} joined the lounge`);
     });
 
-    socket.on('joinRoom', (room) => {
-        if (users[socket.id]) {
-            const prevRoom = users[socket.id].room;
-            if(prevRoom) socket.leave(prevRoom);
-
-            users[socket.id].room = room;
-            socket.join(room);
-            io.to(room).emit('message', `💖 ${users[socket.id].name} joined ${room}`);
-            io.emit('updateUsers',
-               Object.entries(users).map(([id, data]) => ({
-                 socketId: id,
-                 name: data.name,
-                 room: data.room
-             }))
-            );
-        }
-    });
-
-    socket.on('chatMessage', ({ msg }) => {
+    socket.on('chatMessage', (data) => {
         const user = users[socket.id];
-        if(user && user.room){
-            io.to(user.room).emit('message', `${user.name}: ${msg}`);
+        if(user){
+            // Send message to everyone in the room
+            io.to(user.room).emit('message', `${user.name}: ${data.msg}`);
         }
     });
 
+    // WebRTC Signaling for Calls
     socket.on('webrtc-offer', ({ offer, targetId }) => {
         io.to(targetId).emit('incoming-call', {
             offer,
@@ -60,23 +49,14 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('call-declined', ({ targetId }) => {
-        io.to(targetId).emit('call-declined');
-    });
-
     socket.on('disconnect', () => {
-        delete users[socket.id];
-        io.emit('updateUsers',
-            Object.entries(users).map(([id, data]) => ({
-                socketId: id,
-                name: data.name,
-                room: data.room
-            }))
-        );
-        console.log('User disconnected:', socket.id);
+        if (users[socket.id]) {
+            console.log(`${users[socket.id].name} left`);
+            delete users[socket.id];
+            io.emit('updateUsers', Object.values(users));
+        }
     });
 });
 
-// ✅ Render dynamic port
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`LoveTalk running on port ${PORT}`));
+server.listen(PORT, () => console.log(`LoveTalk running on http://localhost:${PORT}`));
