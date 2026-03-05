@@ -17,54 +17,56 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); 
 /* Left Panel - Transparent Dark */
 #leftPanel { width: 380px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
 
-#centerPanel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+#centerPanel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
 
-/* Status Text Updates */
-#status { font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px; transition: all 0.3s; color: white; }
-.searching-text { font-size: 24px !important; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+/* Status Text - Smaller/Cleaner */
+#status { font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 10px; opacity: 0.8; color: white; transition: all 0.3s; }
 
-/* Logo & Voice Indicator */
-#logoContainer { width: 180px; height: 180px; position: relative; }
+/* Action Buttons - Transparent Dim White */
+.callButtons { display: flex; flex-direction: row; gap: 15px; align-items: center; margin-top: 30px; }
+.circleBtn { width: 70px; height: 70px; border: none; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+
+/* Active States */
+.circleBtn.active-mute { background: #FF4B4B !important; }
+.circleBtn.active-call { background: #FF4B4B !important; }
+.circleBtn.active-add { background: #4BFF8B !important; }
+.circleBtn.active-report { background: #FF4B4B !important; }
+.circleBtn:active { transform: scale(0.9); }
+
+.label-tag { position: absolute; bottom: -22px; font-size: 9px; font-weight: 900; color: white; white-space: nowrap; opacity: 0.7; }
+
+/* Tab Headers */
+.tab-header { font-size: 10px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 0; cursor: pointer; display: flex; justify-content: space-between; }
+.tab-content { max-height: 80px; overflow-y: auto; font-size: 11px; padding: 10px 0; }
+
+/* Logo & Voice (Hidden until talking) */
+#logoContainer { width: 150px; height: 150px; position: relative; }
 .base-bubble { fill: white; }
-.outline-trace { fill: none; stroke: #4BFF8B; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: var(--logo-dash); transition: stroke-dashoffset 0.1s linear; display: none; }
+.outline-trace { fill: none; stroke: #4BFF8B; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: var(--logo-dash); transition: stroke-dashoffset 0.1s linear; display: none; }
 .heart-cutout { fill: #4BFF8B; opacity: var(--heart-fill); transition: opacity 0.2s; }
 
-/* Action Buttons - Transparent until pressed */
-.callButtons { display: flex; flex-direction: row; gap: 20px; align-items: center; margin-top: 40px; }
-.circleBtn { width: 80px; height: 80px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; background: transparent; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
-.circleBtn svg { opacity: 0.6; transition: all 0.3s; }
-
-/* Dynamic Button Colors */
-.circleBtn.active-mute { background: #FF4B4B; border-color: #FF4B4B; }
-.circleBtn.active-call { background: #FF4B4B; border-color: #FF4B4B; }
-.circleBtn.active-add { background: #4BFF8B; border-color: #4BFF8B; }
-.circleBtn.active-report { background: #FF4B4B; border-color: #FF4B4B; }
-.circleBtn:active { transform: scale(0.9); }
-.circleBtn:hover svg { opacity: 1; }
-
-.label-tag { position: absolute; bottom: -25px; font-size: 10px; font-weight: 900; color: white; white-space: nowrap; }
-
-/* Dropdown Tabs */
-.tab-header { font-size: 10px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 0; cursor: pointer; display: flex; justify-content: space-between; }
-.tab-content { max-height: 100px; overflow-y: auto; font-size: 11px; padding: 10px 0; transition: all 0.3s; }
-
 /* Chat Box */
-#chatBox { margin-top: 15px; display: none; flex-direction: column; flex-grow: 1; background: #ffffff; border-radius: 20px; overflow: hidden; }
+#chatBox { margin-top: 15px; display: none; flex-direction: column; flex-grow: 1; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 #messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding: 15px; color: #000; }
-.msg-bubble { padding: 8px 15px; border-radius: 18px; max-width: 75%; font-size: 14px; }
-.msg-bubble.mine { align-self: flex-end; background: #007aff; color: white; }
-.msg-bubble.theirs { align-self: flex-start; background: #e5e5ea; color: black; }
+.msg-bubble { padding: 8px 15px; border-radius: 18px; max-width: 75%; font-size: 14px; line-height: 1.4; }
+.msg-bubble.mine { align-self: flex-end; background: #007aff; color: white; border-bottom-right-radius: 4px; }
+.msg-bubble.theirs { align-self: flex-start; background: #e5e5ea; color: black; border-bottom-left-radius: 4px; }
 
-#memeGallery { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; background: #f2f2f7; max-height: 200px; overflow-y: auto; }
+#memeGallery { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; background: #f2f2f7; max-height: 220px; overflow-y: auto; border-top: 1px solid #ddd; }
 .meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; cursor: pointer; border-radius: 4px; }
 
-/* Controls Spacing */
-.extra-spacing { margin-top: 80px; display: flex; gap: 40px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+/* Responsive Split Screen */
+@media (max-width: 800px) {
+    #appView { flex-direction: column; height: auto; }
+    #leftPanel { width: 100%; order: 2; height: 60vh; border-right: none; border-top: 1px solid rgba(255,255,255,0.1); }
+    #centerPanel { width: 100%; order: 1; padding: 40px 0; flex: none; }
+    .extra-spacing { margin-top: 30px !important; }
+}
 
-#footerSpace { padding: 100px 15% 40px; text-align: center; background: white; color: #333; margin-top: 200px; }
+.extra-spacing { margin-top: 60px; display: flex; gap: 30px; font-size: 10px; font-weight: 800; text-transform: uppercase; opacity: 0.6; }
+#footerSpace { padding: 80px 15% 40px; text-align: center; background: white; color: #333; margin-top: 100px; }
 footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d; color: #555; width: 100%; }
-
-.modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; background: #1a1a1a; border-radius: 20px; padding: 20px; z-index: 2000; text-align: center; }
+.modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; background: #1a1a1a; border-radius: 20px; padding: 20px; z-index: 2000; text-align: center; border: 1px solid #333; }
 </style>
 </head>
 <body>
@@ -108,24 +110,24 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
                 <path class="heart-cutout" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
             </svg>
         </div>
-        <div id="brandName" style="font-size: 3.5rem; font-weight: 800; letter-spacing: -3px;">LoveTalk</div>
+        <div id="brandName" style="font-size: 2.8rem; font-weight: 800; letter-spacing: -2px;">LoveTalk</div>
         <div id="status">READY</div>
 
         <div class="callButtons">
             <button class="circleBtn" id="muteBtn" onclick="muteT()">
-                <svg viewBox="0 0 100 100" width="40"><g fill="white"><rect x="44" y="30" width="12" height="22" rx="6" /><path d="M38 46 a12 12 0 0 0 24 0" fill="none" stroke="white" stroke-width="4"/></g></svg>
+                <svg viewBox="0 0 100 100" width="48"><g fill="white"><rect x="44" y="25" width="12" height="30" rx="6" /><path d="M35 46 a15 15 0 0 0 30 0" fill="none" stroke="white" stroke-width="5"/></g></svg>
                 <div class="label-tag" id="muteTag">MUTE</div>
             </button>
-            <button id="callBtn" class="circleBtn" onclick="handleCall()">
-                <svg viewBox="0 0 100 100" width="50"><rect x="35" y="20" width="30" height="60" rx="6" fill="none" stroke="white" stroke-width="3"/><rect id="phoneScreen" x="39" y="25" width="22" height="42" rx="2" fill="#4BFF8B"/><circle cx="50" cy="72" r="3" fill="white"/></svg>
+            <button id="callBtn" class="circleBtn" onclick="handleCall()" style="background: rgba(255,255,255,0.15);">
+                <svg viewBox="0 0 100 100" width="55"><rect x="35" y="20" width="30" height="60" rx="6" fill="none" stroke="white" stroke-width="3"/><rect id="phoneScreen" x="39" y="25" width="22" height="42" rx="2" fill="#4BFF8B"/><circle cx="50" cy="72" r="3" fill="white"/></svg>
                 <div class="label-tag" id="callTag">CALL</div>
             </button>
             <button class="circleBtn" id="addBtn" onclick="handleAdd()">
-                <svg viewBox="0 0 100 100" width="40"><path d="M50 30 v40 M30 50 h40" stroke="white" stroke-width="8" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 100 100" width="35"><path d="M50 30 v40 M30 50 h40" stroke="white" stroke-width="10" stroke-linecap="round"/></svg>
                 <div class="label-tag">ADD</div>
             </button>
             <button class="circleBtn" id="reportBtn" onclick="handleReport()">
-                <text x="50" y="65" text-anchor="middle" fill="white" font-size="40" font-weight="800">!</text>
+                <text x="50" y="68" text-anchor="middle" fill="white" font-size="55" font-weight="900">!</text>
                 <div class="label-tag">REPORT</div>
             </button>
         </div>
@@ -170,7 +172,7 @@ let isMuted = false;
 function openMod(id) { document.getElementById(id).style.display='block'; }
 function cls() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
 function setBg(c) { document.body.style.background = c; cls(); }
-function toggleTab(id) { 
+function toggleTab(id) { 
     const el = document.getElementById(id);
     el.style.display = (el.style.display === 'none') ? 'block' : 'none';
 }
@@ -187,7 +189,7 @@ function handleAdd() {
     const btn = document.getElementById('addBtn');
     btn.classList.add('active-add');
     document.getElementById('connEmpty').style.display = 'none';
-    const d = document.createElement('div'); d.textContent = "♥ " + peer;
+    const d = document.createElement('div'); d.textContent = "♥ " + peer; d.style.padding = "5px 0";
     document.getElementById('connDD').appendChild(d);
     setTimeout(() => btn.classList.remove('active-add'), 1000);
 }
@@ -208,21 +210,19 @@ function handleCall() {
 
 function startSearch() {
     const status = document.getElementById('status');
-    status.textContent = "FINDING LOVE...";
-    status.classList.add('searching-text');
+    status.textContent = "FINDING SOMEONE...";
     
     setTimeout(() => {
         const btn = document.getElementById('callBtn');
         btn.classList.add('active-call');
         peer = "Human_" + Math.floor(Math.random()*999);
         status.textContent = "LINKED: " + peer;
-        status.classList.remove('searching-text');
         document.getElementById('callTag').textContent = "END";
         document.getElementById('chatBox').style.display = 'flex';
         historyList.push(peer);
         updateHistory();
         initAudio();
-    }, 1500);
+    }, 1200);
 }
 
 function endCall() {
@@ -234,7 +234,6 @@ function endCall() {
     document.getElementById('messages').innerHTML = "";
     peer = "";
     
-    // Auto Call Logic
     if(document.getElementById('autoCheck').checked) {
         setTimeout(startSearch, 1000);
     }
@@ -242,14 +241,13 @@ function endCall() {
 
 async function fetchMemes() {
     const grid = document.getElementById('memeGallery');
-    grid.innerHTML = "<div style='color:black; padding:20px;'>Loading 60 Memes...</div>";
+    grid.innerHTML = "<div style='color:black; padding:20px; font-size:12px;'>Loading...</div>";
     try {
         const res = await fetch('https://api.imgflip.com/get_memes');
         const data = await res.json();
-        // Take 60 memes from the API
         const memes = data.data.memes.slice(0, 60);
         grid.innerHTML = memes.map(m => `<img src="${m.url}" class="meme-thumb" onclick="sendMeme('${m.url}')">`).join('');
-    } catch(e) { grid.innerHTML = "Error loading."; }
+    } catch(e) { grid.innerHTML = "Error."; }
 }
 
 function toggleMemeGallery() {
@@ -275,7 +273,6 @@ function sendMeme(url) {
     msg.innerHTML = `<img src="${url}" style="width:100%; border-radius:10px;">`;
     document.getElementById('messages').appendChild(msg);
     document.getElementById('messages').scrollTop = 9999;
-    toggleMemeGallery();
 }
 
 function updateHistory() {
@@ -302,7 +299,7 @@ function processVoice() {
     let vol = data.reduce((a,b) => a+b) / data.length;
     
     const indicator = document.getElementById('voiceIndicator');
-    if(vol > 5) { // Threshold for talking
+    if(vol > 5) { 
         indicator.style.display = "block";
         document.documentElement.style.setProperty('--logo-dash', Math.max(0, 400 - (vol * 5)));
         document.documentElement.style.setProperty('--heart-fill', '1');
