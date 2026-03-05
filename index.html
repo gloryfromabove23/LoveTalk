@@ -28,13 +28,16 @@ body{
 
 /* ---------------- LAYOUT ---------------- */
 #leftPanel{
-    width:420px;
+    width: 420px;
+    min-width: 300px; /* Allows it to shrink slightly */
+    max-width: 40vw;   /* Makes it slim when window is narrowed */
     background:rgba(20,20,25,0.65);
     backdrop-filter:blur(20px);
     border-right:1px solid rgba(255,255,255,0.05);
     display:flex;
     flex-direction:column;
     padding:20px;
+    transition: width 0.3s ease;
 }
 
 #centerPanel{
@@ -43,34 +46,6 @@ body{
     flex-direction:column;
     align-items:center;
     justify-content:center;
-}
-
-/* ---------------- ONLINE ---------------- */
-#onlineTop{
-    display:flex;
-    justify-content:space-between;
-    font-weight:600;
-    font-size:14px;
-    cursor:pointer;
-}
-
-#onlineDropdown{
-    max-height:0;
-    overflow:hidden;
-    transition:.3s;
-}
-
-#onlineDropdown.open{
-    max-height:60vh;
-    overflow-y:auto;
-    margin-top:10px;
-}
-
-.dropdownUser{
-    padding:8px;
-    border-radius:8px;
-    background:rgba(255,255,255,0.08);
-    margin-bottom:6px;
 }
 
 /* ---------------- CHAT ---------------- */
@@ -82,6 +57,7 @@ body{
     border-radius:20px;
     background:rgba(255,255,255,0.06);
     padding:15px;
+    position: relative;
 }
 
 #messages{
@@ -94,6 +70,7 @@ body{
     padding:12px;
     border-radius:18px;
     margin:8px 0;
+    word-wrap: break-word;
 }
 
 #chatControls{
@@ -117,73 +94,51 @@ body{
     border:none;
     background:white;
     font-weight:700;
+    cursor: pointer;
 }
 
-/* ---------------- LOGO ---------------- */
-#mainLogo{
-    width:240px;
-    transition:0.08s linear;
+#memeMenu { 
+    display: none; position: absolute; bottom: 80px; left: 10px; right: 10px; 
+    background: rgba(30, 30, 35, 0.95); padding: 15px; border-radius: 15px; 
+    grid-template-columns: repeat(3, 1fr); gap: 10px; z-index: 100; 
+    backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
+    max-height: 200px; overflow-y: auto;
 }
-
-#brandName{
-    font-size:2rem;
-    font-weight:800;
-    margin-top:15px;
-}
-
-.accent{ color:#222; }
-
-#status{
-    margin-top:8px;
-    font-weight:600;
-}
+#memeMenu img { width: 100%; border-radius: 8px; cursor: pointer; }
 
 /* ---------------- CALL CONTROLS ---------------- */
-#callControls{
-    margin-top:20px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-}
-
 .callButtons{
     display:flex;
-    gap:15px;
+    gap:10px;
     align-items:center;
+    margin-top: 15px;
 }
 
 .circleBtn{
-    width:90px;
-    height:90px;
+    width:70px;
+    height:70px;
     border:none;
     background:none;
     cursor:pointer;
+    transition: transform 0.1s;
 }
 
-.circleBtn svg{
-    width:100%;
-    height:100%;
-}
+.circleBtn:active { transform: scale(0.9); }
 
-#callLoader{
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    border:6px solid rgba(255,255,255,0.3);
-    border-top-color:white;
-    animation:spin 1s linear infinite;
-    display:none;
-}
+#callBtn.loading { animation: spin 2s linear infinite; }
 
 @keyframes spin{
     0%{transform:rotate(0deg)}
     100%{transform:rotate(360deg)}
 }
 
-.autoCallWrap{
-    font-size:14px;
+.historyWrap {
+    margin-top: 10px;
+    font-size: 13px;
+    opacity: 0.8;
 }
+
+#onlineDropdown.open { max-height: 40vh; overflow-y: auto; margin-top: 10px; }
 </style>
 </head>
 
@@ -198,73 +153,110 @@ body{
     <div id="onlineDropdown"></div>
 
     <div id="chatBox">
+        <div id="memeMenu"></div>
         <div id="messages"></div>
         <div id="chatControls">
             <input id="msgInput" placeholder="Say something...">
+            <button id="gifBtn" style="background:#FF6A88; color:white;">🎁</button>
             <button id="sendBtn">Send</button>
         </div>
     </div>
 </div>
 
 <div id="centerPanel">
-<svg id="mainLogo" viewBox="0 0 100 100">
-  <path fill="white" fill-rule="evenodd"
-        d="M10 30 Q10 10 30 10 H70 Q90 10 90 30 V70 Q90 90 70 90 H30 Q10 90 10 70 Z
-           M50 65 C35 50,30 40,40 35 C45 32,50 38,50 38 C50 38,55 32,60 35 C70 40,65 50,50 65Z"/>
-  <polygon points="30,80 45,95 45,80" fill="white"/>
-</svg>
+    <svg id="mainLogo" viewBox="0 0 100 100">
+        <path fill="white" fill-rule="evenodd" d="M10 30 Q10 10 30 10 H70 Q90 10 90 30 V70 Q90 90 70 90 H30 Q10 90 10 70 Z M50 65 C35 50,30 40,40 35 C45 32,50 38,50 38 C50 38,55 32,60 35 C70 40,65 50,50 65Z"/>
+        <polygon points="30,80 45,95 45,80" fill="white"/>
+    </svg>
 
-<div id="brandName">Love<span class="accent">Talk</span></div>
-<div id="status">Online</div>
+    <div id="brandName">Love<span class="accent">Talk</span></div>
+    <div id="status">Online</div>
 
-<div id="callControls">
-  <div class="callButtons">
-    <button id="callBtn" class="circleBtn">
-      <svg viewBox="0 0 100 100">
-        <defs>
-          <mask id="phoneMask">
-            <rect width="100" height="100" fill="white"/>
-            <path d="M35 40 Q45 30 55 40 L60 45 Q65 50 60 55 L55 60 Q50 65 45 60 L40 55 Q35 50 40 45 Z" fill="black"/>
-          </mask>
-        </defs>
-        <circle cx="50" cy="50" r="40" fill="white" mask="url(#phoneMask)"/>
-      </svg>
-    </button>
-    <div id="callLoader"></div>
-    <button id="hangBtn" class="circleBtn" style="display:none;">
-      <svg viewBox="0 0 100 100">
-        <defs>
-          <mask id="hangMask">
-            <rect width="100" height="100" fill="white"/>
-            <path d="M30 60 Q50 75 70 60 L65 55 Q50 65 35 55 Z" fill="black"/>
-          </mask>
-        </defs>
-        <circle cx="50" cy="50" r="40" fill="white" mask="url(#hangMask)"/>
-      </svg>
-    </button>
-  </div>
-  <label class="autoCallWrap">
-    <input type="checkbox" id="autoCall"> Auto Call
-  </label>
-</div>
+    <div id="callControls">
+        <div class="callButtons">
+            <button class="circleBtn" id="muteBtn">
+                <svg viewBox="0 0 100 100">
+                    <mask id="muteMask"><rect width="100" height="100" fill="white"/><path d="M40 35h-5v30h5l10 10V25L40 35zm20 15c0-5-3-9-7-11v22c4-2 7-6 7-11z" fill="black"/></mask>
+                    <circle cx="50" cy="50" r="40" fill="white" mask="url(#muteMask)"/>
+                </svg>
+            </button>
+
+            <button id="callBtn" class="circleBtn">
+                <svg viewBox="0 0 100 100">
+                    <mask id="phoneMask"><rect width="100" height="100" fill="white"/><path d="M35 40 Q45 30 55 40 L60 45 Q65 50 60 55 L55 60 Q50 65 45 60 L40 55 Q35 50 40 45 Z" fill="black"/></mask>
+                    <circle cx="50" cy="50" r="40" fill="white" mask="url(#phoneMask)"/>
+                </svg>
+            </button>
+
+            <button class="circleBtn" id="friendBtn">
+                <svg viewBox="0 0 100 100">
+                    <mask id="friendMask"><rect width="100" height="100" fill="white"/><path d="M50 45c5.5 0 10-4.5 10-10s-4.5-10-10-10-10 4.5-10 10 4.5 10 10 10zm0 5c-8.3 0-25 4.2-25 12.5V70h50v-7.5c0-8.3-16.7-12.5-25-12.5z" fill="black"/></mask>
+                    <circle cx="50" cy="50" r="40" fill="white" mask="url(#friendMask)"/>
+                </svg>
+            </button>
+
+            <button class="circleBtn" id="reportBtn">
+                <svg viewBox="0 0 100 100">
+                    <mask id="reportMask"><rect width="100" height="100" fill="white"/><path d="M50 20c-16.6 0-30 13.4-30 30s13.4 30 30 30 30-13.4 30-30-13.4-30-30-30zm2 45h-4v-4h4v4zm0-10h-4V35h4v20z" fill="black"/></mask>
+                    <circle cx="50" cy="50" r="40" fill="white" mask="url(#reportMask)"/>
+                </svg>
+            </button>
+        </div>
+
+        <div style="display:flex; gap:20px; align-items:center; margin-top:10px;">
+            <label class="autoCallWrap"><input type="checkbox" id="autoCall"> Auto Call</label>
+            <div class="historyWrap">Call History: <span id="lastUser">None</span></div>
+        </div>
+    </div>
 </div>
 
 <script>
-/* ---------------- USERNAME ---------------- */
+/* ---------------- USER & SOCKET ---------------- */
 const adjectives=["Neo","Luxe","Echo","Nova","Drift","Vibe","Hyper","Aurora"];
 const nouns=["Pulse","Flux","Wave","Core","Orbit","Phase","Glow","Shift"];
-function generateUsername(){
-  return adjectives[Math.floor(Math.random()*adjectives.length)]
-       + nouns[Math.floor(Math.random()*nouns.length)]
-       + Math.floor(Math.random()*900+100);
+const username = adjectives[Math.floor(Math.random()*adjectives.length)] + nouns[Math.floor(Math.random()*nouns.length)] + Math.floor(Math.random()*900+100);
+
+const socket = io();
+socket.on('connect', () => socket.emit('setName', username));
+
+/* ---------------- MEMES ---------------- */
+const memeList = [
+    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/l41lTfuxV6M0vT8S4/giphy.gif" },
+    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/MDJ9IbxxvDUQM/giphy.gif" },
+    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/QMHoU66L5Qezq5qK7w/giphy.gif" },
+    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o72F8t9TDi2xVnxOE/giphy.gif" },
+    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/H5iz8vPzfaYBr0HoFv/giphy.gif" }
+];
+
+const memeMenu = document.getElementById("memeMenu");
+memeList.forEach(meme => {
+    const img = document.createElement("img");
+    img.src = meme.url;
+    img.onclick = () => {
+        socket.emit('chatMessage', { msg: `<img src="${meme.url}" style="width:100%; border-radius:10px;">` });
+        memeMenu.style.display = "none";
+    };
+    memeMenu.appendChild(img);
+});
+
+document.getElementById("gifBtn").onclick = () => memeMenu.style.display = memeMenu.style.display === "grid" ? "none" : "grid";
+
+/* ---------------- CHAT LOGIC ---------------- */
+function sendMessage() {
+    const input = document.getElementById("msgInput");
+    if(input.value.trim()) {
+        socket.emit('chatMessage', { msg: input.value });
+        input.value = "";
+    }
 }
-const username=generateUsername();
+document.getElementById("sendBtn").onclick = sendMessage;
+document.getElementById("msgInput").onkeydown = (e) => { if(e.key === "Enter") sendMessage(); };
 
-/* ---------------- SOCKET CONNECTION (FIXED) ---------------- */
-const socket = io(); // Connects to the server
-
-socket.on('connect', () => {
-    socket.emit('setName', username);
+socket.on('message', (msg) => {
+    const p = document.createElement("p");
+    p.innerHTML = msg;
+    document.getElementById("messages").appendChild(p);
+    document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
 });
 
 socket.on('updateUsers', (userNames) => {
@@ -279,44 +271,34 @@ socket.on('updateUsers', (userNames) => {
     document.getElementById("onlineCount").textContent = `People Online (${userNames.length})`;
 });
 
-socket.on('message', (msg) => {
-    const messages = document.getElementById("messages");
-    const p = document.createElement("p");
-    p.textContent = msg;
-    messages.appendChild(p);
-    messages.scrollTop = messages.scrollHeight;
-});
-
-/* ---------------- UI CONTROLS ---------------- */
-document.getElementById("sendBtn").onclick = () => {
-    const input = document.getElementById("msgInput");
-    if(input.value) {
-        socket.emit('chatMessage', { msg: input.value });
-        input.value = "";
-    }
+/* ---------------- CALL BUTTONS & HISTORY ---------------- */
+const callBtn = document.getElementById("callBtn");
+callBtn.onclick = () => {
+    callBtn.classList.toggle("loading"); // Starts spinning
+    // Logic for connecting goes here
+    setTimeout(() => {
+        document.getElementById("lastUser").textContent = "Last Match: " + (Math.random() > 0.5 ? "NeonWave" : "LuxeCore");
+    }, 2000);
 };
 
-document.getElementById("toggleUsers").onclick = () => {
-    document.getElementById("onlineDropdown").classList.toggle("open");
-};
+document.getElementById("toggleUsers").onclick = () => document.getElementById("onlineDropdown").classList.toggle("open");
 
-/* ---------------- LOGO MIC PULSE (KEEPING YOUR CODE) ---------------- */
+/* ---------------- LOGO PULSE ---------------- */
 navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-    const analyser=ctx.createAnalyser();
-    const mic=ctx.createMediaStreamSource(stream);
-    mic.connect(analyser);
-    analyser.fftSize=256;
-    const dataArray=new Uint8Array(analyser.frequencyBinCount);
-    const logo=document.getElementById("mainLogo");
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = ctx.createAnalyser();
+    const mic = ctx.createMediaStreamSource(stream);
+    mic.connect(analyser); analyser.fftSize=256;
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    const logo = document.getElementById("mainLogo");
     function animate(){
         analyser.getByteFrequencyData(dataArray);
-        const avg=dataArray.reduce((a,b)=>a+b)/dataArray.length;
-        logo.style.transform=`scale(${1+avg/200})`;
+        const avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
+        logo.style.transform = `scale(${1+avg/200})`;
         requestAnimationFrame(animate);
     }
     animate();
-}).catch(() => console.log("Mic access not granted"));
+}).catch(() => console.log("Mic access denied"));
 </script>
 </body>
 </html>
