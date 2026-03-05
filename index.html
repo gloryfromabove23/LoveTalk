@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>LoveTalk ♥︎</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="/socket.io/socket.io.js"></script>
 
 <style>
 /* ---------------- BASE ---------------- */
@@ -188,9 +189,7 @@ body{
 
 <body>
 
-<!-- LEFT PANEL -->
 <div id="leftPanel">
-
     <div id="onlineTop">
         <span id="onlineCount">People Online (0)</span>
         <span id="toggleUsers">▼</span>
@@ -205,12 +204,9 @@ body{
             <button id="sendBtn">Send</button>
         </div>
     </div>
-
 </div>
 
-<!-- CENTER PANEL -->
 <div id="centerPanel">
-
 <svg id="mainLogo" viewBox="0 0 100 100">
   <path fill="white" fill-rule="evenodd"
         d="M10 30 Q10 10 30 10 H70 Q90 10 90 30 V70 Q90 90 70 90 H30 Q10 90 10 70 Z
@@ -223,8 +219,6 @@ body{
 
 <div id="callControls">
   <div class="callButtons">
-
-    <!-- CALL BUTTON -->
     <button id="callBtn" class="circleBtn">
       <svg viewBox="0 0 100 100">
         <defs>
@@ -236,10 +230,7 @@ body{
         <circle cx="50" cy="50" r="40" fill="white" mask="url(#phoneMask)"/>
       </svg>
     </button>
-
     <div id="callLoader"></div>
-
-    <!-- HANG BUTTON -->
     <button id="hangBtn" class="circleBtn" style="display:none;">
       <svg viewBox="0 0 100 100">
         <defs>
@@ -251,119 +242,81 @@ body{
         <circle cx="50" cy="50" r="40" fill="white" mask="url(#hangMask)"/>
       </svg>
     </button>
-
   </div>
-
   <label class="autoCallWrap">
     <input type="checkbox" id="autoCall"> Auto Call
   </label>
 </div>
-
 </div>
 
 <script>
-
 /* ---------------- USERNAME ---------------- */
 const adjectives=["Neo","Luxe","Echo","Nova","Drift","Vibe","Hyper","Aurora"];
 const nouns=["Pulse","Flux","Wave","Core","Orbit","Phase","Glow","Shift"];
-
 function generateUsername(){
   return adjectives[Math.floor(Math.random()*adjectives.length)]
        + nouns[Math.floor(Math.random()*nouns.length)]
        + Math.floor(Math.random()*900+100);
 }
-
 const username=generateUsername();
 
-/* ---------------- WEBSOCKET ---------------- */
-const ws = new WebSocket(`wss://${window.location.host}`);
-let users=[];
-let inCall=false;
+/* ---------------- SOCKET CONNECTION (FIXED) ---------------- */
+const socket = io(); // Connects to the server
 
-ws.onopen=()=>ws.send(JSON.stringify({type:"join",username}));
-
-ws.onmessage=e=>{
- const data=JSON.parse(e.data);
-
- if(data.type==="update"){
-   users=data.users;
-   updateOnlineUI();
- }
-
- if(data.type==="matched"){
-   loader.style.display="none";
-   hangBtn.style.display="block";
-   inCall=true;
- }
-
- if(data.type==="callEnded"){
-   resetCallUI();
- }
-};
-
-/* ---------------- ONLINE UI ---------------- */
-const onlineDropdown=document.getElementById("onlineDropdown");
-const onlineCount=document.getElementById("onlineCount");
-const toggleUsers=document.getElementById("toggleUsers");
-
-function updateOnlineUI(){
- onlineDropdown.innerHTML="";
- users.forEach(u=>{
-   const div=document.createElement("div");
-   div.className="dropdownUser";
-   div.textContent=u;
-   onlineDropdown.appendChild(div);
- });
- onlineCount.textContent=`People Online (${users.length})`;
-}
-
-toggleUsers.onclick=()=>{
- onlineDropdown.classList.toggle("open");
-};
-
-/* ---------------- CALL SYSTEM ---------------- */
-const callBtn=document.getElementById("callBtn");
-const hangBtn=document.getElementById("hangBtn");
-const loader=document.getElementById("callLoader");
-
-callBtn.onclick=()=>{
- callBtn.style.display="none";
- loader.style.display="block";
- ws.send(JSON.stringify({type:"call"}));
-};
-
-hangBtn.onclick=()=>{
- ws.send(JSON.stringify({type:"hangup"}));
- resetCallUI();
-};
-
-function resetCallUI(){
- loader.style.display="none";
- hangBtn.style.display="none";
- callBtn.style.display="block";
- inCall=false;
-}
-
-/* ---------------- LOGO MIC PULSE ---------------- */
-navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
- const ctx=new (window.AudioContext||window.webkitAudioContext)();
- const analyser=ctx.createAnalyser();
- const mic=ctx.createMediaStreamSource(stream);
- mic.connect(analyser);
- analyser.fftSize=256;
- const dataArray=new Uint8Array(analyser.frequencyBinCount);
- const logo=document.getElementById("mainLogo");
-
- function animate(){
-   analyser.getByteFrequencyData(dataArray);
-   const avg=dataArray.reduce((a,b)=>a+b)/dataArray.length;
-   logo.style.transform=`scale(${1+avg/200})`;
-   requestAnimationFrame(animate);
- }
- animate();
+socket.on('connect', () => {
+    socket.emit('setName', username);
 });
 
-</script>
+socket.on('updateUsers', (userNames) => {
+    const onlineDropdown = document.getElementById("onlineDropdown");
+    onlineDropdown.innerHTML = "";
+    userNames.forEach(name => {
+        const div = document.createElement("div");
+        div.className = "dropdownUser";
+        div.textContent = name;
+        onlineDropdown.appendChild(div);
+    });
+    document.getElementById("onlineCount").textContent = `People Online (${userNames.length})`;
+});
 
+socket.on('message', (msg) => {
+    const messages = document.getElementById("messages");
+    const p = document.createElement("p");
+    p.textContent = msg;
+    messages.appendChild(p);
+    messages.scrollTop = messages.scrollHeight;
+});
+
+/* ---------------- UI CONTROLS ---------------- */
+document.getElementById("sendBtn").onclick = () => {
+    const input = document.getElementById("msgInput");
+    if(input.value) {
+        socket.emit('chatMessage', { msg: input.value });
+        input.value = "";
+    }
+};
+
+document.getElementById("toggleUsers").onclick = () => {
+    document.getElementById("onlineDropdown").classList.toggle("open");
+};
+
+/* ---------------- LOGO MIC PULSE (KEEPING YOUR CODE) ---------------- */
+navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const analyser=ctx.createAnalyser();
+    const mic=ctx.createMediaStreamSource(stream);
+    mic.connect(analyser);
+    analyser.fftSize=256;
+    const dataArray=new Uint8Array(analyser.frequencyBinCount);
+    const logo=document.getElementById("mainLogo");
+    function animate(){
+        analyser.getByteFrequencyData(dataArray);
+        const avg=dataArray.reduce((a,b)=>a+b)/dataArray.length;
+        logo.style.transform=`scale(${1+avg/200})`;
+        requestAnimationFrame(animate);
+    }
+    animate();
+}).catch(() => console.log("Mic access not granted"));
+</script>
 </body>
 </html>
