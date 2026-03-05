@@ -6,62 +6,60 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root { --main-bg: linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC); --logo-dash: 400; --heart-fill: 0; }
-body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); background-size: 300% 300%; animation: grad 12s ease infinite; color: white; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); background-size: 300% 300%; animation: grad 12s ease infinite; color: white; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
 @keyframes grad { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
 
 #topBar { padding: 15px 30px; display: flex; justify-content: flex-end; background: rgba(0,0,0,0.1); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; }
-.theme-btn { background: white; color: black; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 10px; text-transform: uppercase; }
+.theme-btn { background: white; color: black; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 10px; text-transform: uppercase; transition: transform 0.2s; }
+.theme-btn:active { transform: scale(0.95); }
 
-#appView { display: flex; flex: 1; width: 100%; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-#leftPanel { width: 400px; background: rgba(15, 15, 20, 0.9); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; z-index: 10; transition: width 0.5s ease; }
-#centerPanel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; transition: all 0.5s ease; }
+#appView { display: flex; flex: 1; width: 100%; transition: all 0.5s ease; }
+#leftPanel { width: 380px; background: rgba(15, 15, 20, 0.9); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; position: relative; }
+#centerPanel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
 
-/* Logo & Text Styling */
+/* Logo & Branding */
 #logoContainer { width: 180px; height: 180px; position: relative; transition: all 0.5s ease; }
 .base-bubble { fill: white; }
 .outline-trace { fill: none; stroke: #4BFF8B; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: var(--logo-dash); transition: stroke-dashoffset 0.1s linear; }
 .heart-cutout { fill: #4BFF8B; opacity: var(--heart-fill); transition: opacity 0.2s; }
-#brandName { font-size: 3.5rem; font-weight: 800; margin: 0; letter-spacing: -3px; transition: font-size 0.5s ease; }
+#brandName { font-size: 3.5rem; font-weight: 800; margin: 0; letter-spacing: -3px; transition: all 0.5s ease; }
 
-/* Button Labels - Cutout Effect */
-.label-tag { position: absolute; bottom: -20px; font-size: 10px; font-weight: 900; background: white; color: black; padding: 2px 8px; border-radius: 4px; white-space: nowrap; mix-blend-mode: screen; }
-.label-tag span { mix-blend-mode: destination-out; }
-
-.callButtons { display: flex; flex-direction: row; gap: 20px; align-items: center; transition: transform 0.5s ease; }
+/* Action Buttons */
+.callButtons { display: flex; flex-direction: row; gap: 20px; align-items: center; margin-top: 40px; }
 .circleBtn { width: 80px; height: 80px; border: none; background: transparent; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; }
+.label-tag { position: absolute; bottom: -20px; font-size: 10px; font-weight: 900; background: white; color: black; padding: 2px 8px; border-radius: 4px; white-space: nowrap; mix-blend-mode: screen; }
 #muteHighlight { display: none; position: absolute; width: 60px; height: 60px; background: #FF4B4B; border-radius: 50%; z-index: -1; }
 
-/* iPhone Chat Styling */
-#chatBox { margin-top: 15px; display: flex; flex-direction: column; flex-grow: 1; background: #ffffff; border-radius: 20px; padding: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-#messages { flex: 1; overflow-y: auto; font-size: 15px; display: flex; flex-direction: column; gap: 4px; padding: 10px; }
+/* iPhone Style Chat */
+#chatBox { margin-top: 15px; display: none; flex-direction: column; flex-grow: 1; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+#chatHeader { background: #f9f9f9; padding: 10px; border-bottom: 1px solid #eee; text-align: center; color: #000; }
+#chatHeader .avatar { width: 30px; height: 30px; background: #8e8e93; border-radius: 50%; margin: 0 auto 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600; }
+#chatHeader .name { font-size: 11px; font-weight: 400; color: #000; }
 
-.timestamp { align-self: center; font-size: 11px; color: #8e8e93; font-weight: 600; margin: 10px 0 5px 0; text-transform: uppercase; }
-.msg-bubble { padding: 8px 15px; border-radius: 18px; max-width: 75%; position: relative; line-height: 1.4; }
+#messages { flex: 1; overflow-y: auto; font-size: 15px; display: flex; flex-direction: column; gap: 4px; padding: 15px; }
+.msg-bubble { padding: 8px 15px; border-radius: 18px; max-width: 75%; line-height: 1.4; font-size: 14px; }
 .msg-bubble.mine { align-self: flex-end; background: #007aff; color: white; border-bottom-right-radius: 4px; }
 .msg-bubble.theirs { align-self: flex-start; background: #e5e5ea; color: black; border-bottom-left-radius: 4px; }
-.msg-bubble img { max-width: 100%; border-radius: 12px; }
+.timestamp { align-self: center; font-size: 10px; color: #8e8e93; font-weight: 600; margin: 10px 0; text-transform: uppercase; }
+.receipt { align-self: flex-end; font-size: 10px; color: #8e8e93; margin: 2px 5px 8px 0; }
 
-.receipt { align-self: flex-end; font-size: 10px; color: #8e8e93; margin-bottom: 8px; margin-right: 5px; font-weight: 500; }
-
-/* In-Chat Meme Grid */
-#memeGallery { display: none; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 10px; background: #f2f2f7; border-top: 1px solid #ddd; max-height: 200px; overflow-y: auto; }
+#memeGallery { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; background: #f2f2f7; border-top: 1px solid #ddd; max-height: 180px; overflow-y: auto; }
 .meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; cursor: pointer; }
 
-/* Footer adjustments */
-#footerSpace { padding: 40px 15%; text-align: center; background: white; color: #333; }
-footer { padding: 30px; text-align: center; font-size: 10px; background: #0b0b0d; color: #555; font-weight: 800; }
+/* Bottom Elements */
+#footerSpace { padding: 40px 15%; text-align: center; background: white; color: #333; margin-top: auto; }
+footer { padding: 20px; text-align: center; font-size: 10px; background: #0b0b0d; color: #555; font-weight: 800; width: 100%; }
 
-/* Small Screen Transition Logic */
+.modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; background: #1a1a1a; border-radius: 20px; padding: 20px; z-index: 2000; border: 1px solid #333; text-align: center; }
+
 @media (max-width: 850px) {
-    #appView { flex-direction: column-reverse; height: auto; }
-    #leftPanel { width: 100%; height: 500px; border-right: none; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-    #centerPanel { padding: 40px 20px; flex: none; }
-    #logoContainer { width: 100px; height: 100px; }
-    #brandName { font-size: 2.2rem; }
-    .callButtons { transform: scale(0.9); }
+    #appView { flex-direction: column-reverse; }
+    #leftPanel { width: 100%; height: auto; border-right: none; border-top: 1px solid rgba(255,255,255,0.1); }
+    #centerPanel { padding: 20px; }
+    #logoContainer { width: 80px; height: 80px; }
+    #brandName { font-size: 2rem; }
+    .callButtons { margin-top: 20px; transform: scale(0.9); }
 }
-
-#reportIconCircle { transition: fill 0.2s; }
 </style>
 </head>
 <body>
@@ -70,21 +68,24 @@ footer { padding: 30px; text-align: center; font-size: 10px; background: #0b0b0d
 
 <div id="appView">
     <div id="leftPanel">
-        <div style="font-size:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.1); padding:10px 0; display:flex; justify-content: space-between;">
+        <div style="font-size:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; display:flex; justify-content: space-between;">
             <span>VERIFIED HUMANS</span> <span id="onlineCount">142</span>
         </div>
-        <div id="connDD" style="font-size:11px; padding:10px;"><div id="connEmpty" style="opacity:0.3;">No active connections</div></div>
+        <div id="connDD" style="font-size:11px; padding:10px 0;">
+            <div id="connEmpty" style="opacity:0.3;">No active connections</div>
+        </div>
         
         <div id="chatBox">
-            <div id="messages">
-                <div class="timestamp">Today 3:12 PM</div>
-                <div class="msg-bubble theirs">Connected to the network. Say hello!</div>
+            <div id="chatHeader">
+                <div class="avatar" id="peerInitial">?</div>
+                <div class="name" id="peerName">Connecting...</div>
             </div>
+            <div id="messages"></div>
             <div id="memeGallery"></div>
             <div style="display:flex; gap:8px; padding:10px; border-top: 1px solid #eee; align-items: center;">
-                <button onclick="toggleMemeGallery()" style="background:none; border:none; cursor:pointer; font-size:24px; padding:0;">🎲</button>
-                <input id="msgInput" onkeydown="if(event.key==='Enter')sendMsg()" style="flex:1; background:#f2f2f7; border:none; color:black; padding:10px 15px; border-radius:20px; outline:none;" placeholder="iMessage">
-                <button onclick="sendMsg()" style="background:#007aff; color:#fff; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer; font-weight:800; font-size:18px; display:flex; align-items:center; justify-content:center;">↑</button>
+                <button onclick="toggleMemeGallery()" style="background:none; border:none; cursor:pointer; font-size:22px;">🎲</button>
+                <input id="msgInput" onkeydown="if(event.key==='Enter')sendMsg()" style="flex:1; background:#f2f2f7; border:none; color:black; padding:8px 12px; border-radius:20px; outline:none;" placeholder="iMessage">
+                <button onclick="sendMsg()" style="background:#007aff; color:#fff; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-weight:800; font-size:16px;">↑</button>
             </div>
         </div>
     </div>
@@ -92,7 +93,7 @@ footer { padding: 30px; text-align: center; font-size: 10px; background: #0b0b0d
     <div id="centerPanel">
         <div id="logoWrapper" style="display:flex; flex-direction:column; align-items:center;">
             <div id="logoContainer">
-                <svg viewBox="0 0 100 100" style="width:100%; height:100%;">
+                <svg viewBox="0 0 100 100">
                     <defs>
                         <mask id="m">
                             <rect width="100" height="100" fill="white"/>
@@ -105,34 +106,30 @@ footer { padding: 30px; text-align: center; font-size: 10px; background: #0b0b0d
                 </svg>
             </div>
             <div id="brandName">Love<span style="font-weight:100">Talk</span></div>
+            <div id="status" style="font-weight:600; opacity:0.7; font-size:9px; text-transform:uppercase; letter-spacing:1px; margin-top:5px;">Ready</div>
         </div>
-        
-        <div id="status" style="margin-top:10px;">Ready</div>
-        
-        <div class="callButtons" style="margin-top:40px;">
+
+        <div class="callButtons">
             <button class="circleBtn" onclick="muteT()">
                 <div id="muteHighlight"></div>
                 <svg viewBox="0 0 100 100" width="55"><circle cx="50" cy="50" r="42" fill="white" opacity="0.1"/><g fill="white"><rect x="44" y="30" width="12" height="22" rx="6" /><path d="M38 46 a12 12 0 0 0 24 0" fill="none" stroke="white" stroke-width="4"/></g></svg>
-                <div class="label-tag" id="muteTag" style="display:none;"><span>MUTE</span></div>
+                <div class="label-tag" id="muteTag" style="display:none;">MUTE</div>
             </button>
-
             <button id="callBtn" class="circleBtn" onclick="handleCall()">
                 <svg viewBox="0 0 100 100" width="75"><rect x="35" y="20" width="30" height="60" rx="6" fill="none" stroke="white" stroke-width="3"/><rect id="phoneScreen" x="39" y="25" width="22" height="42" rx="2" fill="#4BFF8B"/><circle cx="50" cy="72" r="3" fill="white"/></svg>
-                <div class="label-tag" id="callTag"><span>CALL</span></div>
+                <div class="label-tag" id="callTag">CALL</div>
             </button>
-
             <button class="circleBtn" onclick="openMod('fModal')">
                 <svg viewBox="0 0 100 100" width="55"><circle cx="50" cy="50" r="42" fill="white" opacity="0.1"/><path d="M50 30 v40 M30 50 h40" stroke="white" stroke-width="8" stroke-linecap="round"/></svg>
-                <div class="label-tag"><span>ADD</span></div>
+                <div class="label-tag">ADD</div>
             </button>
-
             <button id="reportBtn" class="circleBtn" onclick="handleReportClick()">
                 <svg viewBox="0 0 100 100" width="55"><circle id="reportIconCircle" cx="50" cy="50" r="42" fill="white" opacity="0.1"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="45" font-weight="800">!</text></svg>
-                <div class="label-tag"><span>REPORT</span></div>
+                <div class="label-tag">REPORT</div>
             </button>
         </div>
 
-        <div class="bottom-controls">
+        <div style="margin-top:30px; font-size:10px; font-weight:800; text-transform:uppercase; display:flex; gap:20px;">
             <label style="cursor:pointer;"><input type="checkbox" id="autoCheck" onchange="toggleAuto()"> Auto Call</label>
             <span style="cursor:pointer; text-decoration:underline; opacity:0.6;" onclick="openMod('hModal')">History</span>
         </div>
@@ -145,31 +142,31 @@ footer { padding: 30px; text-align: center; font-size: 10px; background: #0b0b0d
 </div>
 <footer>&copy; 2026 LOVETALK NETWORKS // ENCRYPTED</footer>
 
+<div id="cModal" class="modal">
+    <h3>Canvas</h3>
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin:15px 0;">
+        <div style="height:40px; border-radius:8px; background:linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC); border:2px solid white; cursor:pointer;" onclick="setBg('linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC)')"></div>
+        <div style="height:40px; border-radius:8px; background:#001a33; cursor:pointer;" onclick="setBg('#001a33')"></div>
+        <div style="height:40px; border-radius:8px; background:#1a1a1a; cursor:pointer;" onclick="setBg('#1a1a1a')"></div>
+    </div>
+    <button class="theme-btn" onclick="cls()">Done</button>
+</div>
+
 <div id="bModal" class="modal">
     <h3 style="color:#FF4B4B">Report User</h3>
-    <input type="text" id="banReason" style="width:85%; padding:10px; margin:10px 0; background:#222; border:none; color:#fff;" placeholder="Reason...">
-    <div style="display:flex;gap:10px;"><button class="theme-btn" onclick="cls()" style="flex:1">Cancel</button><button class="theme-btn" onclick="confirmBan()" style="flex:1;background:#FF4B4B;color:white;">Confirm</button></div>
+    <input type="text" id="banReason" style="width:80%; padding:10px; margin:10px 0; background:#222; border:none; color:#fff; border-radius:5px;" placeholder="Reason...">
+    <div style="display:flex;gap:10px;margin-top:10px;"><button class="theme-btn" onclick="cls()" style="flex:1">Cancel</button><button class="theme-btn" onclick="confirmBan()" style="flex:1;background:#FF4B4B;color:white;">Confirm</button></div>
 </div>
 
 <div id="fModal" class="modal">
     <h3>Add to Connections?</h3>
-    <div style="display:flex;gap:10px;"><button class="theme-btn" onclick="cls()" style="flex:1">No</button><button class="theme-btn" onclick="addFriend()" style="flex:1;background:#4BFF8B;">Yes</button></div>
+    <div style="display:flex;gap:10px;margin-top:10px;"><button class="theme-btn" onclick="cls()" style="flex:1">No</button><button class="theme-btn" onclick="addFriend()" style="flex:1;background:#4BFF8B;">Yes</button></div>
 </div>
 
 <div id="hModal" class="modal">
-    <h3>Recent Humans</h3>
-    <div id="historyList" style="max-height:150px; overflow-y:auto; text-align:left; font-size:11px; color:white;"></div>
+    <h3>History</h3>
+    <div id="historyList" style="max-height:150px; overflow-y:auto; font-size:12px; text-align:left; padding:10px; color:white;"></div>
     <button class="theme-btn" onclick="cls()" style="margin-top:10px">Close</button>
-</div>
-
-<div id="cModal" class="modal">
-    <h3>Canvas</h3>
-    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin:15px 0;">
-        <div style="height:35px; border-radius:5px; background:linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC); cursor:pointer;" onclick="setBg('linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC)')"></div>
-        <div style="height:35px; border-radius:5px; background:#001a33; cursor:pointer;" onclick="setBg('#001a33')"></div>
-        <div style="height:35px; border-radius:5px; background:#1a1a1a; cursor:pointer;" onclick="setBg('#1a1a1a')"></div>
-    </div>
-    <button class="theme-btn" onclick="cls()">Done</button>
 </div>
 
 <script>
@@ -177,31 +174,31 @@ let peer = "";
 let isAuto = false;
 let historyList = [];
 let audioContext, analyser, dataArray;
-let lastMsgTime = Date.now();
+let lastMsgTime = 0;
 
 function openMod(id) { document.getElementById(id).style.display='block'; }
 function cls() { 
     document.querySelectorAll('.modal').forEach(m => m.style.display='none'); 
-    document.getElementById('reportIconCircle').style.fill = "white";
-    document.getElementById('reportIconCircle').style.opacity = "0.1";
+    const rCircle = document.getElementById('reportIconCircle');
+    rCircle.style.fill = "white"; rCircle.style.opacity = "0.1";
 }
 
 function handleReportClick() {
-    document.getElementById('reportIconCircle').style.fill = "#FF4B4B";
-    document.getElementById('reportIconCircle').style.opacity = "1";
+    const rCircle = document.getElementById('reportIconCircle');
+    rCircle.style.fill = "#FF4B4B"; rCircle.style.opacity = "1";
     openMod('bModal');
 }
 
-function setBg(c) { document.body.style.background = c; document.body.style.animation = 'none'; cls(); }
+function setBg(c) { 
+    document.body.style.background = c; 
+    document.body.style.animation = (c.includes('gradient')) ? 'grad 12s ease infinite' : 'none';
+    cls(); 
+}
 
 function toggleMemeGallery() {
     const gallery = document.getElementById('memeGallery');
-    if (gallery.style.display === 'grid') {
-        gallery.style.display = 'none';
-    } else {
-        gallery.style.display = 'grid';
-        fetchMemes();
-    }
+    gallery.style.display = (gallery.style.display === 'grid') ? 'none' : 'grid';
+    if(gallery.style.display === 'grid') fetchMemes();
 }
 
 async function fetchMemes() {
@@ -210,77 +207,9 @@ async function fetchMemes() {
     try {
         const res = await fetch('https://api.imgflip.com/get_memes');
         const data = await res.json();
-        const memes = data.data.memes.slice(0, 30);
+        const memes = data.data.memes.slice(0, 15);
         grid.innerHTML = memes.map(m => `<img src="${m.url}" class="meme-thumb" onclick="sendMeme('${m.url}')">`).join('');
     } catch(e) { grid.innerHTML = "Error"; }
-}
-
-function sendMeme(url) {
-    addTimestamp();
-    const div = document.createElement('div');
-    div.className = "msg-bubble mine";
-    div.innerHTML = `<img src="${url}">`;
-    document.getElementById('messages').appendChild(div);
-    
-    addReceipt();
-    
-    document.getElementById('memeGallery').style.display = 'none';
-    scrollChat();
-}
-
-function addTimestamp() {
-    const now = Date.now();
-    if (now - lastMsgTime > 60000) {
-        const timeDiv = document.createElement('div');
-        timeDiv.className = "timestamp";
-        const date = new Date();
-        timeDiv.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        document.getElementById('messages').appendChild(timeDiv);
-    }
-    lastMsgTime = now;
-}
-
-function addReceipt() {
-    // Remove previous receipts
-    document.querySelectorAll('.receipt').forEach(r => r.remove());
-    
-    const receipt = document.createElement('div');
-    receipt.className = "receipt";
-    receipt.textContent = "Delivered";
-    document.getElementById('messages').appendChild(receipt);
-    
-    // Switch to Read after 3 seconds
-    setTimeout(() => {
-        receipt.textContent = "Read";
-    }, 3000);
-}
-
-function sendMsg() {
-    const i = document.getElementById('msgInput');
-    if(i.value.trim()) {
-        addTimestamp();
-        const div = document.createElement('div'); 
-        div.className = "msg-bubble mine";
-        div.textContent = i.value;
-        document.getElementById('messages').appendChild(div);
-        i.value = "";
-        
-        addReceipt();
-        scrollChat();
-        
-        setTimeout(() => {
-            const reply = document.createElement('div');
-            reply.className = "msg-bubble theirs";
-            reply.textContent = "Checking in...";
-            document.getElementById('messages').appendChild(reply);
-            scrollChat();
-        }, 4500);
-    }
-}
-
-function scrollChat() {
-    const m = document.getElementById('messages');
-    m.scrollTop = m.scrollHeight;
 }
 
 function handleCall() {
@@ -289,14 +218,16 @@ function handleCall() {
 }
 
 function startSearch() {
-    const btn = document.getElementById('callBtn');
     document.getElementById('status').textContent = "Locating Human...";
     setTimeout(() => {
-        btn.classList.add('connected');
+        document.getElementById('callBtn').classList.add('connected');
         peer = "Human_" + Math.floor(Math.random()*999);
+        document.getElementById('peerName').textContent = peer;
+        document.getElementById('peerInitial').textContent = peer.charAt(6);
         document.getElementById('status').textContent = "Linked: " + peer;
-        document.getElementById('callTag').querySelector('span').textContent = "END";
+        document.getElementById('callTag').textContent = "END";
         document.getElementById('phoneScreen').style.fill = "#FF4B4B"; 
+        document.getElementById('chatBox').style.display = 'flex';
         historyList.push(peer);
         updateHistory();
         initAudio();
@@ -304,30 +235,76 @@ function startSearch() {
 }
 
 function endCall() {
-    const btn = document.getElementById('callBtn');
-    btn.classList.remove('connected');
+    document.getElementById('callBtn').classList.remove('connected');
+    document.getElementById('chatBox').style.display = 'none';
+    document.getElementById('messages').innerHTML = '';
     document.getElementById('status').textContent = "Ready";
-    document.getElementById('callTag').querySelector('span').textContent = "CALL";
+    document.getElementById('callTag').textContent = "CALL";
     document.getElementById('phoneScreen').style.fill = "#4BFF8B";
     document.documentElement.style.setProperty('--logo-dash', '400');
     document.documentElement.style.setProperty('--heart-fill', '0');
     peer = "";
 }
 
-function addFriend() {
-    if(!peer) return;
-    document.getElementById('connEmpty').style.display = 'none';
-    const div = document.createElement('div');
-    div.style.color = "#4BFF8B";
-    div.textContent = "♥ " + peer;
-    document.getElementById('connDD').appendChild(div);
-    cls();
+function sendMsg() {
+    const input = document.getElementById('msgInput');
+    if(!input.value.trim()) return;
+    
+    addTimestamp();
+    const msg = document.createElement('div');
+    msg.className = "msg-bubble mine";
+    msg.textContent = input.value;
+    document.getElementById('messages').appendChild(msg);
+    
+    const receipt = document.createElement('div');
+    receipt.className = "receipt";
+    receipt.textContent = "Delivered";
+    document.getElementById('messages').appendChild(receipt);
+    
+    input.value = "";
+    scrollChat();
+    setTimeout(() => { receipt.textContent = "Read"; }, 2000);
 }
 
-function confirmBan() {
-    endCall();
-    cls();
+function sendMeme(url) {
+    addTimestamp();
+    const msg = document.createElement('div');
+    msg.className = "msg-bubble mine";
+    msg.innerHTML = `<img src="${url}" style="max-width:100%; border-radius:12px;">`;
+    document.getElementById('messages').appendChild(msg);
+    toggleMemeGallery();
+    scrollChat();
 }
+
+function addTimestamp() {
+    const now = Date.now();
+    if (now - lastMsgTime > 60000) {
+        const timeDiv = document.createElement('div');
+        timeDiv.className = "timestamp";
+        timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('messages').appendChild(timeDiv);
+    }
+    lastMsgTime = now;
+}
+
+function scrollChat() { const m = document.getElementById('messages'); m.scrollTop = m.scrollHeight; }
+
+function updateHistory() {
+    const list = document.getElementById('historyList');
+    list.innerHTML = historyList.slice().reverse().map(h => `<div style="padding:10px; border-bottom:1px solid #333;">♥ ${h}</div>`).join('');
+}
+
+function muteT() {
+    const high = document.getElementById('muteHighlight');
+    const tag = document.getElementById('muteTag');
+    const active = high.style.display === 'block';
+    high.style.display = active ? 'none' : 'block';
+    tag.style.display = active ? 'none' : 'block';
+}
+
+function confirmBan() { endCall(); cls(); }
+function addFriend() { if(peer) { document.getElementById('connEmpty').style.display = 'none'; const div = document.createElement('div'); div.style.color = "#4BFF8B"; div.textContent = "♥ " + peer; document.getElementById('connDD').appendChild(div); } cls(); }
+function toggleAuto() { isAuto = document.getElementById('autoCheck').checked; }
 
 async function initAudio() {
     if(audioContext) return;
@@ -340,33 +317,17 @@ async function initAudio() {
         analyser.fftSize = 256;
         dataArray = new Uint8Array(analyser.frequencyBinCount);
         processHeartLogic();
-    } catch(e) { console.warn("Mic access denied"); }
+    } catch(e) { console.warn("Mic blocked"); }
 }
 
 function processHeartLogic() {
-    if(!analyser || !document.getElementById('callBtn').classList.contains('connected')) return;
+    if(!analyser || !peer) return;
     requestAnimationFrame(processHeartLogic);
     analyser.getByteFrequencyData(dataArray);
     let volume = dataArray.reduce((a,b) => a+b) / dataArray.length;
-    let dashOffset = Math.max(0, 400 - (volume * 6));
-    document.documentElement.style.setProperty('--logo-dash', dashOffset);
+    document.documentElement.style.setProperty('--logo-dash', Math.max(0, 400 - (volume * 6)));
     document.documentElement.style.setProperty('--heart-fill', volume > 15 ? '1' : '0');
 }
-
-function updateHistory() {
-    const list = document.getElementById('historyList');
-    list.innerHTML = historyList.slice().reverse().map(h => `<div style="padding:8px; border-bottom:1px solid #333;">${h}</div>`).join('');
-}
-
-function muteT() {
-    const high = document.getElementById('muteHighlight');
-    const tag = document.getElementById('muteTag');
-    const isMuted = high.style.display === 'block';
-    high.style.display = isMuted ? 'none' : 'block';
-    tag.style.display = isMuted ? 'none' : 'block';
-}
-
-function toggleAuto() { isAuto = document.getElementById('autoCheck').checked; }
 </script>
 </body>
 </html>
