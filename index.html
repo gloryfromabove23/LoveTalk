@@ -25,68 +25,67 @@ body {
 }
 #centerPanel {
     flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; padding-bottom: 8vh;
+    align-items: center; justify-content: center;
 }
 
-/* ---------------- BRANDING ---------------- */
-#mainLogo { width: 110px; margin-bottom: 10px; transition: 0.1s linear; }
-#brandName { font-size: 3rem; font-weight: 800; margin: 0; letter-spacing: -2px; }
-.talk-thin { font-weight: 100; letter-spacing: 0px; }
+/* ---------------- BRANDING & LOGO ---------------- */
+#mainLogo { 
+    width: 150px; /* Made bigger */
+    height: 150px; 
+    margin-bottom: 20px; 
+    transition: 0.1s linear; 
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+}
+#brandName { font-size: 3.8rem; font-weight: 800; margin: 0; letter-spacing: -3px; }
+.talk-thin { font-weight: 100; letter-spacing: -1px; margin-left: 2px; }
+#status { margin-top: 10px; margin-bottom: 70px; /* Spaced further apart */ font-weight: 400; opacity: 0.6; letter-spacing: 2px; text-transform: uppercase; font-size: 11px; }
+
+/* ---------------- MODERN BUTTONS ---------------- */
+.callButtons { display: flex; gap: 20px; align-items: center; }
+.circleBtn { 
+    width: 72px; height: 72px; border: none; background: none; cursor: pointer; padding: 0; 
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s; 
+}
+.circleBtn:hover { transform: translateY(-5px); filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)); }
+.circleBtn:active { transform: scale(0.9); }
+
+.spinning { animation: spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
 /* ---------------- CHAT ---------------- */
 #chatBox {
     margin-top: auto; display: flex; flex-direction: column;
-    height: 70%; border-radius: 20px; background: rgba(255, 255, 255, 0.06);
-    padding: 15px; position: relative;
+    height: 70%; border-radius: 20px; background: rgba(255, 255, 255, 0.05);
+    padding: 15px; border: 1px solid rgba(255,255,255,0.08);
 }
 #messages { flex: 1; overflow-y: auto; }
-#messages p { background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 15px; margin: 5px 0; font-size: 14px; word-wrap: break-word; }
-
+#messages p { background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 15px; margin: 8px 0; font-size: 14px; }
 #chatControls { display: flex; gap: 8px; margin-top: 10px; }
-#chatControls input { flex: 1; padding: 10px; border-radius: 10px; border: none; background: #1a1b1e; color: white; }
-#chatControls button { padding: 10px; border-radius: 10px; border: none; background: white; font-weight: 800; cursor: pointer; color: black; }
-
-/* ---------------- BUTTONS (TRANSPARENT CUT-OUTS) ---------------- */
-.callButtons { display: flex; gap: 15px; align-items: center; margin-top: 20px; }
-.circleBtn { width: 70px; height: 70px; border: none; background: none; cursor: pointer; padding: 0; }
-.circleBtn:active { transform: scale(0.9); }
-.spinning { animation: spin 1s linear infinite; }
-@keyframes spin { 100% { transform: rotate(360deg); } }
+#chatControls input { flex: 1; padding: 12px; border-radius: 12px; border: none; background: rgba(0,0,0,0.3); color: white; outline: none; }
+#chatControls button { padding: 0 15px; border-radius: 12px; border: none; background: white; font-weight: 800; cursor: pointer; color: black; }
 
 /* ---------------- MODALS ---------------- */
 .modal {
     display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 350px; background: rgba(30, 30, 35, 0.98); backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 25px; padding: 25px; z-index: 1000;
+    width: 350px; background: rgba(25, 25, 30, 0.98); backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 30px; padding: 30px; z-index: 1000;
 }
-.modal h3 { margin-top: 0; color: #FF6A88; }
-.modal-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; }
-
-/* ---------------- MEME MENU ---------------- */
-#memeMenu { 
-    display: none; position: absolute; bottom: 75px; left: 10px; right: 10px; 
-    background: rgba(0, 0, 0, 0.9); padding: 10px; border-radius: 15px; 
-    grid-template-columns: repeat(3, 1fr); gap: 8px; z-index: 100;
-    max-height: 250px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1);
-}
-#memeMenu img { width: 100%; border-radius: 8px; cursor: pointer; aspect-ratio: 1/1; object-fit: cover; }
+.modal-close { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px; opacity: 0.5; }
 </style>
 </head>
 
 <body>
 
 <div id="leftPanel">
-    <div id="onlineTop" style="cursor:pointer; display: flex; justify-content: space-between;" onclick="document.getElementById('onlineDropdown').classList.toggle('open')">
-        <span id="onlineCount">People Online (0)</span> <span>▼</span>
+    <div id="onlineTop" style="cursor:pointer; display: flex; justify-content: space-between; font-weight: 600;" onclick="document.getElementById('onlineDropdown').classList.toggle('open')">
+        <span id="onlineCount">Discover (0)</span> <span>▼</span>
     </div>
-    <div id="onlineDropdown" style="max-height:0; overflow:hidden; transition:0.3s; background: rgba(0,0,0,0.2); border-radius: 10px;"></div>
+    <div id="onlineDropdown" style="max-height:0; overflow:hidden; transition:0.3s; margin-top:10px;"></div>
 
     <div id="chatBox">
-        <div id="memeMenu"></div>
         <div id="messages"></div>
         <div id="chatControls">
-            <input id="msgInput" placeholder="Message...">
-            <button id="gifBtn" style="background:#FF6A88; color:white;">🎁</button>
+            <input id="msgInput" placeholder="Say hello...">
             <button id="sendBtn">Send</button>
         </div>
     </div>
@@ -95,126 +94,81 @@ body {
 <div id="centerPanel">
     <svg id="mainLogo" viewBox="0 0 100 100">
         <defs>
-            <mask id="logoMask">
+            <mask id="modernLogoMask">
                 <rect width="100" height="100" fill="white" />
-                <path d="M50 65 C35 50, 30 40, 40 35 C45 32, 50 38, 50 38 C50 38, 55 32, 60 35 C70 40, 65 50, 50 65 Z" fill="black" />
+                <path d="M50 75 L30 52 C22 40 28 28 40 28 C45 28 50 32 50 32 C50 32 55 28 60 28 C72 28 78 40 70 52 L50 75 Z" fill="black" />
             </mask>
         </defs>
-        <path fill="white" mask="url(#logoMask)" d="M10 30 Q10 10 30 10 H70 Q90 10 90 30 V70 Q90 90 70 90 H30 Q10 90 10 70 Z" />
+        <rect x="5" y="5" width="90" height="90" rx="24" fill="white" mask="url(#modernLogoMask)" />
     </svg>
 
     <div id="brandName">Love<span class="talk-thin">Talk</span></div>
-    <div id="status">Online</div>
+    <div id="status">Secure & Online</div>
 
     <div class="callButtons">
         <button class="circleBtn" id="muteBtn">
             <svg viewBox="0 0 100 100">
                 <defs>
-                    <mask id="micMask">
+                    <mask id="micMaskM">
                         <rect width="100" height="100" fill="white"/>
-                        <rect x="42" y="28" width="16" height="26" rx="8" fill="black"/>
-                        <path d="M35 45c0 10 15 10 15 10s15 0 15-10m-15 10v10" fill="none" stroke="black" stroke-width="6"/>
-                        <line id="muteSlash" x1="25" y1="25" x2="75" y2="75" stroke="black" stroke-width="8" style="display:none;"/>
+                        <rect x="43" y="28" width="14" height="24" rx="7" fill="black"/>
+                        <path d="M36 45c0 8 14 8 14 8s14 0 14-8" fill="none" stroke="black" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="50" y1="53" x2="50" y2="65" stroke="black" stroke-width="5" stroke-linecap="round"/>
+                        <line id="muteSlash" x1="25" y1="25" x2="75" y2="75" stroke="black" stroke-width="8" stroke-linecap="round" style="display:none;"/>
                     </mask>
                 </defs>
-                <circle cx="50" cy="50" r="45" fill="white" mask="url(#micMask)"/>
+                <circle cx="50" cy="50" r="45" fill="white" mask="url(#micMaskM)"/>
             </svg>
         </button>
 
         <button id="callBtn" class="circleBtn">
             <svg viewBox="0 0 100 100">
                 <defs>
-                    <mask id="phoneMask">
+                    <mask id="callMaskM">
                         <rect width="100" height="100" fill="white"/>
-                        <path d="M30 40c0-5 20-15 40 0l-5 10c-10-5-25-5-30 0l-5-10zM40 50c0 15 20 15 20 0" fill="black"/>
+                        <path d="M30 40c0-4 4-8 8-8h24c4 0 8 4 8 8v4c0 12-10 22-22 22h-6c-4 0-8-4-8-8v-18z" fill="black" transform="rotate(-45 50 50)"/>
                     </mask>
                 </defs>
-                <circle cx="50" cy="50" r="45" fill="white" mask="url(#phoneMask)"/>
+                <circle cx="50" cy="50" r="45" fill="white" mask="url(#callMaskM)"/>
             </svg>
         </button>
 
         <button class="circleBtn" id="friendBtn">
             <svg viewBox="0 0 100 100">
                 <defs>
-                    <mask id="plusMask">
+                    <mask id="plusMaskM">
                         <rect width="100" height="100" fill="white"/>
-                        <path d="M50 30v40M30 50h40" stroke="black" stroke-width="12" stroke-linecap="round"/>
+                        <path d="M50 32v36M32 50h36" stroke="black" stroke-width="10" stroke-linecap="round"/>
                     </mask>
                 </defs>
-                <circle cx="50" cy="50" r="45" fill="white" mask="url(#plusMask)"/>
+                <circle cx="50" cy="50" r="45" fill="white" mask="url(#plusMaskM)"/>
             </svg>
         </button>
 
         <button class="circleBtn" id="reportBtn">
             <svg viewBox="0 0 100 100">
                 <defs>
-                    <mask id="exclMask">
+                    <mask id="exclMaskM">
                         <rect width="100" height="100" fill="white"/>
-                        <text x="50" y="72" text-anchor="middle" font-weight="900" font-size="55" fill="black">!</text>
+                        <path d="M50 32v25" stroke="black" stroke-width="10" stroke-linecap="round"/>
+                        <circle cx="50" cy="70" r="6" fill="black"/>
                     </mask>
                 </defs>
-                <circle cx="50" cy="50" r="45" fill="white" mask="url(#exclMask)"/>
+                <circle cx="50" cy="50" r="45" fill="white" mask="url(#exclMaskM)"/>
             </svg>
         </button>
     </div>
 
-    <div style="margin-top:20px; display:flex; gap:15px; font-size:14px; align-items: center;">
-        <label style="cursor: pointer;"><input type="checkbox" id="autoCall"> Auto Call</label>
-        <div onclick="openHistory()" style="cursor:pointer; text-decoration:underline;">Call History</div>
+    <div style="margin-top:40px; display:flex; gap:25px; font-size:12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5;">
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;"><input type="checkbox" id="autoCall"> Auto-match</label>
+        <div onclick="openHistory()" style="cursor:pointer; text-decoration:underline;">Log</div>
     </div>
-</div>
-
-<div id="historyModal" class="modal">
-    <span class="modal-close" onclick="closeModals()">×</span>
-    <h3 id="historyCount">You've had 0 calls</h3>
-    <div id="historyList" style="max-height: 180px; overflow-y: auto;"></div>
-</div>
-
-<div id="reportModal" class="modal">
-    <span class="modal-close" onclick="closeModals()">×</span>
-    <h3>Report User</h3>
-    <p style="font-size: 12px; opacity: 0.8;">Policy: Harassment or inappropriate behavior leads to a permanent ban.</p>
-    <textarea id="reportText" style="width:100%; height:80px; margin:10px 0; background:#1a1b1e; color:white; border:none; padding:10px; border-radius:10px;"></textarea>
-    <button onclick="sendReport()" style="width:100%; padding:12px; border-radius:10px; border:none; background:white; font-weight:800; cursor: pointer;">Send Report</button>
 </div>
 
 <script>
 const socket = io();
-const adjectives=["Neo","Luxe","Echo","Nova","Drift","Vibe","Hyper"];
-const nouns=["Pulse","Flux","Wave","Core","Orbit","Phase","Glow"];
-const username = adjectives[Math.floor(Math.random()*adjectives.length)] + nouns[Math.floor(Math.random()*nouns.length)] + Math.floor(Math.random()*99);
 let callHistory = [];
 
-socket.on('connect', () => socket.emit('setName', username));
-
-/* ---------------- 15 FULLY VERIFIED MEMES ---------------- */
-const memes = [
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/MDJ9IbxxvDUQM/giphy.gif", // Cat kiss
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/v4aGOHef6XpNC/giphy.gif", // Star Trek kiss
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/c76IJbxAb97Hi/giphy.gif", // Cat stretch kiss
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/QMHoU66L5Qezq5qK7w/giphy.gif", // Fine dog
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/l41lTfuxV6M0vT8S4/giphy.gif", // Happy cat
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7TKMGpxxidXuyPza/giphy.gif", // Heart dance
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7buirYcmV5nSwIRW/giphy.gif", // Excited
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/108M7gCS1JSoO4/giphy.gif", // Dancing cat
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/OPU6wzx8JBaK6S4kWU/giphy.gif", // Crying
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/H5iz8vPzfaYBr0HoFv/giphy.gif", // Love dance
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o72F8t9TDi2xVnxOE/giphy.gif", // Heart pop
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/v6aOjy0QJD1f2/giphy.gif", // Dog nod
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/9d3l6hEReY9vG/giphy.gif", // Panda
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3og0INyCmHlNylks9O/giphy.gif", // Shy cat
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/vXDeO68a9PxO8/giphy.gif"  // Happy dog
-];
-
-const memeMenu = document.getElementById("memeMenu");
-memes.forEach(url => {
-    const img = document.createElement("img"); img.src = url;
-    img.onclick = () => { socket.emit('chatMessage', { msg: `<img src="${url}" style="width:100%; border-radius:10px;">` }); memeMenu.style.display="none"; };
-    memeMenu.appendChild(img);
-});
-document.getElementById("gifBtn").onclick = () => memeMenu.style.display = memeMenu.style.display === "grid" ? "none" : "grid";
-
-/* ---------------- UI LOGIC ---------------- */
 document.getElementById("muteBtn").onclick = () => {
     const slash = document.getElementById("muteSlash");
     slash.style.display = slash.style.display === "none" ? "block" : "none";
@@ -223,58 +177,10 @@ document.getElementById("muteBtn").onclick = () => {
 const callBtn = document.getElementById("callBtn");
 callBtn.onclick = () => {
     callBtn.classList.toggle("spinning");
-    if(callBtn.classList.contains("spinning")) {
-        document.getElementById("status").textContent = "Searching...";
-        setTimeout(() => {
-            let match = adjectives[Math.floor(Math.random()*adjectives.length)] + " Match";
-            callHistory.push(match);
-            document.getElementById("status").textContent = "Connected to " + match;
-        }, 3000);
-    } else {
-        document.getElementById("status").textContent = "Online";
-    }
+    document.getElementById("status").textContent = callBtn.classList.contains("spinning") ? "Searching for connection..." : "Secure & Online";
 };
 
-function openHistory() {
-    document.getElementById("historyModal").style.display = "block";
-    document.getElementById("historyCount").textContent = `You've had ${callHistory.length} calls`;
-    const list = document.getElementById("historyList");
-    list.innerHTML = callHistory.map(u => `<div style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05)">Connected with: ${u}</div>`).reverse().join('');
-}
-
-document.getElementById("reportBtn").onclick = () => document.getElementById("reportModal").style.display = "block";
-function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = "none"); }
-
-function sendReport() {
-    const text = document.getElementById("reportText").value;
-    if(text) {
-        alert("Report sent to admin. Thank you.");
-        closeModals();
-        document.getElementById("reportText").value = "";
-    }
-}
-
-/* ---------------- CHAT LOGIC ---------------- */
-function sendMsg() {
-    const inp = document.getElementById("msgInput");
-    if(inp.value.trim()){ socket.emit('chatMessage', { msg: inp.value }); inp.value=""; }
-}
-document.getElementById("sendBtn").onclick = sendMsg;
-document.getElementById("msgInput").onkeydown = (e) => { if(e.key==="Enter") sendMsg(); };
-
-socket.on('message', (msg) => {
-    const p = document.createElement("p"); p.innerHTML = msg;
-    document.getElementById("messages").appendChild(p);
-    document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
-});
-
-socket.on('updateUsers', (list) => {
-    const dd = document.getElementById("onlineDropdown"); dd.innerHTML = "";
-    list.forEach(n => { const d = document.createElement("div"); d.textContent=n; d.style.padding="8px"; dd.appendChild(d); });
-    document.getElementById("onlineCount").textContent = `People Online (${list.length})`;
-});
-
-/* ---------------- LOGO MIC PULSE ---------------- */
+/* ---------------- AUDIO REACTIVE LOGO ---------------- */
 navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const analyser = ctx.createAnalyser();
@@ -285,7 +191,7 @@ navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
     function animate(){
         analyser.getByteFrequencyData(dataArray);
         const avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
-        logo.style.transform = `scale(${1+avg/250})`;
+        logo.style.transform = `scale(${1 + (avg / 200)})`;
         requestAnimationFrame(animate);
     }
     animate();
