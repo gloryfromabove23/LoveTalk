@@ -5,7 +5,7 @@
 <title>LoveTalk ♥︎</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root { --main-bg: linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC); --heart-fill: 0%; --stroke-dash: 100; }
+:root { --main-bg: linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC); --logo-dash: 400; --heart-fill: 0; }
 body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); background-size: 300% 300%; animation: grad 12s ease infinite; color: white; overflow-x: hidden; }
 @keyframes grad { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
 
@@ -16,12 +16,12 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); 
 #leftPanel { width: 400px; background: rgba(15, 15, 20, 0.9); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
 #centerPanel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; transition: all 0.3s ease; }
 
-#logoWrapper { display: flex; flex-direction: column; align-items: center; gap: 10px; transition: all 0.3s ease; }
+/* Logo: Cutout heart with green outline tracing */
+#logoWrapper { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 #logoContainer { width: 180px; height: 180px; position: relative; }
-.bubble-svg { width: 100%; height: 100%; fill: white; position: absolute; }
-
-.heart-outline { fill: none; stroke: #4BFF8B; stroke-width: 3; stroke-dasharray: 100; stroke-dashoffset: var(--stroke-dash); transition: stroke-dashoffset 0.1s linear; }
-.heart-inner { fill: #4BFF8B; opacity: var(--heart-fill); transition: opacity 0.2s; }
+.base-bubble { fill: white; }
+.outline-trace { fill: none; stroke: #4BFF8B; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: var(--logo-dash); transition: stroke-dashoffset 0.1s linear; }
+.heart-cutout { fill: #4BFF8B; opacity: var(--heart-fill); transition: opacity 0.2s; }
 
 #brandName { font-size: 3.5rem; font-weight: 800; margin: 0; letter-spacing: -3px; }
 #status { font-weight: 600; opacity: 0.7; letter-spacing: 2px; text-transform: uppercase; font-size: 9px; margin-bottom: 40px; }
@@ -30,30 +30,35 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); 
 .circleBtn { width: 80px; height: 80px; border: none; background: transparent; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; }
 
 #muteHighlight { display: none; position: absolute; width: 60px; height: 60px; background: #FF4B4B; border-radius: 50%; z-index: -1; }
-#muteText, #endCallText { position: absolute; bottom: -22px; font-size: 10px; font-weight: 900; color: #FF4B4B; background: #fff; padding: 2px 8px; border-radius: 4px; display: none; white-space: nowrap; }
+#muteText, #endCallText { position: absolute; bottom: -5px; font-size: 10px; font-weight: 900; color: #FF4B4B; background: #fff; padding: 2px 8px; border-radius: 4px; display: none; white-space: nowrap; z-index: 5; }
+
+/* Fixed distance for Auto & History */
+.bottom-controls { margin-top: 30px; display: flex; gap: 40px; font-size: 10px; font-weight: 800; text-transform: uppercase; align-items: center; }
 
 @media (max-width: 850px) {
     #appView { flex-direction: column; height: auto; }
-    #leftPanel { width: 100%; height: 500px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; }
+    #leftPanel { width: 100%; height: 500px; border-right: none; }
     #logoWrapper { flex-direction: row; justify-content: center; margin-bottom: 20px; }
     #logoContainer { width: 60px; height: 60px; }
     #brandName { font-size: 2rem; }
-    #footerSpace { display: none; }
-    #status { margin-bottom: 20px; }
+    #footerSpace, footer { display: none; } /* Hidden on small screens unless scrolled */
 }
 
 #chatBox { margin-top: 15px; display: flex; flex-direction: column; flex-grow: 1; background: rgba(0, 0, 0, 0.3); border-radius: 15px; padding: 15px; overflow: hidden; }
 #messages { flex: 1; overflow-y: auto; font-size: 14px; display: flex; flex-direction: column; gap: 8px; }
-.msg-bubble { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; max-width: 90%; }
-.msg-bubble img { max-width: 100%; border-radius: 8px; margin-top: 5px; display: block; }
+.msg-bubble { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; max-width: 90%; align-self: flex-start; }
+.msg-bubble.mine { align-self: flex-end; background: rgba(75, 255, 139, 0.2); }
+.msg-bubble img { max-width: 100%; border-radius: 8px; display: block; }
 
-#footerSpace { margin-top: 50px; padding: 40px 15%; text-align: center; background: white; color: #333; }
+#footerSpace { margin-top: 500px; padding: 80px 15%; text-align: center; background: white; color: #333; }
 footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d; color: #555; font-weight: 800; }
 
 .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: #111; border-radius: 20px; padding: 25px; z-index: 2000; text-align: center; border: 1px solid #333; }
-#memeGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-height: 300px; overflow-y: auto; margin: 15px 0; }
+#memeGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-height: 400px; overflow-y: auto; margin: 15px 0; padding: 5px; }
 .meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 5px; cursor: pointer; border: 2px solid transparent; }
 .meme-thumb:hover { border-color: #4BFF8B; }
+
+#connDD { font-size: 11px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-top: 5px; }
 </style>
 </head>
 <body>
@@ -62,14 +67,20 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
 
 <div id="appView">
     <div id="leftPanel">
-        <div class="dropdown-head" style="font-size:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.1); padding:10px 0;"><span>VERIFIED HUMANS</span> <span id="onlineCount">142</span></div>
+        <div style="font-size:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.1); padding:10px 0; display:flex; justify-content: space-between;">
+            <span>VERIFIED HUMANS</span> <span id="onlineCount">142</span>
+        </div>
+        
+        <div id="connDD">
+            <div id="connEmpty" style="opacity:0.3;">No active connections</div>
+        </div>
         
         <div id="chatBox">
             <div id="messages"></div>
             <div style="display:flex; gap:8px; margin-top:10px;">
-                <button onclick="fetchMemes()" style="background:#4BFF8B; color:#000; border:none; border-radius:10px; padding:0 10px; cursor:pointer; font-weight:800; font-size:9px;">MEME</button>
-                <input id="msgInput" onkeydown="if(event.key==='Enter')sendMsg()" style="flex:1; background:rgba(255,255,255,0.1); border:none; color:white; padding:10px; border-radius:10px; outline:none;" placeholder="Say something...">
-                <button onclick="sendMsg()" style="background:#fff; color:#000; border:none; border-radius:10px; padding:0 12px; cursor:pointer; font-weight:800; font-size:10px;">SEND</button>
+                <input id="msgInput" onkeydown="if(event.key==='Enter')sendMsg()" style="flex:1; background:rgba(255,255,255,0.1); border:none; color:white; padding:10px; border-radius:10px; outline:none;" placeholder="Type...">
+                <button onclick="fetchMemes()" style="background:transparent; border:1px solid #4BFF8B; border-radius:10px; padding:0 10px; cursor:pointer; font-size:18px;">🎲</button>
+                <button onclick="sendMsg()" style="background:#fff; color:#000; border:none; border-radius:10px; padding:0 15px; cursor:pointer; font-weight:800; font-size:10px;">SEND</button>
             </div>
         </div>
     </div>
@@ -77,10 +88,16 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
     <div id="centerPanel">
         <div id="logoWrapper">
             <div id="logoContainer">
-                <svg viewBox="0 0 100 100" class="bubble-svg"><path d="M20 15 H80 Q88 15 88 23 V68 Q88 76 80 76 H45 L30 90 V76 Q12 76 12 68 V23 Q12 15 20 15 Z" /></svg>
-                <svg viewBox="0 0 100 100" class="bubble-svg" style="z-index: 2;">
-                    <path id="heartPath" class="heart-outline" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65" />
-                    <path class="heart-inner" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65" />
+                <svg viewBox="0 0 100 100" class="bubble-svg">
+                    <defs>
+                        <mask id="m">
+                            <rect width="100" height="100" fill="white"/>
+                            <path d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65" fill="black"/>
+                        </mask>
+                    </defs>
+                    <path class="base-bubble" d="M20 15 H80 Q88 15 88 23 V68 Q88 76 80 76 H45 L30 90 V76 Q12 76 12 68 V23 Q12 15 20 15 Z" mask="url(#m)"/>
+                    <path class="outline-trace" d="M20 15 H80 Q88 15 88 23 V68 Q88 76 80 76 H45 L30 90 V76 Q12 76 12 68 V23 Q12 15 20 15 Z"/>
+                    <path class="heart-cutout" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
                 </svg>
             </div>
             <div id="brandName">Love<span style="font-weight:100">Talk</span></div>
@@ -102,7 +119,7 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
             <button class="circleBtn" onclick="openMod('bModal')"><svg viewBox="0 0 100 100" width="55"><circle cx="50" cy="50" r="42" fill="white" opacity="0.1"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="45" font-weight="800">!</text></svg></button>
         </div>
 
-        <div style="margin-top: 30px; display: flex; gap: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase;">
+        <div class="bottom-controls">
             <label style="cursor:pointer;"><input type="checkbox" id="autoCheck" onchange="toggleAuto()"> Auto Call</label>
             <span style="cursor:pointer; text-decoration:underline; opacity:0.6;" onclick="openMod('hModal')">History</span>
         </div>
@@ -110,34 +127,29 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
 </div>
 
 <div id="footerSpace"><h2>The Mission</h2><p>LoveTalk connects humans directly. Pure conversation. No tracking.</p></div>
-<footer>&copy; 2026 LOVETALK NETWORKS // ENCRYPTED // VERIFIED HUMANS ONLY</footer>
-
-<div id="vModal" class="modal">
-    <h3>Human Verification</h3>
-    <button class="theme-btn" onclick="verifyHuman()" style="width:100%; background:#4BFF8B; color:#000;">I AM A REAL PERSON</button>
-</div>
+<footer>&copy; 2026 LOVETALK NETWORKS // ENCRYPTED</footer>
 
 <div id="memeModal" class="modal">
-    <h3>Choose a Meme</h3>
+    <h3>Meme Gallery</h3>
     <div id="memeGrid"></div>
     <button class="theme-btn" onclick="cls()">Cancel</button>
 </div>
 
 <div id="bModal" class="modal">
     <h3 style="color:#FF4B4B">Report User</h3>
-    <input type="text" id="banReason" style="width:85%; padding:10px; margin:10px 0; background:#222; border:none; color:#fff;" placeholder="Why?">
+    <input type="text" id="banReason" style="width:85%; padding:10px; margin:10px 0; background:#222; border:none; color:#fff;" placeholder="Reason...">
     <div style="display:flex;gap:10px;"><button class="theme-btn" onclick="cls()" style="flex:1">Cancel</button><button class="theme-btn" onclick="confirmBan()" style="flex:1;background:#FF4B4B;color:white;">Confirm</button></div>
 </div>
 
 <div id="fModal" class="modal">
-    <h3>Add Friend?</h3>
-    <div style="display:flex;gap:10px;"><button class="theme-btn" onclick="cls()" style="flex:1">No</button><button class="theme-btn" onclick="addFriend()" style="flex:1">Yes</button></div>
+    <h3>Add to Connections?</h3>
+    <div style="display:flex;gap:10px;"><button class="theme-btn" onclick="cls()" style="flex:1">No</button><button class="theme-btn" onclick="addFriend()" style="flex:1;background:#4BFF8B;">Yes</button></div>
 </div>
 
 <div id="hModal" class="modal">
-    <h3>History</h3>
+    <h3>Recent Humans</h3>
     <div id="historyList" style="max-height:150px; overflow-y:auto; text-align:left; font-size:11px;"></div>
-    <button class="theme-btn" onclick="cls()">Close</button>
+    <button class="theme-btn" onclick="cls()" style="margin-top:10px">Close</button>
 </div>
 
 <div id="cModal" class="modal">
@@ -163,18 +175,19 @@ function setBg(c) { document.body.style.background = c; document.body.style.anim
 async function fetchMemes() {
     openMod('memeModal');
     const grid = document.getElementById('memeGrid');
-    grid.innerHTML = "Loading...";
+    grid.innerHTML = "Loading 60 memes...";
     try {
         const res = await fetch('https://api.imgflip.com/get_memes');
         const data = await res.json();
-        const memes = data.data.memes.slice(0, 20);
+        // Requesting 60 memes
+        const memes = data.data.memes.slice(0, 60);
         grid.innerHTML = memes.map(m => `<img src="${m.url}" class="meme-thumb" onclick="sendMeme('${m.url}')">`).join('');
     } catch(e) { grid.innerHTML = "Failed to load memes."; }
 }
 
 function sendMeme(url) {
     const div = document.createElement('div');
-    div.className = "msg-bubble";
+    div.className = "msg-bubble mine";
     div.innerHTML = `<img src="${url}">`;
     document.getElementById('messages').appendChild(div);
     cls();
@@ -187,23 +200,22 @@ function handleCall() {
 }
 
 function startSearch() {
-    document.getElementById('callBtn').classList.add('searching');
-    document.getElementById('status').textContent = "Locating Human...";
-    setTimeout(() => openMod('vModal'), 1500);
-}
-
-function verifyHuman() {
-    cls();
     const btn = document.getElementById('callBtn');
-    btn.classList.remove('searching');
-    btn.classList.add('connected');
-    peer = "Human_" + Math.floor(Math.random()*999);
-    document.getElementById('status').textContent = "Verified: " + peer;
-    document.getElementById('endCallText').style.display = 'block';
-    document.getElementById('phoneScreen').style.fill = "#FF4B4B"; 
-    history.push(peer);
-    updateHistory();
-    initAudio();
+    btn.classList.add('searching');
+    document.getElementById('status').textContent = "Locating Human...";
+    
+    // Auto-connect without human verification screen
+    setTimeout(() => {
+        btn.classList.remove('searching');
+        btn.classList.add('connected');
+        peer = "Human_" + Math.floor(Math.random()*999);
+        document.getElementById('status').textContent = "Linked: " + peer;
+        document.getElementById('endCallText').style.display = 'block';
+        document.getElementById('phoneScreen').style.fill = "#FF4B4B"; 
+        history.push(peer);
+        updateHistory();
+        initAudio();
+    }, 1500);
 }
 
 function endCall() {
@@ -212,15 +224,34 @@ function endCall() {
     document.getElementById('status').textContent = "Ready";
     document.getElementById('endCallText').style.display = 'none';
     document.getElementById('phoneScreen').style.fill = "#4BFF8B";
-    document.documentElement.style.setProperty('--stroke-dash', '100');
+    document.documentElement.style.setProperty('--logo-dash', '400');
     document.documentElement.style.setProperty('--heart-fill', '0');
+    peer = "";
+}
+
+function addFriend() {
+    if(!peer) return alert("Connect to a human first!");
+    document.getElementById('connEmpty').style.display = 'none';
+    const div = document.createElement('div');
+    div.style.color = "#4BFF8B";
+    div.style.marginBottom = "5px";
+    div.textContent = "♥ " + peer;
+    document.getElementById('connDD').appendChild(div);
+    cls();
+}
+
+function confirmBan() {
+    if(!peer) return cls();
+    alert("User " + peer + " has been reported and disconnected.");
+    endCall();
+    cls();
 }
 
 function sendMsg() {
     let i = document.getElementById('msgInput');
     if(i.value) {
         let div = document.createElement('div'); 
-        div.className = "msg-bubble";
+        div.className = "msg-bubble mine";
         div.textContent = i.value;
         document.getElementById('messages').appendChild(div);
         i.value = "";
@@ -247,14 +278,18 @@ function processHeartLogic() {
     requestAnimationFrame(processHeartLogic);
     analyser.getByteFrequencyData(dataArray);
     let volume = dataArray.reduce((a,b) => a+b) / dataArray.length;
-    let dashOffset = Math.max(0, 100 - (volume * 1.5));
-    document.documentElement.style.setProperty('--stroke-dash', dashOffset);
-    document.documentElement.style.setProperty('--heart-fill', volume > 30 ? '1' : '0');
+    
+    // Trace outline: 400 is full dash (invisible), 0 is full stroke
+    let dashOffset = Math.max(0, 400 - (volume * 4));
+    document.documentElement.style.setProperty('--logo-dash', dashOffset);
+    
+    // Fill the cutout heart when volume is high
+    document.documentElement.style.setProperty('--heart-fill', volume > 25 ? '1' : '0');
 }
 
 function updateHistory() {
     const list = document.getElementById('historyList');
-    list.innerHTML = history.map(h => `<div style="padding:5px; border-bottom:1px solid #333;">${h}</div>`).join('');
+    list.innerHTML = history.slice().reverse().map(h => `<div style="padding:8px; border-bottom:1px solid #333;">${h}</div>`).join('');
 }
 
 function muteT() {
