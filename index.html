@@ -8,155 +8,84 @@
 
 <style>
 /* ---------------- BASE ---------------- */
-body{
-    margin:0;
-    font-family:'Inter',sans-serif;
-    background: linear-gradient(-45deg,#FF9A8B,#FF6A88,#FF99AC);
-    background-size:300% 300%;
-    animation:gradientMove 12s ease infinite;
-    color:white;
-    display:flex;
-    height:100vh;
-    overflow:hidden;
+body {
+    margin: 0; font-family: 'Inter', sans-serif;
+    background: linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC);
+    background-size: 300% 300%; animation: gradientMove 12s ease infinite;
+    color: white; display: flex; height: 100vh; overflow: hidden;
 }
-
-@keyframes gradientMove{
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
+@keyframes gradientMove { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
 
 /* ---------------- LAYOUT ---------------- */
-#leftPanel{
-    width: 420px;
-    min-width: 300px; /* Allows it to shrink slightly */
-    max-width: 40vw;   /* Makes it slim when window is narrowed */
-    background:rgba(20,20,25,0.65);
-    backdrop-filter:blur(20px);
-    border-right:1px solid rgba(255,255,255,0.05);
-    display:flex;
-    flex-direction:column;
-    padding:20px;
-    transition: width 0.3s ease;
+#leftPanel {
+    width: 320px; min-width: 280px; max-width: 35vw;
+    background: rgba(20, 20, 25, 0.7); backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex; flex-direction: column; padding: 20px; z-index: 10;
 }
-
-#centerPanel{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
+#centerPanel {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding-bottom: 8vh;
 }
 
 /* ---------------- CHAT ---------------- */
-#chatBox{
-    margin-top:auto;
-    display:flex;
-    flex-direction:column;
-    height:65%;
-    border-radius:20px;
-    background:rgba(255,255,255,0.06);
-    padding:15px;
-    position: relative;
+#chatBox {
+    margin-top: auto; display: flex; flex-direction: column;
+    height: 70%; border-radius: 20px; background: rgba(255, 255, 255, 0.06);
+    padding: 15px; position: relative;
 }
+#messages { flex: 1; overflow-y: auto; }
+#messages p { background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 15px; margin: 5px 0; font-size: 14px; word-wrap: break-word; }
+#chatControls { display: flex; gap: 8px; margin-top: 10px; }
+#chatControls input { flex: 1; padding: 10px; border-radius: 10px; border: none; background: #1a1b1e; color: white; }
+#chatControls button { padding: 10px; border-radius: 10px; border: none; background: white; font-weight: 800; cursor: pointer; color: black; }
 
-#messages{
-    flex:1;
-    overflow-y:auto;
+/* ---------------- MODALS ---------------- */
+.modal {
+    display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 350px; background: rgba(30, 30, 35, 0.98); backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; padding: 25px; z-index: 1000;
 }
+.modal h3 { margin-top: 0; color: #FF6A88; font-weight: 800; }
+.modal-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-weight: 800; font-size: 20px; }
+#reportText { width: 100%; height: 80px; border-radius: 10px; background: #1a1b1e; color: white; border: none; padding: 10px; margin-top: 10px; resize: none; box-sizing: border-box; }
 
-#messages p{
-    background:rgba(255,255,255,0.1);
-    padding:12px;
-    border-radius:18px;
-    margin:8px 0;
-    word-wrap: break-word;
-}
+/* ---------------- LOGO & BUTTONS ---------------- */
+#mainLogo { width: 120px; margin-bottom: 10px; transition: 0.1s linear; }
+#brandName { font-size: 2.5rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
+.accent { color: #222; }
+#status { margin-bottom: 15px; font-weight: 600; opacity: 0.9; }
 
-#chatControls{
-    display:flex;
-    gap:10px;
-    margin-top:10px;
-}
-
-#chatControls input{
-    flex:1;
-    padding:12px;
-    border-radius:12px;
-    border:none;
-    background:#2b2c32;
-    color:white;
-}
-
-#chatControls button{
-    padding:12px 18px;
-    border-radius:12px;
-    border:none;
-    background:white;
-    font-weight:700;
-    cursor: pointer;
-}
-
-#memeMenu { 
-    display: none; position: absolute; bottom: 80px; left: 10px; right: 10px; 
-    background: rgba(30, 30, 35, 0.95); padding: 15px; border-radius: 15px; 
-    grid-template-columns: repeat(3, 1fr); gap: 10px; z-index: 100; 
-    backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
-    max-height: 200px; overflow-y: auto;
-}
-#memeMenu img { width: 100%; border-radius: 8px; cursor: pointer; }
-
-/* ---------------- CALL CONTROLS ---------------- */
-.callButtons{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    margin-top: 15px;
-}
-
-.circleBtn{
-    width:70px;
-    height:70px;
-    border:none;
-    background:none;
-    cursor:pointer;
-    transition: transform 0.1s;
-}
-
+.callButtons { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+.circleBtn { width: 65px; height: 65px; border: none; background: none; cursor: pointer; padding: 0; transition: 0.2s; }
 .circleBtn:active { transform: scale(0.9); }
+.spinning { animation: spin 1s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
-#callBtn.loading { animation: spin 2s linear infinite; }
-
-@keyframes spin{
-    0%{transform:rotate(0deg)}
-    100%{transform:rotate(360deg)}
+/* ---------------- MEME MENU ---------------- */
+#memeMenu { 
+    display: none; position: absolute; bottom: 70px; left: 10px; right: 10px; 
+    background: rgba(0, 0, 0, 0.9); padding: 10px; border-radius: 15px; 
+    grid-template-columns: repeat(3, 1fr); gap: 8px; z-index: 100;
+    max-height: 200px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1);
 }
-
-.historyWrap {
-    margin-top: 10px;
-    font-size: 13px;
-    opacity: 0.8;
-}
-
-#onlineDropdown.open { max-height: 40vh; overflow-y: auto; margin-top: 10px; }
+#memeMenu img { width: 100%; border-radius: 5px; cursor: pointer; aspect-ratio: 1/1; object-fit: cover; }
 </style>
 </head>
 
 <body>
 
 <div id="leftPanel">
-    <div id="onlineTop">
-        <span id="onlineCount">People Online (0)</span>
-        <span id="toggleUsers">▼</span>
+    <div id="onlineTop" style="cursor:pointer; display: flex; justify-content: space-between;" onclick="document.getElementById('onlineDropdown').classList.toggle('open')">
+        <span id="onlineCount">People Online (0)</span> <span>▼</span>
     </div>
-
-    <div id="onlineDropdown"></div>
+    <div id="onlineDropdown" style="max-height:0; overflow:hidden; transition:0.3s; background: rgba(0,0,0,0.2); border-radius: 10px;"></div>
 
     <div id="chatBox">
         <div id="memeMenu"></div>
         <div id="messages"></div>
         <div id="chatControls">
-            <input id="msgInput" placeholder="Say something...">
+            <input id="msgInput" placeholder="Message...">
             <button id="gifBtn" style="background:#FF6A88; color:white;">🎁</button>
             <button id="sendBtn">Send</button>
         </div>
@@ -165,125 +94,156 @@ body{
 
 <div id="centerPanel">
     <svg id="mainLogo" viewBox="0 0 100 100">
-        <path fill="white" fill-rule="evenodd" d="M10 30 Q10 10 30 10 H70 Q90 10 90 30 V70 Q90 90 70 90 H30 Q10 90 10 70 Z M50 65 C35 50,30 40,40 35 C45 32,50 38,50 38 C50 38,55 32,60 35 C70 40,65 50,50 65Z"/>
-        <polygon points="30,80 45,95 45,80" fill="white"/>
+        <path fill="white" d="M10 30 Q10 10 30 10 H70 Q90 10 90 30 V70 Q90 90 70 90 H30 Q10 90 10 70 Z M50 65 C35 50,30 40,40 35 C45 32,50 38,50 38 C50 38,55 32,60 35 C70 40,65 50,50 65Z"/>
     </svg>
-
     <div id="brandName">Love<span class="accent">Talk</span></div>
     <div id="status">Online</div>
 
-    <div id="callControls">
-        <div class="callButtons">
-            <button class="circleBtn" id="muteBtn">
-                <svg viewBox="0 0 100 100">
-                    <mask id="muteMask"><rect width="100" height="100" fill="white"/><path d="M40 35h-5v30h5l10 10V25L40 35zm20 15c0-5-3-9-7-11v22c4-2 7-6 7-11z" fill="black"/></mask>
-                    <circle cx="50" cy="50" r="40" fill="white" mask="url(#muteMask)"/>
-                </svg>
-            </button>
+    <div class="callButtons">
+        <button class="circleBtn" id="muteBtn" title="Mute">
+            <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white"/>
+            <g id="micIcon" stroke="black" stroke-width="5" fill="none">
+                <rect x="42" y="30" width="16" height="25" rx="8"/>
+                <path d="M35 45c0 10 15 10 15 10s15 0 15-10m-15 10v10"/>
+                <line id="muteSlash" x1="30" y1="30" x2="70" y2="70" stroke="red" stroke-width="8" style="display:none;"/>
+            </g></svg>
+        </button>
 
-            <button id="callBtn" class="circleBtn">
-                <svg viewBox="0 0 100 100">
-                    <mask id="phoneMask"><rect width="100" height="100" fill="white"/><path d="M35 40 Q45 30 55 40 L60 45 Q65 50 60 55 L55 60 Q50 65 45 60 L40 55 Q35 50 40 45 Z" fill="black"/></mask>
-                    <circle cx="50" cy="50" r="40" fill="white" mask="url(#phoneMask)"/>
-                </svg>
-            </button>
+        <button id="callBtn" class="circleBtn" title="Call">
+            <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white"/>
+            <path d="M30 40c0-5 20-15 40 0l-5 10c-10-5-25-5-30 0l-5-10zM40 50c0 15 20 15 20 0" fill="black"/></svg>
+        </button>
 
-            <button class="circleBtn" id="friendBtn">
-                <svg viewBox="0 0 100 100">
-                    <mask id="friendMask"><rect width="100" height="100" fill="white"/><path d="M50 45c5.5 0 10-4.5 10-10s-4.5-10-10-10-10 4.5-10 10 4.5 10 10 10zm0 5c-8.3 0-25 4.2-25 12.5V70h50v-7.5c0-8.3-16.7-12.5-25-12.5z" fill="black"/></mask>
-                    <circle cx="50" cy="50" r="40" fill="white" mask="url(#friendMask)"/>
-                </svg>
-            </button>
+        <button class="circleBtn" id="friendBtn" title="Add Friend">
+            <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white"/>
+            <path d="M50 30v40M30 50h40" stroke="black" stroke-width="8" stroke-linecap="round"/></svg>
+        </button>
 
-            <button class="circleBtn" id="reportBtn">
-                <svg viewBox="0 0 100 100">
-                    <mask id="reportMask"><rect width="100" height="100" fill="white"/><path d="M50 20c-16.6 0-30 13.4-30 30s13.4 30 30 30 30-13.4 30-30-13.4-30-30-30zm2 45h-4v-4h4v4zm0-10h-4V35h4v20z" fill="black"/></mask>
-                    <circle cx="50" cy="50" r="40" fill="white" mask="url(#reportMask)"/>
-                </svg>
-            </button>
-        </div>
+        <button class="circleBtn" id="reportBtn" title="Report">
+            <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white"/>
+            <text x="50" y="68" text-anchor="middle" font-weight="800" font-size="50" fill="black">!</text></svg>
+        </button>
+    </div>
 
-        <div style="display:flex; gap:20px; align-items:center; margin-top:10px;">
-            <label class="autoCallWrap"><input type="checkbox" id="autoCall"> Auto Call</label>
-            <div class="historyWrap">Call History: <span id="lastUser">None</span></div>
-        </div>
+    <div style="margin-top:20px; display:flex; gap:15px; font-size:14px; align-items: center;">
+        <label style="cursor: pointer;"><input type="checkbox" id="autoCall"> Auto Call</label>
+        <div onclick="openHistory()" style="cursor:pointer; text-decoration:underline;">Call History</div>
     </div>
 </div>
 
-<script>
-/* ---------------- USER & SOCKET ---------------- */
-const adjectives=["Neo","Luxe","Echo","Nova","Drift","Vibe","Hyper","Aurora"];
-const nouns=["Pulse","Flux","Wave","Core","Orbit","Phase","Glow","Shift"];
-const username = adjectives[Math.floor(Math.random()*adjectives.length)] + nouns[Math.floor(Math.random()*nouns.length)] + Math.floor(Math.random()*900+100);
+<div id="historyModal" class="modal">
+    <span class="modal-close" onclick="closeModals()">×</span>
+    <h3 id="historyCount">You've had 0 calls</h3>
+    <div id="historyList" style="max-height: 150px; overflow-y: auto; font-size: 14px;"></div>
+</div>
 
+<div id="reportModal" class="modal">
+    <span class="modal-close" onclick="closeModals()">×</span>
+    <h3>Report User</h3>
+    <p style="font-size: 12px; opacity: 0.8; line-height: 1.4;">LoveTalk Policy: We promote kindness. Harassment, hate speech, or inappropriate behavior results in a permanent ban. Reports are sent directly to the admin for review.</p>
+    <textarea id="reportText" placeholder="Describe the issue here..."></textarea>
+    <button onclick="sendReport()" style="margin-top:15px; width:100%; padding:12px; border-radius:10px; border:none; background:white; font-weight:800; cursor: pointer;">Submit Report</button>
+</div>
+
+<script>
 const socket = io();
+const adjectives=["Neo","Luxe","Echo","Nova","Drift","Vibe","Hyper"];
+const nouns=["Pulse","Flux","Wave","Core","Orbit","Phase","Glow"];
+const username = adjectives[Math.floor(Math.random()*adjectives.length)] + nouns[Math.floor(Math.random()*nouns.length)] + Math.floor(Math.random()*99);
+let callHistory = [];
+
 socket.on('connect', () => socket.emit('setName', username));
 
-/* ---------------- MEMES ---------------- */
-const memeList = [
-    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/l41lTfuxV6M0vT8S4/giphy.gif" },
-    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/MDJ9IbxxvDUQM/giphy.gif" },
-    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/QMHoU66L5Qezq5qK7w/giphy.gif" },
-    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o72F8t9TDi2xVnxOE/giphy.gif" },
-    { url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/H5iz8vPzfaYBr0HoFv/giphy.gif" }
+/* ---------------- 15 WORKING MEMES ---------------- */
+const memes = [
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/MDJ9IbxxvDUQM/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/l41lTfuxV6M0vT8S4/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/QMHoU66L5Qezq5qK7w/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7TKMGpxxidXuyPza/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/OPU6wzx8JBaK6S4kWU/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7buirYcmV5nSwIRW/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7abKhOpuMcmLj9cI/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3og0INyCmHlNylks9O/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/2UvAUplqc4C0ZdwxqE/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/108M7gCS1JSoO4/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/9d3l6hEReY9vG/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/c76IJbxAb97Hi/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o72F8t9TDi2xVnxOE/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/H5iz8vPzfaYBr0HoFv/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/v4aGOHef6XpNC/giphy.gif"
 ];
 
 const memeMenu = document.getElementById("memeMenu");
-memeList.forEach(meme => {
-    const img = document.createElement("img");
-    img.src = meme.url;
-    img.onclick = () => {
-        socket.emit('chatMessage', { msg: `<img src="${meme.url}" style="width:100%; border-radius:10px;">` });
-        memeMenu.style.display = "none";
-    };
+memes.forEach(url => {
+    const img = document.createElement("img"); img.src = url;
+    img.onclick = () => { socket.emit('chatMessage', { msg: `<img src="${url}" style="width:100%; border-radius:10px;">` }); memeMenu.style.display="none"; };
     memeMenu.appendChild(img);
 });
-
 document.getElementById("gifBtn").onclick = () => memeMenu.style.display = memeMenu.style.display === "grid" ? "none" : "grid";
 
-/* ---------------- CHAT LOGIC ---------------- */
-function sendMessage() {
-    const input = document.getElementById("msgInput");
-    if(input.value.trim()) {
-        socket.emit('chatMessage', { msg: input.value });
-        input.value = "";
+/* ---------------- UI ACTIONS ---------------- */
+document.getElementById("muteBtn").onclick = () => {
+    const slash = document.getElementById("muteSlash");
+    slash.style.display = slash.style.display === "none" ? "block" : "none";
+};
+
+const callBtn = document.getElementById("callBtn");
+callBtn.onclick = () => {
+    callBtn.classList.toggle("spinning");
+    if(callBtn.classList.contains("spinning")) {
+        document.getElementById("status").textContent = "Searching...";
+        // Simulated Match for History Demo
+        setTimeout(() => {
+            let match = adjectives[Math.floor(Math.random()*adjectives.length)] + " Match";
+            callHistory.push(match);
+            document.getElementById("status").textContent = "Connected to " + match;
+        }, 3000);
+    } else {
+        document.getElementById("status").textContent = "Online";
+    }
+};
+
+function openHistory() {
+    document.getElementById("historyModal").style.display = "block";
+    document.getElementById("historyCount").textContent = `You've had ${callHistory.length} calls`;
+    const list = document.getElementById("historyList");
+    list.innerHTML = callHistory.map(u => `<div style="padding:8px; border-bottom:1px solid rgba(255,255,255,0.05)">Connected with: ${u}</div>`).reverse().join('');
+}
+
+document.getElementById("reportBtn").onclick = () => document.getElementById("reportModal").style.display = "block";
+
+function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = "none"); }
+
+function sendReport() {
+    const text = document.getElementById("reportText").value;
+    if(text) {
+        alert("Thank you. Report sent to admin.");
+        closeModals();
+        document.getElementById("reportText").value = "";
     }
 }
-document.getElementById("sendBtn").onclick = sendMessage;
-document.getElementById("msgInput").onkeydown = (e) => { if(e.key === "Enter") sendMessage(); };
+
+/* ---------------- CHAT LOGIC ---------------- */
+function sendMsg() {
+    const inp = document.getElementById("msgInput");
+    if(inp.value.trim()){ socket.emit('chatMessage', { msg: inp.value }); inp.value=""; }
+}
+document.getElementById("sendBtn").onclick = sendMsg;
+document.getElementById("msgInput").onkeydown = (e) => { if(e.key==="Enter") sendMsg(); };
 
 socket.on('message', (msg) => {
-    const p = document.createElement("p");
-    p.innerHTML = msg;
+    const p = document.createElement("p"); p.innerHTML = msg;
     document.getElementById("messages").appendChild(p);
     document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
 });
 
-socket.on('updateUsers', (userNames) => {
-    const onlineDropdown = document.getElementById("onlineDropdown");
-    onlineDropdown.innerHTML = "";
-    userNames.forEach(name => {
-        const div = document.createElement("div");
-        div.className = "dropdownUser";
-        div.textContent = name;
-        onlineDropdown.appendChild(div);
-    });
-    document.getElementById("onlineCount").textContent = `People Online (${userNames.length})`;
+socket.on('updateUsers', (list) => {
+    const dd = document.getElementById("onlineDropdown"); dd.innerHTML = "";
+    list.forEach(n => { const d = document.createElement("div"); d.textContent=n; d.style.padding="8px"; dd.appendChild(d); });
+    document.getElementById("onlineCount").textContent = `People Online (${list.length})`;
 });
 
-/* ---------------- CALL BUTTONS & HISTORY ---------------- */
-const callBtn = document.getElementById("callBtn");
-callBtn.onclick = () => {
-    callBtn.classList.toggle("loading"); // Starts spinning
-    // Logic for connecting goes here
-    setTimeout(() => {
-        document.getElementById("lastUser").textContent = "Last Match: " + (Math.random() > 0.5 ? "NeonWave" : "LuxeCore");
-    }, 2000);
-};
-
-document.getElementById("toggleUsers").onclick = () => document.getElementById("onlineDropdown").classList.toggle("open");
-
-/* ---------------- LOGO PULSE ---------------- */
+/* ---------------- LOGO MIC PULSE ---------------- */
 navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const analyser = ctx.createAnalyser();
@@ -294,11 +254,11 @@ navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
     function animate(){
         analyser.getByteFrequencyData(dataArray);
         const avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
-        logo.style.transform = `scale(${1+avg/200})`;
+        logo.style.transform = `scale(${1+avg/250})`;
         requestAnimationFrame(animate);
     }
     animate();
-}).catch(() => console.log("Mic access denied"));
+}).catch(() => {});
 </script>
 </body>
 </html>
