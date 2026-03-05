@@ -12,60 +12,55 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); 
 #topBar { padding: 15px 30px; display: flex; justify-content: flex-end; background: rgba(0,0,0,0.1); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; }
 .theme-btn { background: white; color: black; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 10px; text-transform: uppercase; transition: transform 0.2s; }
 
-#appView { display: flex; flex: 1; width: 100%; height: calc(100vh - 60px); }
+#appView { display: flex; flex: 1; width: 100%; height: calc(100vh - 60px); min-height: 800px; }
 
-/* Left Panel - Transparent Dark */
 #leftPanel { width: 380px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
-
 #centerPanel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
 
-/* Status Text - Smaller/Cleaner */
-#status { font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 10px; opacity: 0.8; color: white; transition: all 0.3s; }
+#status { font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 10px; opacity: 0.8; color: white; }
 
-/* Action Buttons - Transparent Dim White */
+/* Buttons */
 .callButtons { display: flex; flex-direction: row; gap: 15px; align-items: center; margin-top: 30px; }
-.circleBtn { width: 70px; height: 70px; border: none; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
-
-/* Active States */
-.circleBtn.active-mute { background: #FF4B4B !important; }
-.circleBtn.active-call { background: #FF4B4B !important; }
-.circleBtn.active-add { background: #4BFF8B !important; }
-.circleBtn.active-report { background: #FF4B4B !important; }
+.circleBtn { width: 75px; height: 75px; border: none; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
 .circleBtn:active { transform: scale(0.9); }
+
+/* Report Button - Large & White */
+#reportBtn { width: 85px; height: 85px; background: rgba(255,255,255,0.25); }
+#reportBtn text { fill: white; font-size: 60px; font-weight: 900; }
 
 .label-tag { position: absolute; bottom: -22px; font-size: 9px; font-weight: 900; color: white; white-space: nowrap; opacity: 0.7; }
 
-/* Tab Headers */
-.tab-header { font-size: 10px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 0; cursor: pointer; display: flex; justify-content: space-between; }
-.tab-content { max-height: 80px; overflow-y: auto; font-size: 11px; padding: 10px 0; }
+/* Highlighted White Outlined Labels */
+.extra-spacing { margin-top: 60px; display: flex; gap: 20px; }
+.pill-label { border: 2px solid white; background: transparent; padding: 6px 15px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; color: white; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+.pill-label:hover { background: rgba(255,255,255,0.1); }
 
-/* Logo & Voice (Hidden until talking) */
-#logoContainer { width: 150px; height: 150px; position: relative; }
+/* Logo & Chat */
+#logoContainer { width: 160px; height: 160px; position: relative; }
 .base-bubble { fill: white; }
 .outline-trace { fill: none; stroke: #4BFF8B; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: var(--logo-dash); transition: stroke-dashoffset 0.1s linear; display: none; }
 .heart-cutout { fill: #4BFF8B; opacity: var(--heart-fill); transition: opacity 0.2s; }
 
-/* Chat Box */
-#chatBox { margin-top: 15px; display: none; flex-direction: column; flex-grow: 1; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+#chatBox { margin-top: 15px; display: none; flex-direction: column; flex-grow: 1; background: #ffffff; border-radius: 20px; overflow: hidden; }
+#chatHeader { padding: 10px; background: #f9f9f9; border-bottom: 1px solid #eee; color: #000; font-size: 12px; font-weight: 700; text-align: center; }
+
 #messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding: 15px; color: #000; }
-.msg-bubble { padding: 8px 15px; border-radius: 18px; max-width: 75%; font-size: 14px; line-height: 1.4; }
+.msg-bubble { padding: 8px 15px; border-radius: 18px; max-width: 75%; font-size: 14px; }
 .msg-bubble.mine { align-self: flex-end; background: #007aff; color: white; border-bottom-right-radius: 4px; }
 .msg-bubble.theirs { align-self: flex-start; background: #e5e5ea; color: black; border-bottom-left-radius: 4px; }
 
 #memeGallery { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; background: #f2f2f7; max-height: 220px; overflow-y: auto; border-top: 1px solid #ddd; }
 .meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; cursor: pointer; border-radius: 4px; }
 
-/* Responsive Split Screen */
+/* Responsive */
 @media (max-width: 800px) {
-    #appView { flex-direction: column; height: auto; }
-    #leftPanel { width: 100%; order: 2; height: 60vh; border-right: none; border-top: 1px solid rgba(255,255,255,0.1); }
+    #appView { flex-direction: column; height: auto; min-height: 0; }
+    #leftPanel { width: 100%; order: 2; height: 60vh; border-right: none; }
     #centerPanel { width: 100%; order: 1; padding: 40px 0; flex: none; }
-    .extra-spacing { margin-top: 30px !important; }
 }
 
-.extra-spacing { margin-top: 60px; display: flex; gap: 30px; font-size: 10px; font-weight: 800; text-transform: uppercase; opacity: 0.6; }
-#footerSpace { padding: 80px 15% 40px; text-align: center; background: white; color: #333; margin-top: 100px; }
-footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d; color: #555; width: 100%; }
+#footerSpace { padding: 100px 15%; text-align: center; background: white; color: #333; }
+footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d; color: #555; }
 .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; background: #1a1a1a; border-radius: 20px; padding: 20px; z-index: 2000; text-align: center; border: 1px solid #333; }
 </style>
 </head>
@@ -75,22 +70,23 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
 
 <div id="appView">
     <div id="leftPanel">
-        <div class="tab-header" onclick="toggleTab('onlineList')">
+        <div class="tab-header" onclick="toggleTab('onlineList')" style="font-size:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.1); padding:10px 0; cursor:pointer; display:flex; justify-content:space-between;">
             <span>VERIFIED HUMANS</span> <span id="onlineCount">142 ▾</span>
         </div>
-        <div id="onlineList" class="tab-content">
+        <div id="onlineList" style="max-height:80px; overflow-y:auto; font-size:11px; padding:10px 0;">
             <div style="opacity:0.6; margin-bottom:5px;">• User_882 (Active)</div>
             <div style="opacity:0.6; margin-bottom:5px;">• Human_412 (Chatting)</div>
         </div>
 
-        <div class="tab-header" onclick="toggleTab('connDD')">
+        <div class="tab-header" onclick="toggleTab('connDD')" style="font-size:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.1); padding:10px 0; cursor:pointer; display:flex; justify-content:space-between;">
             <span>CONNECTIONS</span> <span>▾</span>
         </div>
-        <div id="connDD" class="tab-content">
+        <div id="connDD" style="max-height:80px; overflow-y:auto; font-size:11px; padding:10px 0;">
             <div id="connEmpty" style="opacity:0.3;">No active connections</div>
         </div>
         
         <div id="chatBox">
+            <div id="chatHeader">Linked: <span id="chatPeerName">...</span></div>
             <div id="messages"></div>
             <div id="memeGallery"></div>
             <div style="display:flex; gap:8px; padding:10px; border-top: 1px solid #eee; align-items: center;">
@@ -110,7 +106,7 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
                 <path class="heart-cutout" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
             </svg>
         </div>
-        <div id="brandName" style="font-size: 2.8rem; font-weight: 800; letter-spacing: -2px;">LoveTalk</div>
+        <div id="brandName" style="font-size: 3.5rem; font-weight: 800; letter-spacing: -3px; margin-top: 10px;">LoveTalk</div>
         <div id="status">READY</div>
 
         <div class="callButtons">
@@ -118,7 +114,7 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
                 <svg viewBox="0 0 100 100" width="48"><g fill="white"><rect x="44" y="25" width="12" height="30" rx="6" /><path d="M35 46 a15 15 0 0 0 30 0" fill="none" stroke="white" stroke-width="5"/></g></svg>
                 <div class="label-tag" id="muteTag">MUTE</div>
             </button>
-            <button id="callBtn" class="circleBtn" onclick="handleCall()" style="background: rgba(255,255,255,0.15);">
+            <button id="callBtn" class="circleBtn" onclick="handleCall()">
                 <svg viewBox="0 0 100 100" width="55"><rect x="35" y="20" width="30" height="60" rx="6" fill="none" stroke="white" stroke-width="3"/><rect id="phoneScreen" x="39" y="25" width="22" height="42" rx="2" fill="#4BFF8B"/><circle cx="50" cy="72" r="3" fill="white"/></svg>
                 <div class="label-tag" id="callTag">CALL</div>
             </button>
@@ -127,16 +123,16 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
                 <div class="label-tag">ADD</div>
             </button>
             <button class="circleBtn" id="reportBtn" onclick="handleReport()">
-                <text x="50" y="68" text-anchor="middle" fill="white" font-size="55" font-weight="900">!</text>
+                <svg viewBox="0 0 100 100" width="85"><text x="50" y="68" text-anchor="middle" fill="white" font-size="55" font-weight="900">!</text></svg>
                 <div class="label-tag">REPORT</div>
             </button>
         </div>
 
         <div class="extra-spacing">
-            <label style="cursor:pointer; display:flex; align-items:center; gap:8px;">
-                <input type="checkbox" id="autoCheck" style="transform:scale(1.2)"> Auto Call
+            <label class="pill-label">
+                <input type="checkbox" id="autoCheck" style="accent-color: white;"> Auto Call
             </label>
-            <span style="text-decoration:underline; cursor:pointer;" onclick="openMod('hModal')">History</span>
+            <span class="pill-label" onclick="openMod('hModal')">History</span>
         </div>
     </div>
 </div>
@@ -179,45 +175,48 @@ function toggleTab(id) { 
 
 function muteT() {
     isMuted = !isMuted;
-    const btn = document.getElementById('muteBtn');
-    btn.classList.toggle('active-mute', isMuted);
+    document.getElementById('muteBtn').style.background = isMuted ? "#FF4B4B" : "rgba(255,255,255,0.15)";
     document.getElementById('muteTag').textContent = isMuted ? "MUTED" : "MUTE";
 }
 
 function handleAdd() {
     if(!peer) return;
-    const btn = document.getElementById('addBtn');
-    btn.classList.add('active-add');
     document.getElementById('connEmpty').style.display = 'none';
-    const d = document.createElement('div'); d.textContent = "♥ " + peer; d.style.padding = "5px 0";
+    const d = document.createElement('div'); 
+    d.textContent = "♥ " + peer; 
+    d.style.padding = "5px 0";
+    d.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
     document.getElementById('connDD').appendChild(d);
-    setTimeout(() => btn.classList.remove('active-add'), 1000);
+    
+    const btn = document.getElementById('addBtn');
+    btn.style.background = "#4BFF8B";
+    setTimeout(() => btn.style.background = "rgba(255,255,255,0.15)", 500);
 }
 
 function handleReport() {
     const btn = document.getElementById('reportBtn');
-    btn.classList.add('active-report');
+    btn.style.background = "#FF4B4B";
     setTimeout(() => {
-        btn.classList.remove('active-report');
+        btn.style.background = "rgba(255,255,255,0.15)";
         if(peer) endCall();
     }, 500);
 }
 
 function handleCall() {
     const btn = document.getElementById('callBtn');
-    if (btn.classList.contains('active-call')) endCall(); else startSearch();
+    if (peer) endCall(); else startSearch();
 }
 
 function startSearch() {
-    const status = document.getElementById('status');
-    status.textContent = "FINDING SOMEONE...";
+    document.getElementById('status').textContent = "FINDING SOMEONE...";
+    document.getElementById('phoneScreen').style.fill = "#4BFF8B";
     
     setTimeout(() => {
-        const btn = document.getElementById('callBtn');
-        btn.classList.add('active-call');
         peer = "Human_" + Math.floor(Math.random()*999);
-        status.textContent = "LINKED: " + peer;
+        document.getElementById('status').textContent = "LINKED: " + peer;
+        document.getElementById('chatPeerName').textContent = peer;
         document.getElementById('callTag').textContent = "END";
+        document.getElementById('phoneScreen').style.fill = "#FF4B4B";
         document.getElementById('chatBox').style.display = 'flex';
         historyList.push(peer);
         updateHistory();
@@ -226,11 +225,10 @@ function startSearch() {
 }
 
 function endCall() {
-    const btn = document.getElementById('callBtn');
-    btn.classList.remove('active-call');
     document.getElementById('chatBox').style.display = 'none';
     document.getElementById('status').textContent = "READY";
     document.getElementById('callTag').textContent = "CALL";
+    document.getElementById('phoneScreen').style.fill = "#4BFF8B";
     document.getElementById('messages').innerHTML = "";
     peer = "";
     
@@ -297,7 +295,6 @@ function processVoice() {
     const data = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(data);
     let vol = data.reduce((a,b) => a+b) / data.length;
-    
     const indicator = document.getElementById('voiceIndicator');
     if(vol > 5) { 
         indicator.style.display = "block";
