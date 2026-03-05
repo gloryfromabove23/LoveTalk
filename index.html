@@ -30,39 +30,45 @@ body {
 
 /* ---------------- BRANDING & LOGO ---------------- */
 #mainLogo { 
-    width: 150px; /* Made bigger */
-    height: 150px; 
-    margin-bottom: 20px; 
+    width: 160px; height: 160px; margin-bottom: 20px; 
     transition: 0.1s linear; 
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.2));
 }
 #brandName { font-size: 3.8rem; font-weight: 800; margin: 0; letter-spacing: -3px; }
 .talk-thin { font-weight: 100; letter-spacing: -1px; margin-left: 2px; }
-#status { margin-top: 10px; margin-bottom: 70px; /* Spaced further apart */ font-weight: 400; opacity: 0.6; letter-spacing: 2px; text-transform: uppercase; font-size: 11px; }
+#status { margin-top: 10px; margin-bottom: 70px; font-weight: 400; opacity: 0.6; letter-spacing: 2px; text-transform: uppercase; font-size: 11px; }
 
-/* ---------------- MODERN BUTTONS ---------------- */
+/* ---------------- BUTTONS ---------------- */
 .callButtons { display: flex; gap: 20px; align-items: center; }
 .circleBtn { 
     width: 72px; height: 72px; border: none; background: none; cursor: pointer; padding: 0; 
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s; 
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
 }
-.circleBtn:hover { transform: translateY(-5px); filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)); }
+.circleBtn:hover { transform: translateY(-5px); }
 .circleBtn:active { transform: scale(0.9); }
 
-.spinning { animation: spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+.spinning { animation: spin 1.2s linear infinite; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* ---------------- CHAT ---------------- */
+/* ---------------- CHAT & MEMES ---------------- */
 #chatBox {
     margin-top: auto; display: flex; flex-direction: column;
     height: 70%; border-radius: 20px; background: rgba(255, 255, 255, 0.05);
-    padding: 15px; border: 1px solid rgba(255,255,255,0.08);
+    padding: 15px; position: relative; border: 1px solid rgba(255,255,255,0.08);
 }
 #messages { flex: 1; overflow-y: auto; }
-#messages p { background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 15px; margin: 8px 0; font-size: 14px; }
+#messages p { background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 15px; margin: 8px 0; font-size: 14px; word-wrap: break-word;}
 #chatControls { display: flex; gap: 8px; margin-top: 10px; }
 #chatControls input { flex: 1; padding: 12px; border-radius: 12px; border: none; background: rgba(0,0,0,0.3); color: white; outline: none; }
-#chatControls button { padding: 0 15px; border-radius: 12px; border: none; background: white; font-weight: 800; cursor: pointer; color: black; }
+#chatControls button { padding: 0 12px; border-radius: 12px; border: none; background: white; font-weight: 800; cursor: pointer; color: black; }
+
+#memeMenu { 
+    display: none; position: absolute; bottom: 80px; left: 10px; right: 10px; 
+    background: rgba(0, 0, 0, 0.9); padding: 12px; border-radius: 20px; 
+    grid-template-columns: repeat(3, 1fr); gap: 10px; z-index: 100;
+    max-height: 250px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1);
+}
+#memeMenu img { width: 100%; border-radius: 10px; cursor: pointer; aspect-ratio: 1/1; object-fit: cover; }
 
 /* ---------------- MODALS ---------------- */
 .modal {
@@ -78,14 +84,16 @@ body {
 
 <div id="leftPanel">
     <div id="onlineTop" style="cursor:pointer; display: flex; justify-content: space-between; font-weight: 600;" onclick="document.getElementById('onlineDropdown').classList.toggle('open')">
-        <span id="onlineCount">Discover (0)</span> <span>▼</span>
+        <span id="onlineCount">People Online (0)</span> <span>▼</span>
     </div>
-    <div id="onlineDropdown" style="max-height:0; overflow:hidden; transition:0.3s; margin-top:10px;"></div>
+    <div id="onlineDropdown" style="max-height:0; overflow:hidden; transition:0.3s; background: rgba(0,0,0,0.2); border-radius: 10px; margin-top:10px;"></div>
 
     <div id="chatBox">
+        <div id="memeMenu"></div>
         <div id="messages"></div>
         <div id="chatControls">
-            <input id="msgInput" placeholder="Say hello...">
+            <input id="msgInput" placeholder="Write message...">
+            <button id="gifBtn" style="background:#FF6A88; color:white;">🎁</button>
             <button id="sendBtn">Send</button>
         </div>
     </div>
@@ -94,12 +102,12 @@ body {
 <div id="centerPanel">
     <svg id="mainLogo" viewBox="0 0 100 100">
         <defs>
-            <mask id="modernLogoMask">
+            <mask id="bubbleHeartMask">
                 <rect width="100" height="100" fill="white" />
-                <path d="M50 75 L30 52 C22 40 28 28 40 28 C45 28 50 32 50 32 C50 32 55 28 60 28 C72 28 78 40 70 52 L50 75 Z" fill="black" />
+                <path d="M50 70 L35 50 C28 40 33 30 42 30 C46 30 50 33 50 33 C50 33 54 30 58 30 C67 30 72 40 65 50 L50 70 Z" fill="black" />
             </mask>
         </defs>
-        <rect x="5" y="5" width="90" height="90" rx="24" fill="white" mask="url(#modernLogoMask)" />
+        <path d="M20 10 H80 Q90 10 90 20 V65 Q90 75 80 75 H45 L25 90 V75 Q10 75 10 65 V20 Q10 10 20 10 Z" fill="white" mask="url(#bubbleHeartMask)" />
     </svg>
 
     <div id="brandName">Love<span class="talk-thin">Talk</span></div>
@@ -109,13 +117,7 @@ body {
         <button class="circleBtn" id="muteBtn">
             <svg viewBox="0 0 100 100">
                 <defs>
-                    <mask id="micMaskM">
-                        <rect width="100" height="100" fill="white"/>
-                        <rect x="43" y="28" width="14" height="24" rx="7" fill="black"/>
-                        <path d="M36 45c0 8 14 8 14 8s14 0 14-8" fill="none" stroke="black" stroke-width="5" stroke-linecap="round"/>
-                        <line x1="50" y1="53" x2="50" y2="65" stroke="black" stroke-width="5" stroke-linecap="round"/>
-                        <line id="muteSlash" x1="25" y1="25" x2="75" y2="75" stroke="black" stroke-width="8" stroke-linecap="round" style="display:none;"/>
-                    </mask>
+                    <mask id="micMaskM"><rect width="100" height="100" fill="white"/><rect x="43" y="28" width="14" height="24" rx="7" fill="black"/><path d="M36 45c0 8 14 8 14 8s14 0 14-8" fill="none" stroke="black" stroke-width="5" stroke-linecap="round"/><line x1="50" y1="53" x2="50" y2="65" stroke="black" stroke-width="5" stroke-linecap="round"/><line id="muteSlash" x1="25" y1="25" x2="75" y2="75" stroke="black" stroke-width="8" stroke-linecap="round" style="display:none;"/></mask>
                 </defs>
                 <circle cx="50" cy="50" r="45" fill="white" mask="url(#micMaskM)"/>
             </svg>
@@ -124,22 +126,19 @@ body {
         <button id="callBtn" class="circleBtn">
             <svg viewBox="0 0 100 100">
                 <defs>
-                    <mask id="callMaskM">
+                    <mask id="oldPhoneMask">
                         <rect width="100" height="100" fill="white"/>
-                        <path d="M30 40c0-4 4-8 8-8h24c4 0 8 4 8 8v4c0 12-10 22-22 22h-6c-4 0-8-4-8-8v-18z" fill="black" transform="rotate(-45 50 50)"/>
+                        <path d="M25 45c0-10 15-15 25-15s25 5 25 15l-10 5c-5-5-25-5-30 0l-10-5zM40 55c0 10 20 10 20 0" fill="black"/>
                     </mask>
                 </defs>
-                <circle cx="50" cy="50" r="45" fill="white" mask="url(#callMaskM)"/>
+                <circle cx="50" cy="50" r="45" fill="white" mask="url(#oldPhoneMask)"/>
             </svg>
         </button>
 
         <button class="circleBtn" id="friendBtn">
             <svg viewBox="0 0 100 100">
                 <defs>
-                    <mask id="plusMaskM">
-                        <rect width="100" height="100" fill="white"/>
-                        <path d="M50 32v36M32 50h36" stroke="black" stroke-width="10" stroke-linecap="round"/>
-                    </mask>
+                    <mask id="plusMaskM"><rect width="100" height="100" fill="white"/><path d="M50 32v36M32 50h36" stroke="black" stroke-width="10" stroke-linecap="round"/></mask>
                 </defs>
                 <circle cx="50" cy="50" r="45" fill="white" mask="url(#plusMaskM)"/>
             </svg>
@@ -148,11 +147,7 @@ body {
         <button class="circleBtn" id="reportBtn">
             <svg viewBox="0 0 100 100">
                 <defs>
-                    <mask id="exclMaskM">
-                        <rect width="100" height="100" fill="white"/>
-                        <path d="M50 32v25" stroke="black" stroke-width="10" stroke-linecap="round"/>
-                        <circle cx="50" cy="70" r="6" fill="black"/>
-                    </mask>
+                    <mask id="exclMaskM"><rect width="100" height="100" fill="white"/><path d="M50 32v25" stroke="black" stroke-width="10" stroke-linecap="round"/><circle cx="50" cy="70" r="6" fill="black"/></mask>
                 </defs>
                 <circle cx="50" cy="50" r="45" fill="white" mask="url(#exclMaskM)"/>
             </svg>
@@ -165,10 +160,57 @@ body {
     </div>
 </div>
 
+<div id="historyModal" class="modal">
+    <span class="modal-close" onclick="closeModals()">×</span>
+    <h3 id="historyCount">0 Conversations</h3>
+    <div id="historyList" style="max-height: 200px; overflow-y: auto; margin-top: 15px;"></div>
+</div>
+
+<div id="reportModal" class="modal">
+    <span class="modal-close" onclick="closeModals()">×</span>
+    <h3 style="color:#FF6A88; margin-top: 0;">Report User</h3>
+    <p style="font-size: 11px; opacity: 0.7;">Harassment results in a permanent ban.</p>
+    <textarea id="reportText" style="width:100%; height:80px; margin:15px 0; background:rgba(0,0,0,0.3); color:white; border:none; padding:12px; border-radius:12px; box-sizing: border-box;"></textarea>
+    <button onclick="sendReport()" style="width:100%; padding:12px; border-radius:12px; border:none; background:white; font-weight:800; cursor: pointer;">Submit Report</button>
+</div>
+
 <script>
 const socket = io();
+const adjectives=["Neo","Sweet","Pure","Nova","Vibe","Soft","Wild"];
+const nouns=["Soul","Heart","Pulse","Cloud","Wave","Spark","Echo"];
+const username = adjectives[Math.floor(Math.random()*adjectives.length)] + nouns[Math.floor(Math.random()*nouns.length)] + Math.floor(Math.random()*99);
 let callHistory = [];
 
+socket.on('connect', () => socket.emit('setName', username));
+
+/* ---------------- MEME LOGIC ---------------- */
+const memes = [
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/MDJ9IbxxvDUQM/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/v4aGOHef6XpNC/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/c76IJbxAb97Hi/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/QMHoU66L5Qezq5qK7w/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/l41lTfuxV6M0vT8S4/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7TKMGpxxidXuyPza/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7buirYcmV5nSwIRW/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/108M7gCS1JSoO4/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/OPU6wzx8JBaK6S4kWU/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/H5iz8vPzfaYBr0HoFv/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o72F8t9TDi2xVnxOE/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/v6aOjy0QJD1f2/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/9d3l6hEReY9vG/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3og0INyCmHlNylks9O/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/vXDeO68a9PxO8/giphy.gif"
+];
+
+const memeMenu = document.getElementById("memeMenu");
+memes.forEach(url => {
+    const img = document.createElement("img"); img.src = url;
+    img.onclick = () => { socket.emit('chatMessage', { msg: `<img src="${url}" style="width:100%; border-radius:10px;">` }); memeMenu.style.display="none"; };
+    memeMenu.appendChild(img);
+});
+document.getElementById("gifBtn").onclick = () => memeMenu.style.display = memeMenu.style.display === "grid" ? "none" : "grid";
+
+/* ---------------- UI LOGIC ---------------- */
 document.getElementById("muteBtn").onclick = () => {
     const slash = document.getElementById("muteSlash");
     slash.style.display = slash.style.display === "none" ? "block" : "none";
@@ -177,8 +219,56 @@ document.getElementById("muteBtn").onclick = () => {
 const callBtn = document.getElementById("callBtn");
 callBtn.onclick = () => {
     callBtn.classList.toggle("spinning");
-    document.getElementById("status").textContent = callBtn.classList.contains("spinning") ? "Searching for connection..." : "Secure & Online";
+    if(callBtn.classList.contains("spinning")) {
+        document.getElementById("status").textContent = "Matching...";
+        setTimeout(() => {
+            let match = adjectives[Math.floor(Math.random()*adjectives.length)] + " Match";
+            callHistory.push(match);
+            document.getElementById("status").textContent = "Connected to " + match;
+            callBtn.classList.remove("spinning");
+        }, 3000);
+    } else {
+        document.getElementById("status").textContent = "Secure & Online";
+    }
 };
+
+function openHistory() {
+    document.getElementById("historyModal").style.display = "block";
+    document.getElementById("historyCount").textContent = `${callHistory.length} Matches Found`;
+    const list = document.getElementById("historyList");
+    list.innerHTML = callHistory.map(u => `<div style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05)">Talked with: ${u}</div>`).reverse().join('');
+}
+
+document.getElementById("reportBtn").onclick = () => document.getElementById("reportModal").style.display = "block";
+function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = "none"); }
+
+function sendReport() {
+    if(document.getElementById("reportText").value.trim()){
+        alert("Banned user request sent to system admin.");
+        closeModals();
+        document.getElementById("reportText").value = "";
+    }
+}
+
+/* ---------------- CHAT LOGIC ---------------- */
+function sendMsg() {
+    const inp = document.getElementById("msgInput");
+    if(inp.value.trim()){ socket.emit('chatMessage', { msg: inp.value }); inp.value=""; }
+}
+document.getElementById("sendBtn").onclick = sendMsg;
+document.getElementById("msgInput").onkeydown = (e) => { if(e.key==="Enter") sendMsg(); };
+
+socket.on('message', (msg) => {
+    const p = document.createElement("p"); p.innerHTML = msg;
+    document.getElementById("messages").appendChild(p);
+    document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+});
+
+socket.on('updateUsers', (list) => {
+    const dd = document.getElementById("onlineDropdown"); dd.innerHTML = "";
+    list.forEach(n => { const d = document.createElement("div"); d.textContent=n; d.style.padding="8px"; dd.appendChild(d); });
+    document.getElementById("onlineCount").textContent = `People Online (${list.length})`;
+});
 
 /* ---------------- AUDIO REACTIVE LOGO ---------------- */
 navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
