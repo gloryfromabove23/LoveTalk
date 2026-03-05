@@ -13,49 +13,58 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); 
 .theme-btn { background: white; color: black; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 10px; text-transform: uppercase; transition: transform 0.2s; }
 
 #appView { display: flex; flex: 1; width: 100%; height: calc(100vh - 60px); }
-#leftPanel { width: 380px; background: rgba(15, 15, 20, 0.9); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
+
+/* Left Panel - Transparent Dark */
+#leftPanel { width: 380px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
+
 #centerPanel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
 
-/* Branding */
-#logoContainer { width: 180px; height: 180px; position: relative; transition: all 0.5s ease; }
+/* Status Text Updates */
+#status { font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px; transition: all 0.3s; color: white; }
+.searching-text { font-size: 24px !important; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+/* Logo & Voice Indicator */
+#logoContainer { width: 180px; height: 180px; position: relative; }
 .base-bubble { fill: white; }
-.outline-trace { fill: none; stroke: #4BFF8B; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: var(--logo-dash); transition: stroke-dashoffset 0.1s linear; }
+.outline-trace { fill: none; stroke: #4BFF8B; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: var(--logo-dash); transition: stroke-dashoffset 0.1s linear; display: none; }
 .heart-cutout { fill: #4BFF8B; opacity: var(--heart-fill); transition: opacity 0.2s; }
-#brandName { font-size: 3.5rem; font-weight: 800; margin: 0; letter-spacing: -3px; }
 
-/* Buttons */
+/* Action Buttons - Transparent until pressed */
 .callButtons { display: flex; flex-direction: row; gap: 20px; align-items: center; margin-top: 40px; }
-.circleBtn { width: 80px; height: 80px; border: none; background: transparent; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; }
-.label-tag { position: absolute; bottom: -20px; font-size: 10px; font-weight: 900; background: white; color: black; padding: 2px 8px; border-radius: 4px; white-space: nowrap; transition: all 0.2s; }
+.circleBtn { width: 80px; height: 80px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; background: transparent; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+.circleBtn svg { opacity: 0.6; transition: all 0.3s; }
 
-/* iPhone Chat */
-#chatBox { margin-top: 15px; display: none; flex-direction: column; flex-grow: 1; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-#chatHeader { background: #f9f9f9; padding: 10px; border-bottom: 1px solid #eee; text-align: center; color: #000; }
-#chatHeader .avatar { width: 32px; height: 32px; background: #8e8e93; border-radius: 50%; margin: 0 auto 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
-#chatHeader .name { font-size: 12px; font-weight: 600; }
+/* Dynamic Button Colors */
+.circleBtn.active-mute { background: #FF4B4B; border-color: #FF4B4B; }
+.circleBtn.active-call { background: #FF4B4B; border-color: #FF4B4B; }
+.circleBtn.active-add { background: #4BFF8B; border-color: #4BFF8B; }
+.circleBtn.active-report { background: #FF4B4B; border-color: #FF4B4B; }
+.circleBtn:active { transform: scale(0.9); }
+.circleBtn:hover svg { opacity: 1; }
 
-#messages { flex: 1; overflow-y: auto; font-size: 15px; display: flex; flex-direction: column; gap: 4px; padding: 15px; }
-.msg-bubble { padding: 8px 15px; border-radius: 18px; max-width: 75%; line-height: 1.4; font-size: 14px; }
-.msg-bubble.mine { align-self: flex-end; background: #007aff; color: white; border-bottom-right-radius: 4px; }
-.msg-bubble.theirs { align-self: flex-start; background: #e5e5ea; color: black; border-bottom-left-radius: 4px; }
-.receipt { align-self: flex-end; font-size: 10px; color: #8e8e93; margin: 2px 5px 8px 0; }
+.label-tag { position: absolute; bottom: -25px; font-size: 10px; font-weight: 900; color: white; white-space: nowrap; }
 
-#memeGallery { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; background: #f2f2f7; border-top: 1px solid #ddd; max-height: 250px; overflow-y: auto; }
-.meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; cursor: pointer; }
+/* Dropdown Tabs */
+.tab-header { font-size: 10px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 0; cursor: pointer; display: flex; justify-content: space-between; }
+.tab-content { max-height: 100px; overflow-y: auto; font-size: 11px; padding: 10px 0; transition: all 0.3s; }
 
-/* Layout Fixes */
+/* Chat Box */
+#chatBox { margin-top: 15px; display: none; flex-direction: column; flex-grow: 1; background: #ffffff; border-radius: 20px; overflow: hidden; }
+#messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding: 15px; color: #000; }
+.msg-bubble { padding: 8px 15px; border-radius: 18px; max-width: 75%; font-size: 14px; }
+.msg-bubble.mine { align-self: flex-end; background: #007aff; color: white; }
+.msg-bubble.theirs { align-self: flex-start; background: #e5e5ea; color: black; }
+
+#memeGallery { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; background: #f2f2f7; max-height: 200px; overflow-y: auto; }
+.meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; cursor: pointer; border-radius: 4px; }
+
+/* Controls Spacing */
+.extra-spacing { margin-top: 80px; display: flex; gap: 40px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+
 #footerSpace { padding: 100px 15% 40px; text-align: center; background: white; color: #333; margin-top: 200px; }
-footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d; color: #555; font-weight: 800; }
+footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d; color: #555; width: 100%; }
 
-.modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; background: #1a1a1a; border-radius: 20px; padding: 20px; z-index: 2000; border: 1px solid #333; text-align: center; }
-
-@media (max-width: 850px) {
-    #appView { flex-direction: column-reverse; height: auto; }
-    #leftPanel { width: 100%; height: 600px; border-right: none; }
-    #centerPanel { height: 400px; padding: 20px; flex: none; }
-    #logoContainer { width: 100px; height: 100px; }
-    #brandName { font-size: 2.2rem; }
-}
+.modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; background: #1a1a1a; border-radius: 20px; padding: 20px; z-index: 2000; text-align: center; }
 </style>
 </head>
 <body>
@@ -64,62 +73,67 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
 
 <div id="appView">
     <div id="leftPanel">
-        <div style="font-size:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; display:flex; justify-content: space-between;">
-            <span>VERIFIED HUMANS</span> <span id="onlineCount">142</span>
+        <div class="tab-header" onclick="toggleTab('onlineList')">
+            <span>VERIFIED HUMANS</span> <span id="onlineCount">142 ▾</span>
         </div>
-        <div id="connDD" style="font-size:11px; padding:10px 0;">
+        <div id="onlineList" class="tab-content">
+            <div style="opacity:0.6; margin-bottom:5px;">• User_882 (Active)</div>
+            <div style="opacity:0.6; margin-bottom:5px;">• Human_412 (Chatting)</div>
+        </div>
+
+        <div class="tab-header" onclick="toggleTab('connDD')">
+            <span>CONNECTIONS</span> <span>▾</span>
+        </div>
+        <div id="connDD" class="tab-content">
             <div id="connEmpty" style="opacity:0.3;">No active connections</div>
         </div>
         
         <div id="chatBox">
-            <div id="chatHeader">
-                <div class="avatar" id="peerInitial">?</div>
-                <div class="name" id="peerName">...</div>
-            </div>
             <div id="messages"></div>
             <div id="memeGallery"></div>
             <div style="display:flex; gap:8px; padding:10px; border-top: 1px solid #eee; align-items: center;">
                 <button onclick="toggleMemeGallery()" style="background:none; border:none; cursor:pointer; font-size:22px;">🎲</button>
                 <input id="msgInput" onkeydown="if(event.key==='Enter')sendMsg()" style="flex:1; background:#f2f2f7; border:none; color:black; padding:10px; border-radius:20px; outline:none;" placeholder="iMessage">
-                <button onclick="sendMsg()" style="background:#007aff; color:#fff; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer; font-weight:800;">↑</button>
+                <button onclick="sendMsg()" style="background:#007aff; color:#fff; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer;">↑</button>
             </div>
         </div>
     </div>
 
     <div id="centerPanel">
-        <div id="logoWrapper" style="display:flex; flex-direction:column; align-items:center;">
-            <div id="logoContainer">
-                <svg viewBox="0 0 100 100">
-                    <defs><mask id="m"><rect width="100" height="100" fill="white"/><path d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65" fill="black"/></mask></defs>
-                    <path class="base-bubble" d="M20 15 H80 Q88 15 88 23 V68 Q88 76 80 76 H45 L30 90 V76 Q12 76 12 68 V23 Q12 15 20 15 Z" mask="url(#m)"/>
-                    <path class="outline-trace" d="M20 15 H80 Q88 15 88 23 V68 Q88 76 80 76 H45 L30 90 V76 Q12 76 12 68 V23 Q12 15 20 15 Z"/>
-                    <path class="heart-cutout" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
-                </svg>
-            </div>
-            <div id="brandName">LoveTalk</div>
-            <div id="status" style="font-size:9px; text-transform:uppercase; margin-top:5px; opacity:0.7;">Ready</div>
+        <div id="logoContainer">
+            <svg viewBox="0 0 100 100">
+                <defs><mask id="m"><rect width="100" height="100" fill="white"/><path d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65" fill="black"/></mask></defs>
+                <path class="base-bubble" d="M20 15 H80 Q88 15 88 23 V68 Q88 76 80 76 H45 L30 90 V76 Q12 76 12 68 V23 Q12 15 20 15 Z" mask="url(#m)"/>
+                <path id="voiceIndicator" class="outline-trace" d="M20 15 H80 Q88 15 88 23 V68 Q88 76 80 76 H45 L30 90 V76 Q12 76 12 68 V23 Q12 15 20 15 Z"/>
+                <path class="heart-cutout" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
+            </svg>
         </div>
+        <div id="brandName" style="font-size: 3.5rem; font-weight: 800; letter-spacing: -3px;">LoveTalk</div>
+        <div id="status">READY</div>
 
         <div class="callButtons">
-            <button class="circleBtn" onclick="muteT()">
-                <svg viewBox="0 0 100 100" width="55"><circle id="muteCircle" cx="50" cy="50" r="42" fill="white" opacity="0.1"/><g fill="white"><rect x="44" y="30" width="12" height="22" rx="6" /><path d="M38 46 a12 12 0 0 0 24 0" fill="none" stroke="white" stroke-width="4"/></g></svg>
+            <button class="circleBtn" id="muteBtn" onclick="muteT()">
+                <svg viewBox="0 0 100 100" width="40"><g fill="white"><rect x="44" y="30" width="12" height="22" rx="6" /><path d="M38 46 a12 12 0 0 0 24 0" fill="none" stroke="white" stroke-width="4"/></g></svg>
                 <div class="label-tag" id="muteTag">MUTE</div>
             </button>
             <button id="callBtn" class="circleBtn" onclick="handleCall()">
-                <svg viewBox="0 0 100 100" width="75"><rect x="35" y="20" width="30" height="60" rx="6" fill="none" stroke="white" stroke-width="3"/><rect id="phoneScreen" x="39" y="25" width="22" height="42" rx="2" fill="#4BFF8B"/><circle cx="50" cy="72" r="3" fill="white"/></svg>
+                <svg viewBox="0 0 100 100" width="50"><rect x="35" y="20" width="30" height="60" rx="6" fill="none" stroke="white" stroke-width="3"/><rect id="phoneScreen" x="39" y="25" width="22" height="42" rx="2" fill="#4BFF8B"/><circle cx="50" cy="72" r="3" fill="white"/></svg>
                 <div class="label-tag" id="callTag">CALL</div>
             </button>
-            <button class="circleBtn" onclick="openMod('fModal')">
-                <svg viewBox="0 0 100 100" width="55"><circle cx="50" cy="50" r="42" fill="white" opacity="0.1"/><path d="M50 30 v40 M30 50 h40" stroke="white" stroke-width="8" stroke-linecap="round"/></svg>
+            <button class="circleBtn" id="addBtn" onclick="handleAdd()">
+                <svg viewBox="0 0 100 100" width="40"><path d="M50 30 v40 M30 50 h40" stroke="white" stroke-width="8" stroke-linecap="round"/></svg>
                 <div class="label-tag">ADD</div>
             </button>
-            <button class="circleBtn" onclick="handleReportClick()">
-                <svg viewBox="0 0 100 100" width="55"><circle id="reportIconCircle" cx="50" cy="50" r="42" fill="white" opacity="0.1"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="45" font-weight="800">!</text></svg>
+            <button class="circleBtn" id="reportBtn" onclick="handleReport()">
+                <text x="50" y="65" text-anchor="middle" fill="white" font-size="40" font-weight="800">!</text>
                 <div class="label-tag">REPORT</div>
             </button>
         </div>
-        <div style="margin-top:30px; font-size:10px; font-weight:800; display:flex; gap:20px;">
-            <label><input type="checkbox" onchange="isAuto = this.checked"> Auto Call</label>
+
+        <div class="extra-spacing">
+            <label style="cursor:pointer; display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" id="autoCheck" style="transform:scale(1.2)"> Auto Call
+            </label>
             <span style="text-decoration:underline; cursor:pointer;" onclick="openMod('hModal')">History</span>
         </div>
     </div>
@@ -131,6 +145,12 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
 </div>
 <footer>&copy; 2026 LOVETALK NETWORKS // ENCRYPTED</footer>
 
+<div id="hModal" class="modal">
+    <h3>History</h3>
+    <div id="historyList" style="max-height:150px; overflow-y:auto; color:white; font-size:12px; margin:15px 0;"></div>
+    <button class="theme-btn" onclick="cls()">Close</button>
+</div>
+
 <div id="cModal" class="modal">
     <h3>Canvas</h3>
     <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin:15px 0;">
@@ -141,99 +161,101 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
     <button class="theme-btn" onclick="cls()">Done</button>
 </div>
 
-<div id="hModal" class="modal">
-    <h3>History</h3>
-    <div id="historyList" style="max-height:150px; overflow-y:auto; color:white; font-size:12px;"></div>
-    <button class="theme-btn" onclick="cls()" style="margin-top:10px">Close</button>
-</div>
-
-<div id="fModal" class="modal">
-    <h3>Add Connection?</h3>
-    <button class="theme-btn" onclick="addFriend()" style="background:#4BFF8B">Yes</button>
-    <button class="theme-btn" onclick="cls()">No</button>
-</div>
-
 <script>
 let peer = "";
 let historyList = [];
-let audioContext, analyser, dataArray;
+let audioContext, analyser;
 let isMuted = false;
 
 function openMod(id) { document.getElementById(id).style.display='block'; }
 function cls() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
-
-function setBg(c) { 
-    document.body.style.background = c; 
-    document.body.style.animation = c.includes('gradient') ? 'grad 12s ease infinite' : 'none';
-    cls(); 
+function setBg(c) { document.body.style.background = c; cls(); }
+function toggleTab(id) { 
+    const el = document.getElementById(id);
+    el.style.display = (el.style.display === 'none') ? 'block' : 'none';
 }
 
 function muteT() {
     isMuted = !isMuted;
-    const tag = document.getElementById('muteTag');
-    const circle = document.getElementById('muteCircle');
-    if(isMuted) {
-        tag.textContent = "MUTED";
-        tag.style.background = "#FF4B4B";
-        tag.style.color = "white";
-        tag.style.mixBlendMode = "normal";
-        circle.style.fill = "#FF4B4B";
-        circle.style.opacity = "1";
-    } else {
-        tag.textContent = "MUTE";
-        tag.style.background = "white";
-        tag.style.color = "black";
-        tag.style.mixBlendMode = "screen";
-        circle.style.fill = "white";
-        circle.style.opacity = "0.1";
+    const btn = document.getElementById('muteBtn');
+    btn.classList.toggle('active-mute', isMuted);
+    document.getElementById('muteTag').textContent = isMuted ? "MUTED" : "MUTE";
+}
+
+function handleAdd() {
+    if(!peer) return;
+    const btn = document.getElementById('addBtn');
+    btn.classList.add('active-add');
+    document.getElementById('connEmpty').style.display = 'none';
+    const d = document.createElement('div'); d.textContent = "♥ " + peer;
+    document.getElementById('connDD').appendChild(d);
+    setTimeout(() => btn.classList.remove('active-add'), 1000);
+}
+
+function handleReport() {
+    const btn = document.getElementById('reportBtn');
+    btn.classList.add('active-report');
+    setTimeout(() => {
+        btn.classList.remove('active-report');
+        if(peer) endCall();
+    }, 500);
+}
+
+function handleCall() {
+    const btn = document.getElementById('callBtn');
+    if (btn.classList.contains('active-call')) endCall(); else startSearch();
+}
+
+function startSearch() {
+    const status = document.getElementById('status');
+    status.textContent = "FINDING LOVE...";
+    status.classList.add('searching-text');
+    
+    setTimeout(() => {
+        const btn = document.getElementById('callBtn');
+        btn.classList.add('active-call');
+        peer = "Human_" + Math.floor(Math.random()*999);
+        status.textContent = "LINKED: " + peer;
+        status.classList.remove('searching-text');
+        document.getElementById('callTag').textContent = "END";
+        document.getElementById('chatBox').style.display = 'flex';
+        historyList.push(peer);
+        updateHistory();
+        initAudio();
+    }, 1500);
+}
+
+function endCall() {
+    const btn = document.getElementById('callBtn');
+    btn.classList.remove('active-call');
+    document.getElementById('chatBox').style.display = 'none';
+    document.getElementById('status').textContent = "READY";
+    document.getElementById('callTag').textContent = "CALL";
+    document.getElementById('messages').innerHTML = "";
+    peer = "";
+    
+    // Auto Call Logic
+    if(document.getElementById('autoCheck').checked) {
+        setTimeout(startSearch, 1000);
     }
 }
 
 async function fetchMemes() {
     const grid = document.getElementById('memeGallery');
-    grid.innerHTML = "<div style='color:black; padding:20px;'>Fetching Love...</div>";
+    grid.innerHTML = "<div style='color:black; padding:20px;'>Loading 60 Memes...</div>";
     try {
-        // Fetching more memes to filter for love-related ones
         const res = await fetch('https://api.imgflip.com/get_memes');
         const data = await res.json();
-        const keywords = ['love', 'heart', 'kiss', 'cat', 'sweet', 'cute', 'hug', 'together'];
-        const loveMemes = data.data.memes.filter(m => 
-            keywords.some(k => m.name.toLowerCase().includes(k))
-        ).slice(0, 60);
-        
-        grid.innerHTML = loveMemes.map(m => `<img src="${m.url}" class="meme-thumb" onclick="sendMeme('${m.url}')">`).join('');
-    } catch(e) { grid.innerHTML = "Error loading memes."; }
+        // Take 60 memes from the API
+        const memes = data.data.memes.slice(0, 60);
+        grid.innerHTML = memes.map(m => `<img src="${m.url}" class="meme-thumb" onclick="sendMeme('${m.url}')">`).join('');
+    } catch(e) { grid.innerHTML = "Error loading."; }
 }
 
 function toggleMemeGallery() {
     const g = document.getElementById('memeGallery');
     g.style.display = g.style.display === 'grid' ? 'none' : 'grid';
     if(g.style.display === 'grid') fetchMemes();
-}
-
-function handleCall() {
-    const btn = document.getElementById('callBtn');
-    if (btn.classList.contains('connected')) {
-        btn.classList.remove('connected');
-        document.getElementById('chatBox').style.display = 'none';
-        document.getElementById('callTag').textContent = "CALL";
-        document.getElementById('phoneScreen').style.fill = "#4BFF8B";
-        peer = "";
-    } else {
-        document.getElementById('status').textContent = "Finding Love...";
-        setTimeout(() => {
-            btn.classList.add('connected');
-            peer = "Human_" + Math.floor(Math.random()*999);
-            document.getElementById('peerName').textContent = peer;
-            document.getElementById('peerInitial').textContent = peer.charAt(6);
-            document.getElementById('callTag').textContent = "END";
-            document.getElementById('phoneScreen').style.fill = "#FF4B4B";
-            document.getElementById('chatBox').style.display = 'flex';
-            historyList.push(peer);
-            updateHistory();
-            initAudio();
-        }, 1000);
-    }
 }
 
 function sendMsg() {
@@ -243,12 +265,8 @@ function sendMsg() {
     msg.className = "msg-bubble mine";
     msg.textContent = input.value;
     document.getElementById('messages').appendChild(msg);
-    const r = document.createElement('div');
-    r.className = "receipt"; r.textContent = "Delivered";
-    document.getElementById('messages').appendChild(r);
     input.value = "";
     document.getElementById('messages').scrollTop = 9999;
-    setTimeout(() => r.textContent = "Read", 2000);
 }
 
 function sendMeme(url) {
@@ -264,21 +282,6 @@ function updateHistory() {
     document.getElementById('historyList').innerHTML = historyList.map(h => `<div style="padding:5px; border-bottom:1px solid #333;">♥ ${h}</div>`).join('');
 }
 
-function addFriend() {
-    if(peer) {
-        document.getElementById('connEmpty').style.display = 'none';
-        const d = document.createElement('div'); d.textContent = "♥ " + peer;
-        document.getElementById('connDD').appendChild(d);
-    }
-    cls();
-}
-
-function handleReportClick() {
-    document.getElementById('reportIconCircle').style.fill = "#FF4B4B";
-    document.getElementById('reportIconCircle').style.opacity = "1";
-    setTimeout(() => alert("User Reported"), 500);
-}
-
 async function initAudio() {
     if(audioContext) return;
     try {
@@ -287,18 +290,26 @@ async function initAudio() {
         analyser = audioContext.createAnalyser();
         const source = audioContext.createMediaStreamSource(stream);
         source.connect(analyser);
-        processHeart();
+        processVoice();
     } catch(e) {}
 }
 
-function processHeart() {
+function processVoice() {
     if(!analyser || !peer) return;
-    requestAnimationFrame(processHeart);
+    requestAnimationFrame(processVoice);
     const data = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(data);
     let vol = data.reduce((a,b) => a+b) / data.length;
-    document.documentElement.style.setProperty('--logo-dash', Math.max(0, 400 - (vol * 5)));
-    document.documentElement.style.setProperty('--heart-fill', vol > 10 ? '1' : '0');
+    
+    const indicator = document.getElementById('voiceIndicator');
+    if(vol > 5) { // Threshold for talking
+        indicator.style.display = "block";
+        document.documentElement.style.setProperty('--logo-dash', Math.max(0, 400 - (vol * 5)));
+        document.documentElement.style.setProperty('--heart-fill', '1');
+    } else {
+        indicator.style.display = "none";
+        document.documentElement.style.setProperty('--heart-fill', '0');
+    }
 }
 </script>
 </body>
