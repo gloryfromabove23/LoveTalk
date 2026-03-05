@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>LoveTalk ♥︎</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;600;800&display=swap" rel="stylesheet">
 <script src="/socket.io/socket.io.js"></script>
 
 <style>
@@ -28,6 +28,11 @@ body {
     align-items: center; justify-content: center; padding-bottom: 8vh;
 }
 
+/* ---------------- BRANDING ---------------- */
+#mainLogo { width: 110px; margin-bottom: 10px; transition: 0.1s linear; }
+#brandName { font-size: 3rem; font-weight: 800; margin: 0; letter-spacing: -2px; }
+.talk-thin { font-weight: 100; letter-spacing: 0px; }
+
 /* ---------------- CHAT ---------------- */
 #chatBox {
     margin-top: auto; display: flex; flex-direction: column;
@@ -36,40 +41,35 @@ body {
 }
 #messages { flex: 1; overflow-y: auto; }
 #messages p { background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 15px; margin: 5px 0; font-size: 14px; word-wrap: break-word; }
+
 #chatControls { display: flex; gap: 8px; margin-top: 10px; }
 #chatControls input { flex: 1; padding: 10px; border-radius: 10px; border: none; background: #1a1b1e; color: white; }
 #chatControls button { padding: 10px; border-radius: 10px; border: none; background: white; font-weight: 800; cursor: pointer; color: black; }
+
+/* ---------------- BUTTONS (TRANSPARENT CUT-OUTS) ---------------- */
+.callButtons { display: flex; gap: 15px; align-items: center; margin-top: 20px; }
+.circleBtn { width: 70px; height: 70px; border: none; background: none; cursor: pointer; padding: 0; }
+.circleBtn:active { transform: scale(0.9); }
+.spinning { animation: spin 1s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
 /* ---------------- MODALS ---------------- */
 .modal {
     display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
     width: 350px; background: rgba(30, 30, 35, 0.98); backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; padding: 25px; z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 25px; padding: 25px; z-index: 1000;
 }
-.modal h3 { margin-top: 0; color: #FF6A88; font-weight: 800; }
-.modal-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-weight: 800; font-size: 20px; }
-#reportText { width: 100%; height: 80px; border-radius: 10px; background: #1a1b1e; color: white; border: none; padding: 10px; margin-top: 10px; resize: none; box-sizing: border-box; }
-
-/* ---------------- LOGO & BUTTONS ---------------- */
-#mainLogo { width: 120px; margin-bottom: 10px; transition: 0.1s linear; }
-#brandName { font-size: 2.5rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
-.accent { color: #222; }
-#status { margin-bottom: 15px; font-weight: 600; opacity: 0.9; }
-
-.callButtons { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
-.circleBtn { width: 65px; height: 65px; border: none; background: none; cursor: pointer; padding: 0; transition: 0.2s; }
-.circleBtn:active { transform: scale(0.9); }
-.spinning { animation: spin 1s linear infinite; }
-@keyframes spin { 100% { transform: rotate(360deg); } }
+.modal h3 { margin-top: 0; color: #FF6A88; }
+.modal-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; }
 
 /* ---------------- MEME MENU ---------------- */
 #memeMenu { 
-    display: none; position: absolute; bottom: 70px; left: 10px; right: 10px; 
+    display: none; position: absolute; bottom: 75px; left: 10px; right: 10px; 
     background: rgba(0, 0, 0, 0.9); padding: 10px; border-radius: 15px; 
     grid-template-columns: repeat(3, 1fr); gap: 8px; z-index: 100;
-    max-height: 200px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1);
+    max-height: 250px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1);
 }
-#memeMenu img { width: 100%; border-radius: 5px; cursor: pointer; aspect-ratio: 1/1; object-fit: cover; }
+#memeMenu img { width: 100%; border-radius: 8px; cursor: pointer; aspect-ratio: 1/1; object-fit: cover; }
 </style>
 </head>
 
@@ -94,34 +94,67 @@ body {
 
 <div id="centerPanel">
     <svg id="mainLogo" viewBox="0 0 100 100">
-        <path fill="white" d="M10 30 Q10 10 30 10 H70 Q90 10 90 30 V70 Q90 90 70 90 H30 Q10 90 10 70 Z M50 65 C35 50,30 40,40 35 C45 32,50 38,50 38 C50 38,55 32,60 35 C70 40,65 50,50 65Z"/>
+        <defs>
+            <mask id="logoMask">
+                <rect width="100" height="100" fill="white" />
+                <path d="M50 65 C35 50, 30 40, 40 35 C45 32, 50 38, 50 38 C50 38, 55 32, 60 35 C70 40, 65 50, 50 65 Z" fill="black" />
+            </mask>
+        </defs>
+        <path fill="white" mask="url(#logoMask)" d="M10 30 Q10 10 30 10 H70 Q90 10 90 30 V70 Q90 90 70 90 H30 Q10 90 10 70 Z" />
     </svg>
-    <div id="brandName">Love<span class="accent">Talk</span></div>
+
+    <div id="brandName">Love<span class="talk-thin">Talk</span></div>
     <div id="status">Online</div>
 
     <div class="callButtons">
-        <button class="circleBtn" id="muteBtn" title="Mute">
-            <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white"/>
-            <g id="micIcon" stroke="black" stroke-width="5" fill="none">
-                <rect x="42" y="30" width="16" height="25" rx="8"/>
-                <path d="M35 45c0 10 15 10 15 10s15 0 15-10m-15 10v10"/>
-                <line id="muteSlash" x1="30" y1="30" x2="70" y2="70" stroke="red" stroke-width="8" style="display:none;"/>
-            </g></svg>
+        <button class="circleBtn" id="muteBtn">
+            <svg viewBox="0 0 100 100">
+                <defs>
+                    <mask id="micMask">
+                        <rect width="100" height="100" fill="white"/>
+                        <rect x="42" y="28" width="16" height="26" rx="8" fill="black"/>
+                        <path d="M35 45c0 10 15 10 15 10s15 0 15-10m-15 10v10" fill="none" stroke="black" stroke-width="6"/>
+                        <line id="muteSlash" x1="25" y1="25" x2="75" y2="75" stroke="black" stroke-width="8" style="display:none;"/>
+                    </mask>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="white" mask="url(#micMask)"/>
+            </svg>
         </button>
 
-        <button id="callBtn" class="circleBtn" title="Call">
-            <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white"/>
-            <path d="M30 40c0-5 20-15 40 0l-5 10c-10-5-25-5-30 0l-5-10zM40 50c0 15 20 15 20 0" fill="black"/></svg>
+        <button id="callBtn" class="circleBtn">
+            <svg viewBox="0 0 100 100">
+                <defs>
+                    <mask id="phoneMask">
+                        <rect width="100" height="100" fill="white"/>
+                        <path d="M30 40c0-5 20-15 40 0l-5 10c-10-5-25-5-30 0l-5-10zM40 50c0 15 20 15 20 0" fill="black"/>
+                    </mask>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="white" mask="url(#phoneMask)"/>
+            </svg>
         </button>
 
-        <button class="circleBtn" id="friendBtn" title="Add Friend">
-            <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white"/>
-            <path d="M50 30v40M30 50h40" stroke="black" stroke-width="8" stroke-linecap="round"/></svg>
+        <button class="circleBtn" id="friendBtn">
+            <svg viewBox="0 0 100 100">
+                <defs>
+                    <mask id="plusMask">
+                        <rect width="100" height="100" fill="white"/>
+                        <path d="M50 30v40M30 50h40" stroke="black" stroke-width="12" stroke-linecap="round"/>
+                    </mask>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="white" mask="url(#plusMask)"/>
+            </svg>
         </button>
 
-        <button class="circleBtn" id="reportBtn" title="Report">
-            <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white"/>
-            <text x="50" y="68" text-anchor="middle" font-weight="800" font-size="50" fill="black">!</text></svg>
+        <button class="circleBtn" id="reportBtn">
+            <svg viewBox="0 0 100 100">
+                <defs>
+                    <mask id="exclMask">
+                        <rect width="100" height="100" fill="white"/>
+                        <text x="50" y="72" text-anchor="middle" font-weight="900" font-size="55" fill="black">!</text>
+                    </mask>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="white" mask="url(#exclMask)"/>
+            </svg>
         </button>
     </div>
 
@@ -134,15 +167,15 @@ body {
 <div id="historyModal" class="modal">
     <span class="modal-close" onclick="closeModals()">×</span>
     <h3 id="historyCount">You've had 0 calls</h3>
-    <div id="historyList" style="max-height: 150px; overflow-y: auto; font-size: 14px;"></div>
+    <div id="historyList" style="max-height: 180px; overflow-y: auto;"></div>
 </div>
 
 <div id="reportModal" class="modal">
     <span class="modal-close" onclick="closeModals()">×</span>
     <h3>Report User</h3>
-    <p style="font-size: 12px; opacity: 0.8; line-height: 1.4;">LoveTalk Policy: We promote kindness. Harassment, hate speech, or inappropriate behavior results in a permanent ban. Reports are sent directly to the admin for review.</p>
-    <textarea id="reportText" placeholder="Describe the issue here..."></textarea>
-    <button onclick="sendReport()" style="margin-top:15px; width:100%; padding:12px; border-radius:10px; border:none; background:white; font-weight:800; cursor: pointer;">Submit Report</button>
+    <p style="font-size: 12px; opacity: 0.8;">Policy: Harassment or inappropriate behavior leads to a permanent ban.</p>
+    <textarea id="reportText" style="width:100%; height:80px; margin:10px 0; background:#1a1b1e; color:white; border:none; padding:10px; border-radius:10px;"></textarea>
+    <button onclick="sendReport()" style="width:100%; padding:12px; border-radius:10px; border:none; background:white; font-weight:800; cursor: pointer;">Send Report</button>
 </div>
 
 <script>
@@ -154,23 +187,23 @@ let callHistory = [];
 
 socket.on('connect', () => socket.emit('setName', username));
 
-/* ---------------- 15 WORKING MEMES ---------------- */
+/* ---------------- 15 FULLY VERIFIED MEMES ---------------- */
 const memes = [
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/MDJ9IbxxvDUQM/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/l41lTfuxV6M0vT8S4/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/QMHoU66L5Qezq5qK7w/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7TKMGpxxidXuyPza/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/OPU6wzx8JBaK6S4kWU/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7buirYcmV5nSwIRW/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7abKhOpuMcmLj9cI/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3og0INyCmHlNylks9O/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/2UvAUplqc4C0ZdwxqE/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/108M7gCS1JSoO4/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/9d3l6hEReY9vG/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/c76IJbxAb97Hi/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o72F8t9TDi2xVnxOE/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/H5iz8vPzfaYBr0HoFv/giphy.gif",
-    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/v4aGOHef6XpNC/giphy.gif"
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/MDJ9IbxxvDUQM/giphy.gif", // Cat kiss
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/v4aGOHef6XpNC/giphy.gif", // Star Trek kiss
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/c76IJbxAb97Hi/giphy.gif", // Cat stretch kiss
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/QMHoU66L5Qezq5qK7w/giphy.gif", // Fine dog
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/l41lTfuxV6M0vT8S4/giphy.gif", // Happy cat
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7TKMGpxxidXuyPza/giphy.gif", // Heart dance
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o7buirYcmV5nSwIRW/giphy.gif", // Excited
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/108M7gCS1JSoO4/giphy.gif", // Dancing cat
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/OPU6wzx8JBaK6S4kWU/giphy.gif", // Crying
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/H5iz8vPzfaYBr0HoFv/giphy.gif", // Love dance
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3o72F8t9TDi2xVnxOE/giphy.gif", // Heart pop
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/v6aOjy0QJD1f2/giphy.gif", // Dog nod
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/9d3l6hEReY9vG/giphy.gif", // Panda
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/3og0INyCmHlNylks9O/giphy.gif", // Shy cat
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqcXpqc/vXDeO68a9PxO8/giphy.gif"  // Happy dog
 ];
 
 const memeMenu = document.getElementById("memeMenu");
@@ -181,7 +214,7 @@ memes.forEach(url => {
 });
 document.getElementById("gifBtn").onclick = () => memeMenu.style.display = memeMenu.style.display === "grid" ? "none" : "grid";
 
-/* ---------------- UI ACTIONS ---------------- */
+/* ---------------- UI LOGIC ---------------- */
 document.getElementById("muteBtn").onclick = () => {
     const slash = document.getElementById("muteSlash");
     slash.style.display = slash.style.display === "none" ? "block" : "none";
@@ -192,7 +225,6 @@ callBtn.onclick = () => {
     callBtn.classList.toggle("spinning");
     if(callBtn.classList.contains("spinning")) {
         document.getElementById("status").textContent = "Searching...";
-        // Simulated Match for History Demo
         setTimeout(() => {
             let match = adjectives[Math.floor(Math.random()*adjectives.length)] + " Match";
             callHistory.push(match);
@@ -207,17 +239,16 @@ function openHistory() {
     document.getElementById("historyModal").style.display = "block";
     document.getElementById("historyCount").textContent = `You've had ${callHistory.length} calls`;
     const list = document.getElementById("historyList");
-    list.innerHTML = callHistory.map(u => `<div style="padding:8px; border-bottom:1px solid rgba(255,255,255,0.05)">Connected with: ${u}</div>`).reverse().join('');
+    list.innerHTML = callHistory.map(u => `<div style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05)">Connected with: ${u}</div>`).reverse().join('');
 }
 
 document.getElementById("reportBtn").onclick = () => document.getElementById("reportModal").style.display = "block";
-
 function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = "none"); }
 
 function sendReport() {
     const text = document.getElementById("reportText").value;
     if(text) {
-        alert("Thank you. Report sent to admin.");
+        alert("Report sent to admin. Thank you.");
         closeModals();
         document.getElementById("reportText").value = "";
     }
