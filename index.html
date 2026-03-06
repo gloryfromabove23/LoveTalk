@@ -3,16 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LoveTalk ♥︎ | Connection Reimagined</title>
+<title>LoveTalk ♥︎ | Premium Connection</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
 :root { 
-    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --glass: rgba(255, 255, 255, 0.1);
-    --glass-heavy: rgba(255, 255, 255, 0.2);
-    --glass-border: rgba(255, 255, 255, 0.15);
+    --bg-main: #0a0a0c;
+    --card-bg: rgba(28, 28, 30, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
     --accent: #00f2fe;
-    --heart-pink: #ff5e78;
+    --heart-pink: #ff2d55;
     --apple-blue: #007aff;
     --danger: #ff3b30;
 }
@@ -21,8 +20,8 @@
 
 body { 
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg-gradient);
-    background-attachment: fixed;
+    background: var(--bg-main);
+    background-image: radial-gradient(circle at 50% -20%, #2a1b3d 0%, #0a0a0c 80%);
     color: white;
     height: 100vh;
     display: flex;
@@ -30,323 +29,255 @@ body {
     overflow: hidden;
 }
 
-/* NAVIGATION */
+/* TOP NAV - SLEEKER */
 header {
-    height: 70px;
-    padding: 0 40px;
+    height: 60px;
+    padding: 0 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(25px);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(30px);
     border-bottom: 1px solid var(--glass-border);
     z-index: 1000;
 }
 
-.brand-unit { display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; }
-.brand-unit:hover { transform: scale(1.02); }
-.logo-svg { width: 38px; height: 38px; filter: drop-shadow(0 0 8px var(--heart-pink)); }
-.brand-name { font-weight: 800; font-size: 24px; letter-spacing: -1.5px; }
+.brand-unit { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.logo-heart { width: 28px; height: 28px; fill: var(--heart-pink); filter: drop-shadow(0 0 10px rgba(255, 45, 85, 0.5)); }
+.logo-heart.active { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); filter: drop-shadow(0 0 20px var(--heart-pink)); } 100% { transform: scale(1); } }
+.brand-name { font-weight: 800; font-size: 20px; letter-spacing: -1px; }
 
-.user-status {
-    background: var(--glass);
-    padding: 8px 16px;
-    border-radius: 30px;
-    border: 1px solid var(--glass-border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    font-weight: 600;
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.user-pill { background: rgba(255,255,255,0.05); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid var(--glass-border); }
+
+/* CONTENT LAYOUT */
+#mainApp { display: flex; flex: 1; height: calc(100vh - 60px); overflow: hidden; padding: 15px; gap: 15px; }
+
+/* CHAT AREA (iMESSAGE PERSISTENCE) */
+#chatPanel { flex: 1.4; display: flex; flex-direction: column; height: 100%; }
+.chat-window {
+    flex: 1; background: #ffffff; border-radius: 30px; display: flex; flex-direction: column;
+    overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
 }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+.chat-header { padding: 12px; text-align: center; background: #fbfbfd; border-bottom: 1px solid #efeff4; color: #1d1d1f; font-weight: 700; font-size: 13px; }
+#messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; background: #fff; }
 
-/* MAIN CONTAINER */
-#mainApp { display: flex; flex: 1; height: calc(100vh - 70px); overflow: hidden; }
-
-/* LEFT PANEL (CHAT) */
-#chatPanel {
-    flex: 1.2;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    border-right: 1px solid var(--glass-border);
-}
-
-.chat-box {
-    flex: 1;
-    background: #ffffff;
-    border-radius: 28px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-
-.chat-header {
-    padding: 15px;
-    text-align: center;
-    background: #fbfbfd;
-    border-bottom: 1px solid #efeff4;
-    color: #1d1d1f;
-    font-weight: 700;
-    font-size: 14px;
-}
-
-#messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background: #fff;
-}
-
-/* iMessage Bubbles */
+/* Message Bubbles */
 .msg { max-width: 75%; display: flex; flex-direction: column; }
 .msg.mine { align-self: flex-end; align-items: flex-end; }
 .msg.other { align-self: flex-start; align-items: flex-start; }
+.bubble { padding: 10px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; }
+.msg.mine .bubble { background: var(--apple-blue); color: white; border-bottom-right-radius: 4px; }
+.msg.other .bubble { background: #e9e9eb; color: black; border-bottom-left-radius: 4px; }
 
-.bubble { padding: 12px 18px; border-radius: 22px; font-size: 15px; line-height: 1.4; position: relative; }
-.msg.mine .bubble { background: var(--apple-blue); color: white; border-bottom-right-radius: 5px; }
-.msg.other .bubble { background: #e9e9eb; color: black; border-bottom-left-radius: 5px; }
-
-.chat-footer { padding: 15px; background: #fff; border-top: 1px solid #efeff4; }
-.input-area { display: flex; align-items: center; gap: 10px; background: #f2f2f7; padding: 6px 15px; border-radius: 40px; }
-.input-area input { flex: 1; border: none; background: transparent; padding: 10px; outline: none; font-size: 15px; }
+.chat-footer { padding: 12px 15px; background: #fff; border-top: 1px solid #efeff4; }
+.input-bar { display: flex; align-items: center; gap: 10px; background: #f2f2f7; padding: 4px 12px; border-radius: 30px; }
+.input-bar input { flex: 1; border: none; background: transparent; padding: 10px; outline: none; font-size: 15px; color: #000; }
 
 /* MEME DRAWER */
-#memeTray {
-    display: none;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    padding: 15px;
-    background: #f2f2f7;
-    max-height: 250px;
-    overflow-y: auto;
-    border-top: 1px solid #ddd;
-}
-.meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; cursor: pointer; transition: 0.2s; }
-.meme-thumb:hover { transform: scale(1.05); }
+#memeTray { display: none; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px; background: #f2f2f7; max-height: 200px; overflow-y: auto; }
+.meme-item { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; cursor: pointer; transition: 0.2s; }
 
-/* RIGHT PANEL (CONTROLS) */
-#hubPanel {
-    flex: 0.8;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-}
+/* CONTROL HUB - RIGHT SIDE */
+#hubPanel { flex: 0.8; display: flex; flex-direction: column; gap: 15px; }
+.hub-card { background: var(--card-bg); border-radius: 24px; padding: 20px; border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
+.hub-card h4 { font-size: 10px; text-transform: uppercase; color: var(--accent); letter-spacing: 1px; margin-bottom: 12px; }
 
-.stats-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.stat-card {
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-    border-radius: 24px;
-    padding: 20px;
-    height: 180px;
-}
-.stat-card h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: var(--accent); }
+.list-scroll { height: 120px; overflow-y: auto; font-size: 13px; }
+.row { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.row:hover { color: var(--accent); }
 
-.call-ui { text-align: center; }
-.status-tag { font-size: 48px; font-weight: 800; margin-bottom: 10px; letter-spacing: -2px; }
+/* MAIN CALL INTERFACE */
+.call-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 25px; }
+.status-lg { font-size: 44px; font-weight: 800; letter-spacing: -2px; }
+.status-sub { font-size: 13px; opacity: 0.5; margin-top: -15px; }
 
-.control-buttons { display: flex; gap: 20px; align-items: center; }
-.action-btn {
-    width: 65px; height: 65px; border-radius: 50%; border: 1px solid var(--glass-border);
-    background: var(--glass); color: white; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.action-strip { display: flex; align-items: center; gap: 20px; }
+.btn-circle {
+    width: 60px; height: 60px; border-radius: 50%; border: 1px solid var(--glass-border);
+    background: var(--card-bg); color: white; cursor: pointer; transition: 0.3s;
     display: flex; align-items: center; justify-content: center; position: relative;
 }
-.action-btn:hover { background: var(--glass-heavy); transform: scale(1.1); }
-.action-btn.primary { width: 90px; height: 90px; background: var(--accent); border: none; color: #121212; }
-.action-btn.danger { color: var(--danger); }
-.action-btn svg { width: 28px; height: 28px; fill: currentColor; }
+.btn-circle:hover { background: rgba(255,255,255,0.15); transform: translateY(-3px); }
+.btn-circle.main { width: 85px; height: 85px; background: var(--accent); border: none; color: #000; }
+.btn-circle.main:hover { box-shadow: 0 0 30px rgba(0, 242, 254, 0.4); }
+.btn-circle.danger { color: var(--danger); }
+.btn-circle svg { width: 26px; height: 26px; fill: currentColor; }
 
-.btn-tip { position: absolute; bottom: -25px; font-size: 9px; font-weight: 800; white-space: nowrap; }
+.btn-label { position: absolute; bottom: -22px; font-size: 9px; font-weight: 800; opacity: 0.7; }
 
-/* MODALS */
-#sideNav {
-    position: fixed; right: -400px; top: 0; width: 380px; height: 100vh;
-    background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px);
-    z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 40px; border-left: 1px solid var(--glass-border);
+/* SIDE DRAWER */
+#historyDrawer {
+    position: fixed; right: -350px; top: 0; width: 320px; height: 100vh;
+    background: #1c1c1e; z-index: 2000; transition: 0.4s; padding: 30px;
 }
-#sideNav.open { right: 0; }
+#historyDrawer.open { right: 0; }
 
-.user-row { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; cursor: pointer; }
-.user-row:hover { color: var(--accent); }
-
-@media (max-width: 900px) {
+@media (max-width: 850px) {
     #mainApp { flex-direction: column; overflow-y: auto; }
-    #chatPanel, #hubPanel { flex: none; width: 100%; }
-    #chatPanel { height: 600px; }
+    #chatPanel { height: 500px; flex: none; }
+    #hubPanel { flex: none; }
 }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="brand-unit">
-        <svg class="logo-svg" viewBox="0 0 24 24">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="var(--heart-pink)"/>
-            <path d="M8 8h8v2H8V8zm0 4h5v2H8v-2z" fill="white" opacity="0.8"/>
+    <div class="brand-unit" onclick="location.reload()">
+        <svg class="logo-heart" id="mainLogo" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
         </svg>
         <div class="brand-name">LoveTalk</div>
     </div>
-    <div style="display: flex; gap: 15px; align-items: center;">
-        <div class="user-status">
-            <span class="status-dot"></span>
-            <span id="userName">Verifying...</span>
-        </div>
-        <button onclick="toggleSide()" style="background:white; color:black; border:none; padding:8px 18px; border-radius:20px; font-size:11px; font-weight:800; cursor:pointer;">HISTORY</button>
+    <div class="header-actions">
+        <div class="user-pill" id="myDisplay">Guest</div>
+        <button onclick="toggleHistory()" style="background:none; border:none; color:white; cursor:pointer; font-size:18px;">🕒</button>
     </div>
 </header>
 
 <div id="mainApp">
     <section id="chatPanel">
-        <div class="chat-box">
-            <div class="chat-header" id="chatTitle">READY TO CONNECT</div>
+        <div class="chat-window">
+            <div class="chat-header" id="peerName">NO ACTIVE CALL</div>
             <div id="messages">
-                <div style="margin: auto; text-align: center; max-width: 250px;">
-                    <p style="color: #8e8e93; font-size: 13px;">Your messages are private and end-to-end encrypted.</p>
+                <div style="margin: auto; text-align: center; color: #8e8e93; font-size: 12px;">
+                    Messages are private. Start a call to begin.
                 </div>
             </div>
             <div id="memeTray"></div>
             <div class="chat-footer">
-                <div class="input-area">
-                    <button onclick="toggleMemes()" style="background:none; border:none; font-size:20px; cursor:pointer;">🤡</button>
-                    <input type="text" id="msgInput" placeholder="Send a message..." onkeydown="if(event.key==='Enter')sendMsg()">
-                    <button onclick="sendMsg()" style="background:var(--apple-blue); border:none; color:white; width:34px; height:34px; border-radius:50%; font-weight:800; cursor:pointer;">↑</button>
+                <div class="input-bar">
+                    <button onclick="toggleMemes()" style="background:none; border:none; cursor:pointer; font-size:18px;">🎲</button>
+                    <input type="text" id="msgInput" placeholder="iMessage" onkeydown="if(event.key==='Enter')sendMsg()">
+                    <button onclick="sendMsg()" style="background:var(--apple-blue); border:none; color:white; width:30px; height:30px; border-radius:50%; cursor:pointer;">↑</button>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="hubPanel">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h4>Verified Online</h4>
-                <div id="onlineList"></div>
+        <div class="hub-card">
+            <h4>Humans Online</h4>
+            <div class="list-scroll" id="onlineList"></div>
+        </div>
+
+        <div class="call-center">
+            <h1 class="status-lg" id="statusTxt">READY</h1>
+            <p class="status-sub" id="statusSub">Connect with someone new</p>
+            
+            <div class="action-strip">
+                <button class="btn-circle danger" onclick="reportPeer()">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    <span class="btn-label">REPORT</span>
+                </button>
+
+                <button class="btn-circle main" onclick="handleCall()" id="callBtn">
+                    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    <span class="btn-label" style="bottom:-15px; color:var(--accent)">START CALL</span>
+                </button>
+
+                <button class="btn-circle" onclick="addFav()">
+                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span class="btn-label">FAVORITE</span>
+                </button>
             </div>
-            <div class="stat-card">
-                <h4>Soulmates</h4>
-                <div id="favList"></div>
+
+            <div style="margin-top: 20px; display: flex; align-items: center; gap: 8px; font-size: 11px; opacity: 0.6;">
+                <input type="checkbox" id="autoNext"> <label for="autoNext">Auto-Connect Next</label>
             </div>
         </div>
 
-        <div class="call-ui">
-            <h1 class="status-tag" id="mainStatus">READY</h1>
-            <p style="opacity:0.6; font-size:14px;">Find someone to talk to instantly</p>
-        </div>
-
-        <div class="control-buttons">
-            <button class="action-btn danger" onclick="report()">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                <span class="btn-tip">REPORT</span>
-            </button>
-
-            <button class="action-btn primary" onclick="handleCall()" id="callBtn">
-                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                <span class="btn-tip" style="color:white; bottom:-30px;">START CALL</span>
-            </button>
-
-            <button class="action-btn" onclick="addFav()">
-                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                <span class="btn-tip">FAVORITE</span>
-            </button>
-        </div>
-
-        <div style="font-size: 12px; display: flex; align-items: center; gap: 10px;">
-            <input type="checkbox" id="autoNext" style="accent-color: var(--accent);">
-            <label for="autoNext" style="opacity:0.8; cursor:pointer;">Auto-connect to next person</label>
+        <div class="hub-card">
+            <h4>Saved Souls</h4>
+            <div class="list-scroll" id="favList"></div>
         </div>
     </section>
 </div>
 
-<div id="sideNav">
-    <div onclick="toggleSide()" style="cursor:pointer; font-size:12px; opacity:0.5; margin-bottom:30px;">✕ CLOSE HISTORY</div>
-    <h2 style="margin-bottom:20px; font-weight:800;">Recent Encounters</h2>
-    <div id="historyList"></div>
+<div id="historyDrawer">
+    <div onclick="toggleHistory()" style="cursor:pointer; font-size:12px; opacity:0.5; margin-bottom:25px;">✕ CLOSE HISTORY</div>
+    <h3 style="margin-bottom:20px;">Recent Contacts</h3>
+    <div id="histList"></div>
 </div>
 
 <script>
-let currentPeer = null;
+let activePeer = null;
 let favorites = JSON.parse(localStorage.getItem('lt_favs') || '[]');
-const rFirst = ["Spark", "Velvet", "Midnight", "Ember", "Ocean", "Rose", "Golden", "Silk", "Neon", "Lunar"];
-const rLast = ["Soul", "Whisper", "Vibe", "Flame", "Baker", "Dream", "Hunter", "Starlight", "Petal", "Aura"];
+const firstNames = ["Soul", "Silk", "Ocean", "Velvet", "Lunar", "Ember", "Neon", "Rose", "Aura", "Midnight"];
+const lastNames = ["Whisper", "Gaze", "Dream", "Vibe", "Flame", "Baker", "Hunter", "Starlight", "Heart", "Petal"];
 
 function init() {
-    let name = localStorage.getItem('lt_username');
+    let name = localStorage.getItem('lt_name');
     if(!name) {
-        name = rFirst[Math.floor(Math.random()*rFirst.length)] + rLast[Math.floor(Math.random()*rLast.length)] + (Math.floor(Math.random()*90)+10);
-        localStorage.setItem('lt_username', name);
+        name = firstNames[Math.floor(Math.random()*10)] + (Math.floor(Math.random()*89)+10);
+        localStorage.setItem('lt_name', name);
     }
-    document.getElementById('userName').innerText = name;
+    document.getElementById('myDisplay').innerText = name;
     
-    renderFavs();
     generateOnline();
+    renderFavs();
     loadMemes();
 }
 
 function handleCall() {
-    if(currentPeer) endCall();
-    else findMatch();
+    if(activePeer) endCall();
+    else startSearch();
 }
 
-function findMatch() {
+function startSearch() {
     const btn = document.getElementById('callBtn');
-    document.getElementById('mainStatus').innerText = "LINKING...";
+    const logo = document.getElementById('mainLogo');
+    document.getElementById('statusTxt').innerText = "LINKING...";
     btn.style.background = "var(--danger)";
+    logo.classList.add('active');
     
     setTimeout(() => {
-        currentPeer = rFirst[Math.floor(Math.random()*rFirst.length)] + rLast[Math.floor(Math.random()*rLast.length)];
-        document.getElementById('mainStatus').innerText = "CONNECTED";
-        document.getElementById('chatTitle').innerText = "CHAT WITH " + currentPeer.toUpperCase();
-        addMsg(`Connected with ${currentPeer}. Say hello!`, 'system');
-        logEntry(currentPeer);
+        activePeer = firstNames[Math.floor(Math.random()*10)] + lastNames[Math.floor(Math.random()*10)];
+        document.getElementById('statusTxt').innerText = "CONNECTED";
+        document.getElementById('statusSub').innerText = "Talking with " + activePeer;
+        document.getElementById('peerName').innerText = "CHAT WITH " + activePeer.toUpperCase();
+        addMsg(`Safe space created with ${activePeer}.`, 'system');
+        logCall(activePeer);
     }, 1500);
 }
 
 function endCall() {
-    currentPeer = null;
-    document.getElementById('mainStatus').innerText = "READY";
-    document.getElementById('chatTitle').innerText = "READY TO CONNECT";
+    activePeer = null;
+    document.getElementById('statusTxt').innerText = "READY";
+    document.getElementById('statusSub').innerText = "Connect with someone new";
+    document.getElementById('peerName').innerText = "NO ACTIVE CALL";
     document.getElementById('callBtn').style.background = "var(--accent)";
-    addMsg("Call ended.", "system");
+    document.getElementById('mainLogo').classList.remove('active');
+    addMsg("Connection closed.", "system");
     
     if(document.getElementById('autoNext').checked) {
-        setTimeout(findMatch, 1000);
+        setTimeout(startSearch, 1000);
     }
 }
 
 function sendMsg() {
     const input = document.getElementById('msgInput');
-    if(!input.value.trim() || !currentPeer) return;
+    if(!input.value.trim() || !activePeer) return;
     addMsg(input.value, 'mine');
     input.value = "";
     
-    // Bot Mock Response
     setTimeout(() => {
-        if(currentPeer) addMsg("That's really interesting, tell me more!", 'other');
-    }, 1500);
+        if(activePeer) addMsg("I was just thinking that!", 'other');
+    }, 1200);
 }
 
 function addMsg(text, type) {
     const box = document.getElementById('messages');
-    const wrap = document.createElement('div');
-    wrap.className = type === 'system' ? 'system-msg' : 'msg ' + type;
-    
+    const div = document.createElement('div');
     if(type === 'system') {
-        wrap.innerHTML = `<div style="text-align:center; font-size:11px; color:#aaa; margin:10px 0;">${text}</div>`;
+        div.style.cssText = "text-align:center; font-size:11px; color:#aaa; margin:10px 0;";
+        div.innerText = text;
     } else {
-        wrap.innerHTML = `<div class="bubble">${text}</div>`;
+        div.className = "msg " + type;
+        div.innerHTML = `<div class="bubble">${text}</div>`;
     }
-    
-    box.appendChild(wrap);
+    box.appendChild(div);
     box.scrollTop = box.scrollHeight;
 }
 
@@ -360,52 +291,51 @@ async function loadMemes() {
     try {
         const res = await fetch('https://api.imgflip.com/get_memes');
         const data = await res.json();
-        const memes = data.data.memes.slice(0, 60);
-        tray.innerHTML = memes.map(m => `<img src="${m.url}" class="meme-thumb" onclick="sendMeme('${m.url}')">`).join('');
-    } catch(e) { tray.innerText = "Failed to load memes."; }
+        tray.innerHTML = data.data.memes.slice(0, 60).map(m => `<img src="${m.url}" class="meme-item" onclick="sendMeme('${m.url}')">`).join('');
+    } catch(e) { tray.innerText = "Error loading memes."; }
 }
 
 function sendMeme(url) {
-    if(!currentPeer) return;
+    if(!activePeer) return;
     addMsg(`<img src="${url}" style="width:100%; border-radius:10px;">`, 'mine');
     toggleMemes();
 }
 
-function logEntry(name) {
-    const list = document.getElementById('historyList');
-    const div = document.createElement('div');
-    div.className = "user-row";
-    div.innerHTML = `<span>${name}</span> <span style="float:right; opacity:0.4">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`;
-    list.prepend(div);
+function logCall(name) {
+    const list = document.getElementById('histList');
+    const row = document.createElement('div');
+    row.className = "row";
+    row.innerHTML = `<span>${name}</span> <span style="opacity:0.3; font-size:10px;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`;
+    list.prepend(row);
 }
 
 function addFav() {
-    if(!currentPeer || favorites.includes(currentPeer)) return;
-    favorites.push(currentPeer);
+    if(!activePeer || favorites.includes(activePeer)) return;
+    favorites.push(activePeer);
     localStorage.setItem('lt_favs', JSON.stringify(favorites));
     renderFavs();
 }
 
 function renderFavs() {
     const list = document.getElementById('favList');
-    list.innerHTML = favorites.map(f => `<div class="user-row">♥ ${f}</div>`).join('');
+    list.innerHTML = favorites.map(f => `<div class="row">♥ ${f}</div>`).join('');
 }
 
-function report() {
-    if(!currentPeer) return;
-    alert("User reported. Severing connection.");
+function reportPeer() {
+    if(!activePeer) return;
+    alert("This connection has been reported. Severs immediately.");
     endCall();
 }
 
 function generateOnline() {
     const list = document.getElementById('onlineList');
-    for(let i=0; i<5; i++) {
-        let name = rFirst[Math.floor(Math.random()*rFirst.length)] + rLast[Math.floor(Math.random()*rLast.length)];
-        list.innerHTML += `<div class="user-row">🟢 ${name}</div>`;
+    for(let i=0; i<6; i++) {
+        let n = firstNames[Math.floor(Math.random()*10)] + lastNames[Math.floor(Math.random()*10)];
+        list.innerHTML += `<div class="row"><span>🟢 ${n}</span></div>`;
     }
 }
 
-function toggleSide() { document.getElementById('sideNav').classList.toggle('open'); }
+function toggleHistory() { document.getElementById('historyDrawer').classList.toggle('open'); }
 
 init();
 </script>
