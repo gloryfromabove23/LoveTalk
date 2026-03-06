@@ -2,219 +2,362 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LoveTalk ♥︎</title>
+<title>LoveTalk ♥︎ | Genuine Connection</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root { --main-bg: linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC); }
-body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); background-size: 300% 300%; animation: grad 12s ease infinite; color: white; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+:root { 
+    --main-bg: linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC); 
+    --glass: rgba(255, 255, 255, 0.15);
+    --accent: #4BFF8B;
+    --apple-blue: #007aff;
+}
+
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+body { 
+    margin: 0; 
+    font-family: 'Inter', sans-serif; 
+    background: var(--main-bg); 
+    background-size: 300% 300%; 
+    animation: grad 15s ease infinite; 
+    color: white; 
+    overflow-x: hidden; 
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 @keyframes grad { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
 
-#topBar { padding: 15px 30px; display: flex; justify-content: flex-end; background: rgba(0,0,0,0.1); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; }
-.theme-btn { background: white; color: black; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 10px; text-transform: uppercase; }
+/* NAVIGATION */
+#topBar { 
+    padding: 15px 40px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    background: rgba(0,0,0,0.15); 
+    backdrop-filter: blur(15px); 
+    z-index: 1000;
+}
+.user-identity { font-size: 12px; font-weight: 800; background: var(--glass); padding: 8px 15px; border-radius: 20px; color: var(--accent); }
 
-#appView { display: flex; flex: 1; width: 100%; height: calc(100vh - 60px); }
+/* MAIN LAYOUT */
+#appView { display: flex; flex: 1; height: calc(100vh - 70px); }
 
-/* Left Panel - Now persistent 50% width */
-#leftPanel { width: 50%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 0; flex-shrink: 0; }
-#chatBox { display: flex; flex-direction: column; height: 100%; background: #ffffff; overflow: hidden; }
+/* LEFT: PERSISTENT CHAT (50%) */
+#chatSide { 
+    width: 50%; 
+    background: rgba(255, 255, 255, 0.05); 
+    display: flex; 
+    flex-direction: column; 
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-/* Center Panel - Love Talk Side */
-#centerPanel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; text-align: center; position: relative; overflow-y: auto; }
+#chatBox { flex: 1; display: flex; flex-direction: column; background: white; margin: 20px; border-radius: 25px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
 
-/* Header Layout for Online/Connections */
-.list-container { display: flex; width: 100%; gap: 10px; margin-bottom: 20px; }
-.list-box { flex: 1; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px; height: 150px; overflow-y: auto; text-align: left; }
-.list-box h4 { margin: 0 0 10px 0; font-size: 12px; letter-spacing: 1px; opacity: 0.8; }
-.user-item { font-size: 13px; padding: 5px 0; cursor: pointer; transition: 0.2s; }
-.user-item:hover { color: #4BFF8B; }
+#messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+.msg-row { display: flex; flex-direction: column; max-width: 75%; margin-bottom: 4px; }
+.msg-row.mine { align-self: flex-end; align-items: flex-end; }
 
-/* Logo & flicker */
-#logoContainer { width: 160px; height: 160px; margin-top: 20px; }
-.heart-cutout { fill: #4BFF8B; opacity: 0; transition: opacity 0.1s; }
-.flicker { animation: heartPulse 0.15s infinite alternate; }
-@keyframes heartPulse { from { opacity: 0.3; } to { opacity: 1; } }
+.bubble { padding: 10px 16px; border-radius: 20px; font-size: 14px; line-height: 1.4; position: relative; }
+.bubble.other { background: #e5e5ea; color: black; border-bottom-left-radius: 4px; }
+.bubble.mine { background: var(--apple-blue); color: white; border-bottom-right-radius: 4px; }
 
-/* Horizontal Buttons */
-.callButtons { display: flex; flex-direction: row; gap: 20px; margin-top: 30px; justify-content: center; }
-.circleBtn { width: 70px; height: 70px; border: none; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-.label-tag { position: absolute; bottom: -25px; background: white; padding: 3px 8px; border-radius: 6px; font-size: 9px; font-weight: 900; color: black; }
+.meta { font-size: 9px; color: #8e8e93; margin-top: 4px; text-transform: uppercase; font-weight: 600; }
 
-/* Message Styles */
-#messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 20px; color: #000; }
-.msg-container { display: flex; flex-direction: column; max-width: 80%; }
-.msg-container.mine { align-self: flex-end; align-items: flex-end; }
-.msg-bubble { padding: 10px 15px; border-radius: 18px; font-size: 14px; background: #e5e5ea; color: black; }
-.mine .msg-bubble { background: #007aff; color: white; }
+/* TYPING INDICATOR */
+.typing { padding: 10px 20px; display: none; align-items: center; gap: 4px; }
+.dot { width: 6px; height: 6px; background: #8e8e93; border-radius: 50%; animation: blink 1.4s infinite; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-/* Footer / Mission */
-#footerSpace { padding: 300px 15% 100px; text-align: center; background: white; color: #333; }
+/* CHAT INPUT */
+#chatInputArea { padding: 15px; border-top: 1px solid #eee; display: flex; align-items: center; gap: 10px; background: #fff; }
+#chatInputArea input { flex: 1; border: none; background: #f2f2f7; padding: 12px 18px; border-radius: 25px; outline: none; color: black; }
 
-/* Context Menu */
-#contextMenu { display: none; position: fixed; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 10px; z-index: 3000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-#contextMenu button { display: block; width: 100%; background: none; border: none; color: white; padding: 8px 20px; text-align: left; cursor: pointer; font-size: 12px; }
-#contextMenu button:hover { background: #333; }
+/* RIGHT: CALLING & LISTS */
+#callSide { flex: 1; padding: 30px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
 
+.header-lists { display: flex; width: 100%; gap: 15px; margin-bottom: 30px; }
+.list-card { flex: 1; background: rgba(0,0,0,0.25); border-radius: 20px; padding: 15px; height: 160px; overflow-y: auto; }
+.list-card h4 { margin: 0 0 10px; font-size: 11px; letter-spacing: 1px; color: var(--accent); opacity: 0.9; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+.user-entry { font-size: 13px; padding: 6px 0; cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; }
+.user-entry:hover { color: var(--accent); }
+
+/* LOGO & PULSE */
+#logoWrapper { margin: 40px 0; position: relative; width: 150px; height: 150px; }
+#heartIcon { fill: var(--accent); opacity: 0; transition: opacity 0.2s; }
+.pulse-active { animation: heartFlicker 0.2s infinite alternate; }
+@keyframes heartFlicker { from { opacity: 0.2; } to { opacity: 1; } }
+
+/* HORIZONTAL BUTTONS */
+.btn-row { display: flex; gap: 20px; align-items: center; margin-top: 20px; }
+.action-btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--glass); cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.2s; }
+.action-btn:active { transform: scale(0.9); }
+.action-btn svg { width: 30px; height: 30px; fill: white; }
+.btn-label { position: absolute; bottom: -25px; font-size: 10px; font-weight: 800; background: white; color: black; padding: 2px 8px; border-radius: 5px; }
+
+/* MEME GALLERY */
+#memeGrid { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 10px; background: #f2f2f7; max-height: 250px; overflow-y: auto; border-top: 1px solid #ddd; }
+.meme-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 5px; cursor: pointer; }
+
+/* CONTEXT MENU */
+#contextMenu { display: none; position: fixed; background: #1c1c1e; border-radius: 12px; padding: 8px; z-index: 5000; width: 150px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+#contextMenu button { width: 100%; background: none; border: none; color: white; text-align: left; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; }
+#contextMenu button:hover { background: rgba(255,255,255,0.1); }
+
+/* FOOTER MISSION */
+#missionSection { padding: 400px 10% 100px; text-align: center; background: white; color: #333; line-height: 1.6; }
+
+/* RESPONSIVE SPLIT */
 @media (max-width: 900px) {
-    #appView { flex-direction: column; height: auto; }
-    #leftPanel { width: 100%; order: 2; height: 600px; }
-    #centerPanel { width: 100%; order: 1; height: auto; min-height: 600px; }
+    #appView { flex-direction: column; }
+    #chatSide { width: 100%; order: 2; height: 600px; }
+    #callSide { width: 100%; order: 1; height: auto; padding-bottom: 100px; }
 }
 </style>
 </head>
 <body>
 
-<div id="topBar"><button class="theme-btn" onclick="openMod('cModal')">Edit Canvas</button></div>
+<div id="topBar">
+    <div style="font-weight: 800; letter-spacing: -1px; font-size: 20px;">LoveTalk ♥︎</div>
+    <div id="myUsername" class="user-identity">Generating Identity...</div>
+    <button class="theme-btn" onclick="openMod('cModal')">Edit Canvas</button>
+</div>
 
 <div id="appView">
-    <div id="leftPanel">
+    <div id="chatSide">
         <div id="chatBox">
-            <div style="padding:15px; background:#f9f9f9; border-bottom:1px solid #ddd; color:#000; text-align:center; font-weight:800;">LIVE CHAT</div>
-            <div id="messages"></div>
-            <div id="typingArea" style="display:none; padding:10px 20px; color:#8e8e93; font-size:12px;">Someone is typing...</div>
-            <div id="memeGallery" style="display:none; grid-template-columns: repeat(3, 1fr); gap:4px; padding:8px; background:#f2f2f7; max-height:200px; overflow-y:auto;"></div>
-            <div style="display:flex; gap:8px; padding:15px; border-top: 1px solid #eee; align-items:center;">
-                <button onclick="toggleMemeGallery()" style="background:none; border:none; cursor:pointer; font-size:20px;">🎲</button>
-                <input id="msgInput" onkeydown="if(event.key==='Enter')sendMsg()" style="flex:1; background:#f2f2f7; border:none; color:black; padding:12px; border-radius:20px; outline:none;" placeholder="iMessage">
-                <button onclick="sendMsg()" style="background:#007aff; color:#fff; border:none; border-radius:50%; width:35px; height:35px; cursor:pointer;">↑</button>
+            <div id="messages">
+                <div style="text-align:center; opacity:0.3; font-size:11px; margin-top:100px;">No Active Call</div>
+            </div>
+            <div class="typing" id="typingIndicator">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            <div id="memeGrid"></div>
+            <div id="chatInputArea">
+                <button onclick="toggleMemes()" style="background:none; border:none; font-size:22px; cursor:pointer;">🎲</button>
+                <input id="msgInput" type="text" placeholder="iMessage" onkeydown="if(event.key==='Enter')sendMsg()">
+                <button onclick="sendMsg()" style="background:var(--apple-blue); border:none; color:white; width:34px; height:34px; border-radius:50%; font-weight:800; cursor:pointer;">↑</button>
             </div>
         </div>
     </div>
 
-    <div id="centerPanel">
-        <div class="list-container">
-            <div class="list-box">
+    <div id="callSide">
+        <div class="header-lists">
+            <div class="list-card">
                 <h4>VERIFIED HUMANS</h4>
-                <div id="onlineList">
-                    <div class="user-item" onclick="showUserActions(event, 'User_882')">🟢 User_882</div>
-                    <div class="user-item" onclick="showUserActions(event, 'Human_412')">🟢 Human_412</div>
-                    <div class="user-item" onclick="showUserActions(event, 'Soul_77')">🟢 Soul_77</div>
-                </div>
+                <div id="humanList"></div>
             </div>
-            <div class="list-box">
+            <div class="list-card">
                 <h4>CONNECTIONS</h4>
-                <div id="connDD">
-                    <div class="user-item" onclick="showUserActions(event, 'Saved_One')">♥ Saved_One</div>
-                </div>
+                <div id="connList"></div>
             </div>
         </div>
 
-        <div id="logoContainer">
+        <div id="logoWrapper">
             <svg viewBox="0 0 100 100">
                 <defs><mask id="m"><rect width="100" height="100" fill="white"/><path d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65" fill="black"/></mask></defs>
                 <path fill="white" d="M20 15 H80 Q88 15 88 23 V68 Q88 76 80 76 H45 L30 90 V76 Q12 76 12 68 V23 Q12 15 20 15 Z" mask="url(#m)"/>
-                <path id="heartIcon" class="heart-cutout" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
+                <path id="heartIcon" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
             </svg>
         </div>
-        
-        <div style="font-size: 3.5rem; font-weight: 800; letter-spacing: -3px; margin-top: 10px;">LoveTalk</div>
-        <div id="status">READY</div>
 
-        <div class="callButtons">
-            <button class="circleBtn" onclick="muteT()">
-                <svg viewBox="0 0 100 100" width="30" fill="white"><rect x="44" y="25" width="12" height="30" rx="6"/><path d="M35 46 a15 15 0 0 0 30 0" fill="none" stroke="white" stroke-width="5"/></svg>
-                <div class="label-tag">MUTE</div>
+        <h1 id="callStatus" style="font-size: 40px; margin: 0; font-weight: 800;">READY</h1>
+        <p id="peerInfo" style="opacity: 0.6; margin-bottom: 30px;">Tap Call to start a conversation</p>
+
+        <div class="btn-row">
+            <button class="action-btn" onclick="toggleMute()">
+                <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+                <span class="btn-label" id="muteLbl">MUTE</span>
             </button>
-            <button class="circleBtn" style="width:90px; height:90px; background:#4BFF8B;" onclick="handleCall()">
-                <svg viewBox="0 0 100 100" width="40"><rect x="35" y="20" width="30" height="60" rx="6" fill="none" stroke="black" stroke-width="4"/><circle cx="50" cy="72" r="3" fill="black"/></svg>
-                <div class="label-tag" style="bottom:-15px">CALL</div>
+            <button class="action-btn" id="mainCallBtn" style="width:100px; height:100px; background:var(--accent);" onclick="handleCall()">
+                <svg viewBox="0 0 24 24" style="fill:black"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <span class="btn-label" style="bottom:-10px">START</span>
             </button>
-            <button class="circleBtn" onclick="showOverlay('addOverlay')">
-                <svg viewBox="0 0 100 100" width="30"><path d="M50 30 v40 M30 50 h40" stroke="white" stroke-width="10" stroke-linecap="round"/></svg>
-                <div class="label-tag">ADD</div>
+            <button class="action-btn" onclick="addConnection()">
+                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                <span class="btn-label">ADD</span>
             </button>
-            <button class="circleBtn" onclick="showOverlay('reportOverlay')">
-                <text x="50" y="70" text-anchor="middle" fill="white" font-size="50" font-weight="900">!</text>
-                <div class="label-tag">BLOCK</div>
+            <button class="action-btn" onclick="blockUser()">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                <span class="btn-label">BLOCK</span>
             </button>
         </div>
     </div>
 </div>
 
+<div id="missionSection">
+    <h2>Our Sacred Mission</h2>
+    <p>LoveTalk is founded on the principle that every human deserves to be heard. In an age of algorithms, we choose heart.</p>
+    <p>Scroll down further to read our full statement of faith and community standards.</p>
+</div>
+
 <div id="contextMenu">
-    <button onclick="handleCall()">Call User</button>
-    <button onclick="showOverlay('addOverlay')">Add Friend</button>
-    <button style="color:#FF4B4B" onclick="showOverlay('reportOverlay')">Block User</button>
+    <button onclick="handleCall()">Call Now</button>
+    <button onclick="addConnection()">Add Friend</button>
+    <button style="color:#ff3b30" onclick="blockUser()">Block / Report</button>
 </div>
 
-<div id="footerSpace">
-    <h2>The Mission</h2>
-    <p>LoveTalk is built on the foundation of <strong>Love</strong>.</p>
-    <p>Scroll down to explore our commitment to genuine human connection.</p>
-</div>
-
-<div id="cModal" class="modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1a1a1a; padding:20px; border-radius:20px; z-index:2000;">
-    <h3>Canvas Theme</h3>
-    <button class="theme-btn" onclick="setBg('linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC)')">Pink</button>
-    <button class="theme-btn" onclick="setBg('#1a1a1a')">Dark</button>
-    <button class="theme-btn" onclick="cls()">Close</button>
+<div id="cModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#1c1c1e; padding:30px; border-radius:25px; z-index:9000; border:1px solid #333;">
+    <h3 style="margin-top:0">Canvas Settings</h3>
+    <button class="theme-btn" onclick="setBg('linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC)')" style="margin-bottom:10px; width:100%">Sunset Pink</button>
+    <button class="theme-btn" onclick="setBg('linear-gradient(135deg, #001f3f, #0074D9)')" style="margin-bottom:10px; width:100%">Deep Ocean</button>
+    <button class="theme-btn" onclick="setBg('#121212')" style="margin-bottom:20px; width:100%">Midnight</button>
+    <button class="theme-btn" onclick="cls()" style="background:var(--accent); width:100%">Done</button>
 </div>
 
 <script>
+let currentUser = "";
 let peer = "";
+let isMuted = false;
+let connections = [];
 
+// ROM-COM NAME GENERATOR
+const first = ["MeetCute", "Serendipity", "SlowBurn", "Grumpy", "Sunshine", "EnemiesTo", "CoffeeShop", "LastFirst", "RainyDay", "Secret"];
+const second = ["Chaos", "Crush", "Baker", "Lover", "Stargazer", "Dreamer", "Heartthrob", "Bff", "Protagonist", "Date"];
+
+function generateIdentity() {
+    let savedName = localStorage.getItem('lovetalk_user');
+    if (!savedName) {
+        savedName = first[Math.floor(Math.random()*first.length)] + "_" + second[Math.floor(Math.random()*second.length)] + "_" + Math.floor(Math.random()*99);
+        localStorage.setItem('lovetalk_user', savedName);
+    }
+    currentUser = savedName;
+    document.getElementById('myUsername').innerText = "Logged in as: " + currentUser;
+}
+
+// UI HELPERS
 function openMod(id) { document.getElementById(id).style.display='block'; }
-function cls() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
+function cls() { document.getElementById('cModal').style.display='none'; }
 function setBg(c) { document.body.style.background = c; }
 
-// User Context Menu
-function showUserActions(e, name) {
+// LIST POPULATION
+function populateHumans() {
+    const list = document.getElementById('humanList');
+    list.innerHTML = "";
+    for(let i=0; i<5; i++) {
+        let name = first[Math.floor(Math.random()*first.length)] + "_" + second[Math.floor(Math.random()*second.length)];
+        let div = document.createElement('div');
+        div.className = "user-entry";
+        div.innerHTML = `<span>🟢 ${name}</span>`;
+        div.onclick = (e) => showContext(e, name);
+        list.appendChild(div);
+    }
+}
+
+function showContext(e, name) {
+    e.preventDefault();
     const menu = document.getElementById('contextMenu');
     menu.style.display = 'block';
     menu.style.left = e.pageX + 'px';
     menu.style.top = e.pageY + 'px';
-    window.onclick = () => { menu.style.display = 'none'; };
+    window.onclick = () => menu.style.display = 'none';
     e.stopPropagation();
 }
 
-function handleCall() { peer ? endCall() : startSearch(); }
-
-function startSearch() {
-    document.getElementById('status').textContent = "FINDING...";
-    setTimeout(() => {
-        peer = "Human_" + Math.floor(Math.random()*999);
-        document.getElementById('status').textContent = "LINKED: " + peer;
-        simulateTalking(); // Start the flicker
-    }, 1500);
+// CALL LOGIC
+function handleCall() {
+    if (peer) endCall();
+    else startSearch();
 }
 
-function simulateTalking() {
-    const heart = document.getElementById('heartIcon');
-    setInterval(() => {
-        if(peer) heart.classList.toggle('flicker');
+function startSearch() {
+    document.getElementById('callStatus').innerText = "LINKING...";
+    document.getElementById('mainCallBtn').style.background = "#ff3b30";
+    document.getElementById('typingIndicator').style.display = "flex";
+    
+    setTimeout(() => {
+        peer = first[Math.floor(Math.random()*first.length)] + "_" + second[Math.floor(Math.random()*second.length)];
+        document.getElementById('callStatus').innerText = "CONNECTED";
+        document.getElementById('peerInfo').innerText = "Talking with " + peer;
+        document.getElementById('heartIcon').classList.add('pulse-active');
+        document.getElementById('messages').innerHTML = `<div style="text-align:center; font-size:10px; color:#8e8e93; margin:10px 0;">Conversation with ${peer} started</div>`;
+        document.getElementById('typingIndicator').style.display = "none";
     }, 2000);
 }
 
+function endCall() {
+    peer = "";
+    document.getElementById('callStatus').innerText = "READY";
+    document.getElementById('peerInfo').innerText = "Tap Call to start a conversation";
+    document.getElementById('mainCallBtn').style.background = "var(--accent)";
+    document.getElementById('heartIcon').classList.remove('pulse-active');
+}
+
+// CHAT
 function sendMsg() {
     const input = document.getElementById('msgInput');
-    if(!input.value.trim()) return;
-    const container = document.createElement('div');
-    container.className = "msg-container mine";
-    container.innerHTML = `<div class="msg-bubble">${input.value}</div>`;
-    document.getElementById('messages').appendChild(container);
+    if (!input.value.trim() || !peer) return;
+    
+    renderBubble(input.value, true);
     input.value = "";
-    document.getElementById('messages').scrollTop = 9999;
+    
+    // Auto-reply simulation
+    setTimeout(() => {
+        if(peer) renderBubble("That's so funny! Tell me more.", false);
+    }, 1500);
+}
+
+function renderBubble(txt, isMine) {
+    const msgs = document.getElementById('messages');
+    const row = document.createElement('div');
+    row.className = "msg-row " + (isMine ? "mine" : "");
+    
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    row.innerHTML = `
+        <div class="bubble ${isMine ? 'mine' : 'other'}">${txt}</div>
+        <div class="meta">${now} ${isMine ? '• Read' : ''}</div>
+    `;
+    
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function toggleMemes() {
+    const grid = document.getElementById('memeGrid');
+    grid.style.display = (grid.style.display === 'grid') ? 'none' : 'grid';
+    if(grid.innerHTML === "") fetchMemes();
 }
 
 async function fetchMemes() {
-    const grid = document.getElementById('memeGallery');
+    const grid = document.getElementById('memeGrid');
     const res = await fetch('https://api.imgflip.com/get_memes');
     const data = await res.json();
-    grid.innerHTML = data.data.memes.slice(0, 60).map(m => `<img src="${m.url}" style="width:100%; cursor:pointer" onclick="sendMeme('${m.url}')">`).join('');
-}
-
-function toggleMemeGallery() {
-    const g = document.getElementById('memeGallery');
-    g.style.display = g.style.display === 'grid' ? 'none' : 'grid';
-    if(g.style.display === 'grid') fetchMemes();
+    grid.innerHTML = data.data.memes.slice(0, 60).map(m => `
+        <img src="${m.url}" class="meme-img" onclick="sendMeme('${m.url}')">
+    `).join('');
 }
 
 function sendMeme(url) {
-    const container = document.createElement('div');
-    container.className = "msg-container mine";
-    container.innerHTML = `<div class="msg-bubble"><img src="${url}" style="width:100%"></div>`;
-    document.getElementById('messages').appendChild(container);
-    document.getElementById('memeGallery').style.display = 'none';
+    renderBubble(`<img src="${url}" style="width:100%; border-radius:10px;">`, true);
+    document.getElementById('memeGrid').style.display = 'none';
 }
+
+function addConnection() {
+    if(!peer) return;
+    if(!connections.includes(peer)) {
+        connections.push(peer);
+        const div = document.createElement('div');
+        div.className = "user-entry";
+        div.innerHTML = `<span>♥ ${peer}</span>`;
+        document.getElementById('connList').prepend(div);
+    }
+}
+
+function blockUser() {
+    if(peer) {
+        alert(peer + " has been blocked.");
+        endCall();
+    }
+}
+
+// INIT
+window.onload = () => {
+    generateIdentity();
+    populateHumans();
+};
 </script>
 </body>
 </html>
