@@ -12,56 +12,46 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); 
 #topBar { padding: 15px 30px; display: flex; justify-content: flex-end; background: rgba(0,0,0,0.1); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; }
 .theme-btn { background: white; color: black; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 10px; text-transform: uppercase; transition: transform 0.2s; }
 
-#appView { display: flex; flex: 1; width: 100%; height: calc(100vh - 60px); min-height: 800px; }
-#leftPanel { width: 380px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
+#appView { display: flex; flex: 1; width: 100%; height: calc(100vh - 60px); transition: all 0.5s ease; }
+#leftPanel { width: 380px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; overflow-y: auto; }
 #centerPanel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; position: relative; }
 
-/* Transparent Text Cutout Effect */
-.label-tag { 
-    position: absolute; bottom: -25px; 
-    background: white; 
-    padding: 3px 10px; 
-    border-radius: 6px; 
-    font-size: 10px; font-weight: 900; 
-    color: black; 
-    mix-blend-mode: screen; 
-    white-space: nowrap;
+/* Responsive Split Logic */
+@media (max-width: 900px) {
+    #appView { flex-direction: column; height: auto; }
+    #leftPanel { width: 100%; box-sizing: border-box; border-right: none; border-top: 1px solid rgba(255, 255, 255, 0.1); order: 2; }
+    #centerPanel { height: 600px; order: 1; }
 }
 
-/* Action Buttons */
-.callButtons { display: flex; flex-direction: row; gap: 15px; align-items: center; margin-top: 30px; }
-.circleBtn { width: 75px; height: 75px; border: none; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
-.circleBtn:active { transform: scale(0.9); }
+.verified-title { font-size: 18px; font-weight: 800; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; display: flex; justify-content: space-between; }
+.connection-list { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
 
-/* iMessage style */
-#chatBox { margin-top: 15px; display: none; flex-direction: column; flex-grow: 1; background: #ffffff; border-radius: 20px; overflow: hidden; }
-#chatHeader { padding: 12px; background: #f9f9f9; border-bottom: 1px solid #ddd; color: #000; display: flex; flex-direction: column; align-items: center; }
-.contact-avatar { width: 34px; height: 34px; background: #8e8e93; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 4px; font-size: 18px; }
-#messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding: 15px; color: #000; }
-.msg-bubble { padding: 8px 15px; border-radius: 18px; max-width: 75%; font-size: 14px; background: #e5e5ea; align-self: flex-start; }
-.msg-bubble.mine { background: #007aff; color: white; align-self: flex-end; }
+/* iMessage Typing Indicator */
+.typing-dots { display: none; padding: 8px 15px; background: #e5e5ea; border-radius: 18px; width: fit-content; margin-bottom: 10px; }
+.dot { display: inline-block; width: 6px; height: 6px; background: #8e8e93; border-radius: 50%; animation: bounce 1s infinite; }
+.dot:nth-child(2) { animation-delay: 0.2s; margin: 0 3px; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-/* Meme Gallery */
-#memeGallery { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; background: #f2f2f7; max-height: 200px; overflow-y: auto; border-top: 1px solid #ddd; }
+/* Chat Box Styling */
+#chatBox { margin-top: 15px; display: none; flex-direction: column; height: 500px; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+#messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 15px; color: #000; scroll-behavior: smooth; }
+.msg-container { display: flex; flex-direction: column; max-width: 80%; }
+.msg-container.mine { align-self: flex-end; align-items: flex-end; }
+.msg-bubble { padding: 8px 15px; border-radius: 18px; font-size: 14px; background: #e5e5ea; position: relative; }
+.mine .msg-bubble { background: #007aff; color: white; }
+.msg-meta { font-size: 9px; color: #8e8e93; margin-top: 2px; text-transform: uppercase; }
+
+#memeGallery { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; background: #f2f2f7; max-height: 250px; overflow-y: auto; }
 .meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; cursor: pointer; border-radius: 4px; }
 
-/* Blocking Overlays */
-.blocking-overlay {
-    display: none; position: absolute; top: 0; left: 0; width: 100%; height: 85%;
-    background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 1500;
-    flex-direction: column; align-items: center; justify-content: center; border-radius: 30px;
-}
+/* UI Elements */
+.label-tag { position: absolute; bottom: -25px; background: white; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 900; color: black; mix-blend-mode: screen; white-space: nowrap; }
+.circleBtn { width: 75px; height: 75px; border: none; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+.blocking-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 85%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 1500; flex-direction: column; align-items: center; justify-content: center; border-radius: 30px; }
 
-#logoContainer { width: 160px; height: 160px; position: relative; }
-.base-bubble { fill: white; }
-.heart-cutout { fill: #4BFF8B; opacity: var(--heart-fill); transition: opacity 0.2s; }
-
-.pill-label { border: 2px solid white; background: transparent; padding: 6px 15px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; color: white; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-.extra-spacing { margin-top: 60px; display: flex; gap: 20px; }
-
-#footerSpace { padding: 100px 15%; text-align: center; background: white; color: #333; }
+#footerSpace { padding: 100px 15%; text-align: center; background: white; color: #333; position: relative; z-index: 10; }
 footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d; color: #555; }
-.modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; background: #1a1a1a; border-radius: 20px; padding: 20px; z-index: 2000; text-align: center; border: 1px solid #333; }
 </style>
 </head>
 <body>
@@ -70,22 +60,31 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
 
 <div id="appView">
     <div id="leftPanel">
-        <div class="tab-header" onclick="toggleTab('onlineList')" style="font-size:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.1); padding:10px 0; cursor:pointer; display:flex; justify-content:space-between;">
+        <div class="verified-title" onclick="toggleTab('onlineList')">
             <span>VERIFIED HUMANS</span> <span id="onlineCount">142 ▾</span>
         </div>
-        <div id="onlineList" style="max-height:80px; overflow-y:auto; font-size:11px; padding:10px 0;">
-            <div style="opacity:0.6; margin-bottom:5px;">• User_882 (Active)</div>
-            <div style="opacity:0.6; margin-bottom:5px;">• Human_412 (Chatting)</div>
+        <div id="onlineList" style="max-height:120px; overflow-y:auto; font-size:12px; padding:10px 0; display:none;">
+            <div style="opacity:0.6; margin-bottom:8px;">🟢 User_882 (Active)</div>
+            <div style="opacity:0.6; margin-bottom:8px;">🟢 Human_412 (Searching)</div>
+            <div style="opacity:0.6; margin-bottom:8px;">🟢 Grace_99 (Connected)</div>
+        </div>
+
+        <div class="verified-title" style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1)">
+            <span>CONNECTIONS</span> <span>♥</span>
+        </div>
+        <div id="connDD" class="connection-list" style="font-size:12px; min-height:40px;">
+            <div id="connEmpty" style="opacity:0.3;">No active connections. Use ADD to save humans.</div>
         </div>
 
         <div id="chatBox">
-            <div id="chatHeader">
-                <div class="contact-avatar">👤</div>
-                <span id="chatPeerName">...</span>
+            <div id="chatHeader" style="padding:12px; background:#f9f9f9; border-bottom:1px solid #ddd; color:#000; text-align:center;">
+                <div class="contact-avatar" style="width:30px;height:30px;background:#8e8e93;border-radius:50%;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;color:#fff;">👤</div>
+                <span id="chatPeerName" style="font-size:12px; font-weight:600;">...</span>
             </div>
             <div id="messages"></div>
+            <div id="typingArea" class="typing-dots" style="margin-left: 15px;"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
             <div id="memeGallery"></div>
-            <div style="display:flex; gap:8px; padding:10px; border-top: 1px solid #eee; align-items: center;">
+            <div style="display:flex; gap:8px; padding:10px; border-top:1px solid #eee; align-items:center;">
                 <button onclick="toggleMemeGallery()" style="background:none; border:none; cursor:pointer; font-size:20px;">🎲</button>
                 <input id="msgInput" onkeydown="if(event.key==='Enter')sendMsg()" style="flex:1; background:#f2f2f7; border:none; color:black; padding:10px; border-radius:20px; outline:none;" placeholder="iMessage">
                 <button onclick="sendMsg()" style="background:#007aff; color:#fff; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer;">↑</button>
@@ -95,27 +94,21 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
 
     <div id="centerPanel">
         <div id="addOverlay" class="blocking-overlay">
-            <h3>Add Connection?</h3>
-            <button class="theme-btn" style="background:#4BFF8B; margin-bottom:10px;" onclick="confirmAdd()">Yes, Add Them</button>
+            <h3>Add to Connections?</h3>
+            <button class="theme-btn" style="background:#4BFF8B; margin-bottom:10px;" onclick="confirmAdd()">Connect Forever</button>
             <button class="theme-btn" style="background:transparent; color:white; border:1px solid white;" onclick="closeOverlay('addOverlay')">Cancel</button>
         </div>
 
         <div id="reportOverlay" class="blocking-overlay">
             <svg viewBox="0 0 100 100" width="50" style="margin-bottom:10px;"><circle cx="50" cy="50" r="45" fill="none" stroke="#FF4B4B" stroke-width="5"/><text x="50" y="75" text-anchor="middle" fill="#FF4B4B" font-size="60" font-weight="900">!</text></svg>
-            <h3>Report User</h3>
+            <h3>Report Behavior</h3>
             <select id="reportReason" style="padding:10px; border-radius:10px; margin-bottom:15px; width:220px;">
                 <option>Harassment</option>
-                <option>Bot / Spam</option>
+                <option>Bot / AI detected</option>
                 <option>Inappropriate Language</option>
             </select>
             <button class="theme-btn" style="background:#FF4B4B; color:white; margin-bottom:10px;" onclick="confirmReport()">Submit Report</button>
             <button class="theme-btn" style="background:transparent; color:white; border:1px solid white;" onclick="closeOverlay('reportOverlay')">Cancel</button>
-        </div>
-
-        <div id="historyOverlay" class="blocking-overlay">
-            <h3>History</h3>
-            <div id="historyContent" style="max-height:200px; overflow-y:auto; width:80%; margin-bottom:20px; font-size:12px;"></div>
-            <button class="theme-btn" onclick="closeOverlay('historyOverlay')">Close</button>
         </div>
 
         <div id="logoContainer">
@@ -125,7 +118,7 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
                 <path class="heart-cutout" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
             </svg>
         </div>
-        <div id="brandName" style="font-size: 3.5rem; font-weight: 800; letter-spacing: -3px; margin-top: 10px;">LoveTalk</div>
+        <div style="font-size: 3.5rem; font-weight: 800; letter-spacing: -3px; margin-top: 10px;">LoveTalk</div>
         <div id="status">READY</div>
 
         <div class="callButtons">
@@ -151,7 +144,7 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
             <label class="pill-label">
                 <input type="checkbox" id="autoCheck" style="accent-color: white;"> Auto Call
             </label>
-            <span class="pill-label" onclick="showOverlay('historyOverlay')">History</span>
+            <span class="pill-label" onclick="openMod('hModal')">History</span>
         </div>
     </div>
 </div>
@@ -178,19 +171,17 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
 
 <script>
 let peer = "";
-let historyList = [];
 let isMuted = false;
 
 function openMod(id) { document.getElementById(id).style.display='block'; }
 function cls() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
 function setBg(c) { document.body.style.background = c; }
-function toggleTab(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'none') ? 'block' : 'none'; }
-
-function showOverlay(id) { 
-    if(!peer && (id === 'addOverlay' || id === 'reportOverlay')) return; 
-    if(id === 'historyOverlay') updateHistoryUI();
-    document.getElementById(id).style.display = 'flex'; 
+function toggleTab(id) { 
+    const el = document.getElementById(id); 
+    el.style.display = (el.style.display === 'none') ? 'block' : 'none'; 
 }
+
+function showOverlay(id) { if(!peer && (id === 'addOverlay' || id === 'reportOverlay')) return; document.getElementById(id).style.display = 'flex'; }
 function closeOverlay(id) { document.getElementById(id).style.display = 'none'; }
 
 function muteT() {
@@ -199,35 +190,23 @@ function muteT() {
     document.getElementById('muteTag').innerText = isMuted ? "MUTED" : "MUTE";
 }
 
-function confirmAdd() {
-    const d = document.createElement('div'); 
-    d.textContent = "♥ " + peer; 
-    d.style.padding = "5px 0";
-    document.getElementById('connDD').appendChild(d);
-    closeOverlay('addOverlay');
-}
-
-function confirmReport() {
-    closeOverlay('reportOverlay');
-    if(peer) endCall();
-}
-
 function handleCall() { if (peer) endCall(); else startSearch(); }
 
 function startSearch() {
-    document.getElementById('messages').innerHTML = ""; // Clear old chats
-    document.getElementById('status').textContent = "FINDING SOMEONE...";
+    document.getElementById('messages').innerHTML = "";
+    document.getElementById('status').textContent = "LINKING...";
     document.getElementById('phoneScreen').style.fill = "#4BFF8B";
+    document.getElementById('typingArea').style.display = "block";
     
     setTimeout(() => {
         peer = "Human_" + Math.floor(Math.random()*999);
         document.getElementById('status').textContent = "LINKED: " + peer;
         document.getElementById('chatPeerName').textContent = peer;
         document.getElementById('callTag').textContent = "END";
-        document.getElementById('phoneScreen').style.fill = "#FF4B4B"; // Call active
+        document.getElementById('phoneScreen').style.fill = "#FF4B4B";
         document.getElementById('chatBox').style.display = 'flex';
-        historyList.push(peer);
-    }, 1200);
+        document.getElementById('typingArea').style.display = "none";
+    }, 2000);
 }
 
 function endCall() {
@@ -235,22 +214,31 @@ function endCall() {
     document.getElementById('status').textContent = "READY";
     document.getElementById('callTag').textContent = "CALL";
     document.getElementById('phoneScreen').style.fill = "#4BFF8B";
-    document.getElementById('messages').innerHTML = "";
     peer = "";
-    if(document.getElementById('autoCheck').checked) {
-        setTimeout(startSearch, 1000);
-    }
+    if(document.getElementById('autoCheck').checked) setTimeout(startSearch, 1000);
 }
+
+function confirmAdd() {
+    document.getElementById('connEmpty').style.display = 'none';
+    const d = document.createElement('div');
+    d.innerHTML = `<span style="color:#4BFF8B">♥</span> ${peer} <span style="font-size:8px; opacity:0.5; float:right;">JUST NOW</span>`;
+    d.style.padding = "10px 0";
+    d.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+    document.getElementById('connDD').prepend(d);
+    closeOverlay('addOverlay');
+}
+
+function confirmReport() { alert("Report logged. Disconnecting..."); closeOverlay('reportOverlay'); endCall(); }
 
 async function fetchMemes() {
     const grid = document.getElementById('memeGallery');
-    grid.innerHTML = "<div style='color:black; padding:10px;'>...</div>";
+    grid.innerHTML = "<div style='color:black; padding:20px;'>Loading 60 Memes...</div>";
     try {
         const res = await fetch('https://api.imgflip.com/get_memes');
         const data = await res.json();
-        const memes = data.data.memes.slice(0, 30);
+        const memes = data.data.memes.slice(0, 60);
         grid.innerHTML = memes.map(m => `<img src="${m.url}" class="meme-thumb" onclick="sendMeme('${m.url}')">`).join('');
-    } catch(e) { grid.innerHTML = "Error."; }
+    } catch(e) { grid.innerHTML = "Failed to load memes."; }
 }
 
 function toggleMemeGallery() {
@@ -262,25 +250,27 @@ function toggleMemeGallery() {
 function sendMsg() {
     const input = document.getElementById('msgInput');
     if(!input.value.trim()) return;
-    const msg = document.createElement('div');
-    msg.className = "msg-bubble mine";
-    msg.textContent = input.value;
-    document.getElementById('messages').appendChild(msg);
+    renderBubble(input.value, true);
     input.value = "";
-    document.getElementById('messages').scrollTop = 9999;
 }
 
 function sendMeme(url) {
-    const msg = document.createElement('div');
-    msg.className = "msg-bubble mine";
-    msg.innerHTML = `<img src="${url}" style="width:100%; border-radius:10px;">`;
-    document.getElementById('messages').appendChild(msg);
-    document.getElementById('messages').scrollTop = 9999;
+    renderBubble(`<img src="${url}" style="width:100%; border-radius:12px;">`, true, true);
+    document.getElementById('memeGallery').style.display = "none";
 }
 
-function updateHistoryUI() {
-    const cont = document.getElementById('historyContent');
-    cont.innerHTML = historyList.length ? historyList.map(h => `<div style="padding:8px; border-bottom:1px solid #333;">♥ ${h}</div>`).join('') : "No calls yet.";
+function renderBubble(content, isMine, isHTML = false) {
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const container = document.createElement('div');
+    container.className = `msg-container ${isMine ? 'mine' : ''}`;
+    
+    container.innerHTML = `
+        <div class="msg-bubble">${isHTML ? content : content}</div>
+        <div class="msg-meta">${time} • Read</div>
+    `;
+    
+    document.getElementById('messages').appendChild(container);
+    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 }
 </script>
 </body>
