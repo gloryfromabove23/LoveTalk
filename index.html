@@ -19,14 +19,14 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: var(--main-bg); 
 
 #status { font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 10px; opacity: 0.8; color: white; }
 
-/* Buttons */
+/* Buttons - Unified Size */
 .callButtons { display: flex; flex-direction: row; gap: 15px; align-items: center; margin-top: 30px; }
 .circleBtn { width: 75px; height: 75px; border: none; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
 .circleBtn:active { transform: scale(0.9); }
 
-/* Report Button - Large & White */
-#reportBtn { width: 85px; height: 85px; background: rgba(255,255,255,0.25); }
-#reportBtn text { fill: white; font-size: 60px; font-weight: 900; }
+/* Report Icon - Scaled to match others */
+#reportBtn svg { width: 40px; height: 40px; }
+#reportBtn text { fill: white; font-size: 80px; font-weight: 900; }
 
 .label-tag { position: absolute; bottom: -22px; font-size: 9px; font-weight: 900; color: white; white-space: nowrap; opacity: 0.7; }
 
@@ -123,7 +123,7 @@ footer { padding: 40px; text-align: center; font-size: 10px; background: #0b0b0d
                 <div class="label-tag">ADD</div>
             </button>
             <button class="circleBtn" id="reportBtn" onclick="handleReport()">
-                <svg viewBox="0 0 100 100" width="85"><text x="50" y="68" text-anchor="middle" fill="white" font-size="55" font-weight="900">!</text></svg>
+                <svg viewBox="0 0 100 100"><text x="50" y="75" text-anchor="middle" fill="white" font-size="70" font-weight="900">!</text></svg>
                 <div class="label-tag">REPORT</div>
             </button>
         </div>
@@ -203,7 +203,6 @@ function handleReport() {
 }
 
 function handleCall() {
-    const btn = document.getElementById('callBtn');
     if (peer) endCall(); else startSearch();
 }
 
