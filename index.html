@@ -3,322 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LoveTalk ♥︎ | Premium Connection</title>
+<title>LoveTalk | Connection Refined</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root { 
-    /* Soft, low-strain palette */
-    --bg-deep: #1a1a1c;
-    --bg-surface: #242426;
-    --text-main: #e4e4e7;
-    --text-dim: #a1a1aa;
-    --accent-teal: #82e9de;
-    --accent-rose: #f472b6;
-    --apple-blue: #007aff;
-    --glass: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --bg: #0f1115;
+    --panel: #16191f;
+    --card: #1e222a;
+    --text: #f8fafc;
+    --text-dim: #94a3b8;
+    --accent: #2dd4bf; /* Teal */
+    --accent-soft: rgba(45, 212, 191, 0.1);
+    --rose: #fb7185;
+    --blue: #3b82f6;
+    --border: rgba(255, 255, 255, 0.06);
+    --glass: rgba(255, 255, 255, 0.02);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
 
 body { 
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: var(--bg-deep);
-    color: var(--text-main);
+    background-color: var(--bg);
+    color: var(--text);
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-/* SLEEK HEADER */
+/* NAVIGATION */
 header {
-    height: 80px;
-    padding: 0 40px;
+    height: 70px;
+    padding: 0 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--bg-deep);
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(15, 17, 21, 0.8);
+    backdrop-filter: blur(12px);
+    z-index: 100;
 }
 
-.logo-container { display: flex; align-items: center; gap: 12px; }
-.logo-heart { width: 32px; height: 32px; fill: var(--accent-rose); filter: drop-shadow(0 0 8px rgba(244, 114, 182, 0.3)); }
-.brand-name { font-weight: 700; font-size: 22px; letter-spacing: -0.5px; color: var(--text-main); }
+.brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.brand svg { width: 28px; height: 28px; fill: var(--rose); filter: drop-shadow(0 0 10px rgba(251, 113, 133, 0.4)); }
+.brand span { font-weight: 800; font-size: 20px; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-.profile-chip {
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    padding: 8px 18px;
+.status-pill {
+    background: var(--accent-soft);
+    border: 1px solid rgba(45, 212, 191, 0.2);
+    padding: 6px 14px;
     border-radius: 100px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    font-weight: 500;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
 }
 
-/* MAIN APP STRUCTURE */
-#mainApp { display: flex; flex: 1; overflow: hidden; }
+/* LAYOUT */
+#appContainer { display: flex; flex: 1; overflow: hidden; padding: 15px; gap: 15px; }
 
-/* CHAT PANEL (UNCHANGED AS REQUESTED) */
-#chatPanel { flex: 1.3; padding: 20px; display: flex; flex-direction: column; }
-.chat-window {
-    flex: 1; background: #ffffff; border-radius: 32px; display: flex; flex-direction: column;
-    overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+/* CHAT (Kept as requested, but nested in a modern frame) */
+#chatSection { flex: 1.4; display: flex; flex-direction: column; height: 100%; }
+.chat-outer {
+    flex: 1; background: #ffffff; border-radius: 24px; display: flex; flex-direction: column;
+    overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
-.chat-header { padding: 15px; text-align: center; background: #fbfbfd; border-bottom: 1px solid #efeff4; color: #1d1d1f; font-weight: 700; font-size: 13px; }
-#messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; background: #fff; }
+.chat-head { padding: 14px; text-align: center; background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #0f172a; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; }
+#messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; background: #fff; }
 
-.msg { max-width: 75%; display: flex; flex-direction: column; }
+.msg { max-width: 80%; display: flex; flex-direction: column; }
 .msg.mine { align-self: flex-end; align-items: flex-end; }
 .msg.other { align-self: flex-start; align-items: flex-start; }
-.bubble { padding: 10px 18px; border-radius: 20px; font-size: 15px; line-height: 1.4; }
-.msg.mine .bubble { background: var(--apple-blue); color: white; border-bottom-right-radius: 4px; }
-.msg.other .bubble { background: #e9e9eb; color: black; border-bottom-left-radius: 4px; }
+.bubble { padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.5; }
+.msg.mine .bubble { background: var(--blue); color: white; border-bottom-right-radius: 4px; }
+.msg.other .bubble { background: #f1f5f9; color: #1e293b; border-bottom-left-radius: 4px; }
 
-.chat-footer { padding: 15px; background: #fff; border-top: 1px solid #efeff4; }
-.input-group { display: flex; align-items: center; gap: 12px; background: #f2f2f7; padding: 6px 16px; border-radius: 100px; }
-.input-group input { flex: 1; border: none; background: transparent; padding: 10px; outline: none; font-size: 15px; color: #000; }
+.chat-input-area { padding: 15px; background: #fff; border-top: 1px solid #f1f5f9; }
+.input-wrap { display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 6px 14px; border-radius: 100px; border: 1px solid #e2e8f0; }
+.input-wrap input { flex: 1; border: none; background: transparent; padding: 10px; outline: none; font-size: 15px; color: #1e293b; }
 
-/* REDESIGNED CONTROL HUB */
-#hubPanel {
-    flex: 0.7;
-    background: var(--bg-surface);
-    margin: 20px 20px 20px 0;
-    border-radius: 32px;
+/* CONTROL HUB (Redone for Modern Sleek Look) */
+#hubSection {
+    flex: 0.8;
+    background: var(--panel);
+    border-radius: 24px;
     display: flex;
     flex-direction: column;
-    padding: 30px;
-    gap: 30px;
-    border: 1px solid var(--glass-border);
+    padding: 24px;
+    gap: 20px;
+    border: 1px solid var(--border);
 }
 
-.hub-section h4 { 
-    font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; 
-    color: var(--text-dim); margin-bottom: 15px; font-weight: 700;
-}
+.card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1px; }
 
-.user-list { height: 120px; overflow-y: auto; }
-.user-item { 
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 0; border-bottom: 1px solid var(--glass-border);
-    font-size: 14px; color: var(--text-main); transition: 0.2s;
+.activity-list { height: 140px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.activity-item { 
+    background: var(--glass); padding: 10px 14px; border-radius: 12px; font-size: 13px; 
+    display: flex; justify-content: space-between; border: 1px solid var(--border); transition: 0.3s;
 }
-.user-item:hover { color: var(--accent-teal); cursor: pointer; }
+.activity-item:hover { background: var(--card); border-color: var(--accent); }
 
-/* MODAL-LIKE CALL DISPLAY */
-.call-display {
+.call-hero {
     flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; gap: 10px;
+    text-align: center; padding: 20px;
 }
-#mainStatus { font-size: 38px; font-weight: 800; letter-spacing: -1px; }
-#subStatus { color: var(--text-dim); font-size: 14px; }
+.call-hero h1 { font-size: 42px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 5px; }
+.call-hero p { color: var(--text-dim); font-size: 14px; }
 
-/* MODERN ICON BUTTONS */
-.action-bar { display: flex; gap: 20px; align-items: center; justify-content: center; margin-top: 20px; }
-.icon-btn {
-    width: 60px; height: 60px; border-radius: 20px; border: 1px solid var(--glass-border);
-    background: var(--glass); color: var(--text-main); cursor: pointer; transition: 0.3s;
+/* REIMAGINED BUTTONS */
+.button-grid { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 10px; }
+.action-tile {
+    width: 56px; height: 56px; border-radius: 18px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex; align-items: center; justify-content: center;
 }
-.icon-btn:hover { background: var(--glass-border); transform: translateY(-3px); }
-.icon-btn.primary { width: 80px; height: 80px; background: var(--accent-teal); border: none; color: #121212; border-radius: 28px; }
-.icon-btn.danger { color: var(--accent-rose); }
-.icon-btn svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.action-tile:hover { transform: scale(1.1); background: var(--bg); border-color: var(--text-dim); }
+.action-tile svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; }
+
+.action-tile.main {
+    width: 80px; height: 80px; background: var(--accent); color: var(--bg); border: none; border-radius: 24px;
+    box-shadow: 0 10px 30px -5px rgba(45, 212, 191, 0.4);
+}
+.action-tile.main:hover { transform: scale(1.05) rotate(5deg); box-shadow: 0 15px 35px -5px rgba(45, 212, 191, 0.6); }
+
+.action-tile.danger { color: var(--rose); }
+.action-tile.danger:hover { background: rgba(251, 113, 133, 0.1); border-color: var(--rose); }
 
 /* MEME DRAWER */
-#memeDrawer { display: none; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; background: #f2f2f7; max-height: 200px; overflow-y: auto; }
-.meme-card { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; cursor: pointer; }
+#memeSection { display: none; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px; background: #f1f5f9; max-height: 180px; overflow-y: auto; }
+.meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+.meme-thumb:hover { transform: scale(1.05); z-index: 2; }
 
-@media (max-width: 900px) {
-    #mainApp { flex-direction: column; overflow-y: auto; }
-    #hubPanel { margin: 20px; flex: none; }
-    #chatPanel { height: 550px; flex: none; }
+@media (max-width: 1000px) {
+    #appContainer { flex-direction: column; overflow-y: auto; }
+    #hubSection { flex: none; order: 1; }
+    #chatSection { height: 600px; flex: none; order: 2; }
 }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-container" onclick="location.reload()">
-        <svg class="logo-heart" viewBox="0 0 24 24">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-        </svg>
-        <div class="brand-name">LoveTalk</div>
+    <div class="brand" onclick="location.reload()">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>LoveTalk</span>
     </div>
-    <div style="display: flex; gap: 15px;">
-        <div class="profile-chip">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-teal);"></span>
-            <span id="myUsername">User</span>
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="status-pill">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent);"></span>
+            <span id="userNameDisplay">Guest</span>
         </div>
-        <button onclick="toggleLog()" class="icon-btn" style="width: 42px; height: 42px; border-radius: 12px;">
-            <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        </button>
+        <div class="action-tile" style="width:40px; height:40px; border-radius:12px;" onclick="alert('History encrypted.')">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
     </div>
 </header>
 
-<div id="mainApp">
-    <section id="chatPanel">
-        <div class="chat-window">
-            <div class="chat-header" id="activePeer">IDLE</div>
+<div id="appContainer">
+    <section id="chatSection">
+        <div class="chat-outer">
+            <div class="chat-head" id="chatTitle">READY TO PAIR</div>
             <div id="messages">
-                <div style="margin: auto; color: #a1a1aa; font-size: 13px;">Find a connection to start messaging.</div>
+                <div style="margin: auto; text-align: center; max-width: 200px;">
+                    <p style="color: #94a3b8; font-size: 13px;">Find a connection to begin a secure chat.</p>
+                </div>
             </div>
-            <div id="memeDrawer"></div>
-            <div class="chat-footer">
-                <div class="input-group">
-                    <button onclick="toggleMemes()" style="background:none; border:none; cursor:pointer; font-size:20px;">☺︎</button>
-                    <input type="text" id="msgInput" placeholder="iMessage" onkeydown="if(event.key==='Enter')sendMsg()">
-                    <button onclick="sendMsg()" style="background:var(--apple-blue); border:none; color:white; width:30px; height:30px; border-radius:50%; cursor:pointer;">↑</button>
+            <div id="memeSection"></div>
+            <div class="chat-input-area">
+                <div class="input-wrap">
+                    <button onclick="toggleMemes()" style="background:none; border:none; cursor:pointer; font-size:18px;">✨</button>
+                    <input type="text" id="chatInput" placeholder="Message..." onkeydown="if(event.key==='Enter')sendText()">
+                    <button onclick="sendText()" style="background:var(--blue); border:none; color:white; width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:800;">↑</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="hubPanel">
-        <div class="hub-section">
-            <h4>Live Activity</h4>
-            <div class="user-list" id="onlineBox"></div>
+    <section id="hubSection">
+        <div>
+            <p class="card-label">Community Pulse</p>
+            <div class="activity-list" id="pulseList"></div>
         </div>
 
-        <div class="call-display">
-            <h1 id="mainStatus">Ready</h1>
-            <p id="subStatus">Secure, private, anonymous.</p>
+        <div class="call-hero">
+            <h1 id="statusMain">Idle</h1>
+            <p id="statusSub">Connect anonymously with the world.</p>
         </div>
 
-        <div class="action-bar">
-            <button class="icon-btn danger" onclick="reportUser()">
-                <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01"></path></svg>
+        <div class="button-grid">
+            <button class="action-tile danger" onclick="report()">
+                <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01"/></svg>
             </button>
 
-            <button class="icon-btn primary" onclick="handleCall()" id="callBtn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <button class="action-tile main" onclick="toggleCall()" id="mainBtn">
+                <svg id="callIcon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             </button>
 
-            <button class="icon-btn" onclick="addFav()">
-                <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            <button class="action-tile" onclick="savePeer()">
+                <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
             </button>
         </div>
 
-        <div class="hub-section" style="margin-top:auto">
-            <h4>Saved Souls</h4>
-            <div class="user-list" id="favBox"></div>
+        <div style="margin-top: auto;">
+            <p class="card-label">Soulmates</p>
+            <div class="activity-list" id="soulmateList"></div>
         </div>
     </section>
 </div>
 
 <script>
-let currentCall = null;
-let favorites = JSON.parse(localStorage.getItem('lt_saved') || '[]');
+let sessionPeer = null;
+let savedPeers = JSON.parse(localStorage.getItem('lt_saved') || '[]');
 
-const firsts = ["Aura", "Luna", "Nova", "Silas", "Cyrus", "Atlas", "Sage", "Lyra", "Eon", "Zion"];
-const lasts = ["Vibe", "Flow", "Soul", "Gaze", "Ember", "Pulse", "Wisp", "Echo", "Mist", "Stellar"];
+const namesA = ["Neon", "Velvet", "Silent", "Midnight", "Aura", "Electric", "Lunar", "Solar", "Jade"];
+const namesB = ["Soul", "Vibe", "Echo", "Flow", "Wisp", "Gaze", "Pulse", "Mist", "Ghost"];
 
 function init() {
-    let user = localStorage.getItem('lt_user');
-    if(!user) {
-        user = firsts[Math.floor(Math.random()*10)] + (Math.floor(Math.random()*89)+10);
-        localStorage.setItem('lt_user', user);
+    let stored = localStorage.getItem('lt_username');
+    if(!stored) {
+        stored = namesA[Math.floor(Math.random()*9)] + (Math.floor(Math.random()*89)+10);
+        localStorage.setItem('lt_username', stored);
     }
-    document.getElementById('myUsername').innerText = user;
-    renderFavs();
-    renderOnline();
-    loadMemes();
+    document.getElementById('userNameDisplay').innerText = stored;
+    refreshLists();
+    loadMemeLib();
 }
 
-function handleCall() {
-    if(currentCall) endCall();
-    else findMatch();
+function toggleCall() {
+    if(sessionPeer) quitCall();
+    else findPeer();
 }
 
-function findMatch() {
-    const btn = document.getElementById('callBtn');
-    document.getElementById('mainStatus').innerText = "Linking...";
-    btn.style.background = "var(--accent-rose)";
+function findPeer() {
+    const btn = document.getElementById('mainBtn');
+    document.getElementById('statusMain').innerText = "Linking...";
+    btn.style.background = "var(--rose)";
     
     setTimeout(() => {
-        currentCall = firsts[Math.floor(Math.random()*10)] + lasts[Math.floor(Math.random()*10)];
-        document.getElementById('mainStatus').innerText = "Connected";
-        document.getElementById('subStatus').innerText = "Speaking with " + currentCall;
-        document.getElementById('activePeer').innerText = currentCall.toUpperCase();
-        addMsg(`Private connection established.`, 'system');
-    }, 1500);
+        sessionPeer = namesA[Math.floor(Math.random()*9)] + namesB[Math.floor(Math.random()*9)];
+        document.getElementById('statusMain').innerText = "Connected";
+        document.getElementById('statusSub').innerText = "Talking with " + sessionPeer;
+        document.getElementById('chatTitle').innerText = sessionPeer.toUpperCase();
+        addMessage(`End-to-end encryption active.`, 'system');
+    }, 1200);
 }
 
-function endCall() {
-    currentCall = null;
-    document.getElementById('mainStatus').innerText = "Ready";
-    document.getElementById('subStatus').innerText = "Secure, private, anonymous.";
-    document.getElementById('activePeer').innerText = "IDLE";
-    document.getElementById('callBtn').style.background = "var(--accent-teal)";
-    addMsg("Call ended.", "system");
+function quitCall() {
+    sessionPeer = null;
+    document.getElementById('statusMain').innerText = "Idle";
+    document.getElementById('statusSub').innerText = "Connect anonymously with the world.";
+    document.getElementById('chatTitle').innerText = "READY TO PAIR";
+    document.getElementById('mainBtn').style.background = "var(--accent)";
+    addMessage("Connection terminated.", "system");
 }
 
-function sendMsg() {
-    const input = document.getElementById('msgInput');
-    if(!input.value.trim() || !currentCall) return;
-    addMsg(input.value, 'mine');
-    input.value = "";
-    setTimeout(() => { if(currentCall) addMsg("That makes sense.", 'other'); }, 1500);
+function sendText() {
+    const el = document.getElementById('chatInput');
+    if(!el.value.trim() || !sessionPeer) return;
+    addMessage(el.value, 'mine');
+    el.value = "";
+    setTimeout(() => { if(sessionPeer) addMessage("Thinking about that...", 'other'); }, 1400);
 }
 
-function addMsg(text, type) {
-    const box = document.getElementById('messages');
+function addMessage(txt, type) {
+    const container = document.getElementById('messages');
     const div = document.createElement('div');
     if(type === 'system') {
-        div.style.cssText = "text-align:center; font-size:11px; color:#666; margin:15px 0;";
-        div.innerText = text;
+        div.style.cssText = "text-align:center; font-size:11px; color:#94a3b8; margin:15px 0; text-transform:uppercase; letter-spacing:1px;";
+        div.innerText = txt;
     } else {
         div.className = "msg " + type;
-        div.innerHTML = `<div class="bubble">${text}</div>`;
+        div.innerHTML = `<div class="bubble">${txt}</div>`;
     }
-    box.appendChild(div);
-    box.scrollTop = box.scrollHeight;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
 }
 
 function toggleMemes() {
-    const d = document.getElementById('memeDrawer');
-    d.style.display = d.style.display === 'grid' ? 'none' : 'grid';
+    const box = document.getElementById('memeSection');
+    box.style.display = box.style.display === 'grid' ? 'none' : 'grid';
 }
 
-async function loadMemes() {
+async function loadMemeLib() {
     try {
-        const res = await fetch('https://api.imgflip.com/get_memes');
-        const data = await res.json();
-        document.getElementById('memeDrawer').innerHTML = data.data.memes.slice(0, 60).map(m => 
-            `<img src="${m.url}" class="meme-card" onclick="sendMeme('${m.url}')">`
+        const r = await fetch('https://api.imgflip.com/get_memes');
+        const j = await r.json();
+        document.getElementById('memeSection').innerHTML = j.data.memes.slice(0, 48).map(m => 
+            `<img src="${m.url}" class="meme-thumb" onclick="pushMeme('${m.url}')">`
         ).join('');
-    } catch(e) {}
+    } catch(err) {}
 }
 
-function sendMeme(url) {
-    if(!currentCall) return;
-    addMsg(`<img src="${url}" style="width:100%; border-radius:12px;">`, 'mine');
+function pushMeme(url) {
+    if(!sessionPeer) return;
+    addMessage(`<img src="${url}" style="width:100%; border-radius:12px;">`, 'mine');
     toggleMemes();
 }
 
-function addFav() {
-    if(!currentCall || favorites.includes(currentCall)) return;
-    favorites.push(currentCall);
-    localStorage.setItem('lt_saved', JSON.stringify(favorites));
-    renderFavs();
+function savePeer() {
+    if(!sessionPeer || savedPeers.includes(sessionPeer)) return;
+    savedPeers.push(sessionPeer);
+    localStorage.setItem('lt_saved', JSON.stringify(savedPeers));
+    refreshLists();
 }
 
-function renderFavs() {
-    document.getElementById('favBox').innerHTML = favorites.map(f => `<div class="user-item"><span>♥ ${f}</span></div>`).join('');
-}
-
-function renderOnline() {
-    const box = document.getElementById('onlineBox');
-    for(let i=0; i<4; i++) {
-        let n = firsts[Math.floor(Math.random()*10)] + lasts[Math.floor(Math.random()*10)];
-        box.innerHTML += `<div class="user-item"><span>${n}</span><span style="font-size:8px; color:var(--accent-teal)">●</span></div>`;
+function refreshLists() {
+    // Pulse
+    const p = document.getElementById('pulseList');
+    p.innerHTML = "";
+    for(let i=0; i<3; i++) {
+        let n = namesA[Math.floor(Math.random()*9)] + namesB[Math.floor(Math.random()*9)];
+        p.innerHTML += `<div class="activity-item"><span>${n}</span><span style="color:var(--accent)">Active</span></div>`;
     }
+    // Saved
+    document.getElementById('soulmateList').innerHTML = savedPeers.map(s => 
+        `<div class="activity-item"><span>${s}</span><span>♥</span></div>`
+    ).join('');
 }
 
-function reportUser() { if(currentCall) { alert("User Reported."); endCall(); } }
-function toggleLog() { alert("Call logs are encrypted and private to this device."); }
+function report() { if(sessionPeer) { alert("User Reported. Connection severed."); quitCall(); } }
 
 init();
 </script>
