@@ -3,16 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LoveTalk ♥︎</title>
+<title>LoveTalk ♥︎ | Connection Reimagined</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
 :root { 
-    --bg-gradient: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
-    --glass: rgba(255, 255, 255, 0.12);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --accent: #4BFF8B;
-    --danger: #ff4b4b;
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-heavy: rgba(255, 255, 255, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --accent: #00f2fe;
+    --heart-pink: #ff5e78;
     --apple-blue: #007aff;
+    --danger: #ff3b30;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
@@ -20,8 +22,7 @@
 body { 
     font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--bg-gradient);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
+    background-attachment: fixed;
     color: white;
     height: 100vh;
     display: flex;
@@ -29,319 +30,358 @@ body {
     overflow: hidden;
 }
 
-@keyframes gradientShift { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
-
-/* HEADER & LOGO UNIT */
+/* NAVIGATION */
 header {
     height: 70px;
-    padding: 0 20px;
+    padding: 0 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0,0,0,0.15);
-    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(25px);
     border-bottom: 1px solid var(--glass-border);
     z-index: 1000;
 }
 
-.logo-unit { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-.logo-unit svg { width: 32px; height: 32px; fill: white; }
-.brand { font-weight: 800; font-size: 22px; letter-spacing: -1px; }
+.brand-unit { display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; }
+.brand-unit:hover { transform: scale(1.02); }
+.logo-svg { width: 38px; height: 38px; filter: drop-shadow(0 0 8px var(--heart-pink)); }
+.brand-name { font-weight: 800; font-size: 24px; letter-spacing: -1.5px; }
 
-.header-right { display: flex; gap: 12px; align-items: center; }
-.id-badge { background: var(--glass); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid var(--glass-border); color: #fff; }
+.user-status {
+    background: var(--glass);
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
 
-/* MAIN LAYOUT */
-#mainApp { display: flex; flex: 1; height: calc(100vh - 70px); min-height: 0; }
+/* MAIN CONTAINER */
+#mainApp { display: flex; flex: 1; height: calc(100vh - 70px); overflow: hidden; }
 
 /* LEFT PANEL (CHAT) */
 #chatPanel {
     flex: 1.2;
     display: flex;
     flex-direction: column;
-    padding: 15px;
+    padding: 20px;
     border-right: 1px solid var(--glass-border);
-    min-width: 320px;
 }
 
-.chat-container {
+.chat-box {
     flex: 1;
     background: #ffffff;
-    border-radius: 24px;
+    border-radius: 28px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
 
 .chat-header {
-    padding: 12px;
+    padding: 15px;
     text-align: center;
-    background: #fdfdfd;
-    border-bottom: 1px solid #f0f0f0;
+    background: #fbfbfd;
+    border-bottom: 1px solid #efeff4;
     color: #1d1d1f;
     font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.5px;
+    font-size: 14px;
 }
 
 #messages {
     flex: 1;
     overflow-y: auto;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.msg { max-width: 80%; }
-.msg.mine { align-self: flex-end; }
-.msg.other { align-self: flex-start; }
-.bubble { padding: 10px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4; }
-.msg.mine .bubble { background: var(--apple-blue); color: white; border-bottom-right-radius: 4px; }
-.msg.other .bubble { background: #e9e9eb; color: #000; border-bottom-left-radius: 4px; }
-
-/* RIGHT PANEL (HUB) */
-#hubPanel {
-    flex: 0.8;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    background: rgba(0,0,0,0.05);
-    min-width: 300px;
-    overflow-y: auto;
+    gap: 10px;
+    background: #fff;
 }
 
-.list-section { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-.glass-box {
-    background: var(--glass);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
+/* iMessage Bubbles */
+.msg { max-width: 75%; display: flex; flex-direction: column; }
+.msg.mine { align-self: flex-end; align-items: flex-end; }
+.msg.other { align-self: flex-start; align-items: flex-start; }
+
+.bubble { padding: 12px 18px; border-radius: 22px; font-size: 15px; line-height: 1.4; position: relative; }
+.msg.mine .bubble { background: var(--apple-blue); color: white; border-bottom-right-radius: 5px; }
+.msg.other .bubble { background: #e9e9eb; color: black; border-bottom-left-radius: 5px; }
+
+.chat-footer { padding: 15px; background: #fff; border-top: 1px solid #efeff4; }
+.input-area { display: flex; align-items: center; gap: 10px; background: #f2f2f7; padding: 6px 15px; border-radius: 40px; }
+.input-area input { flex: 1; border: none; background: transparent; padding: 10px; outline: none; font-size: 15px; }
+
+/* MEME DRAWER */
+#memeTray {
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
     padding: 15px;
-    height: 150px;
+    background: #f2f2f7;
+    max-height: 250px;
     overflow-y: auto;
+    border-top: 1px solid #ddd;
 }
-.glass-box h4 { font-size: 10px; text-transform: uppercase; margin-bottom: 10px; color: var(--accent); opacity: 0.9; }
+.meme-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+.meme-thumb:hover { transform: scale(1.05); }
 
-.user-row {
-    font-size: 12px; padding: 6px 0; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05);
-    display: flex; justify-content: space-between;
+/* RIGHT PANEL (CONTROLS) */
+#hubPanel {
+    flex: 0.8;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
 }
+
+.stats-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.stat-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 20px;
+    height: 180px;
+}
+.stat-card h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: var(--accent); }
+
+.call-ui { text-align: center; }
+.status-tag { font-size: 48px; font-weight: 800; margin-bottom: 10px; letter-spacing: -2px; }
+
+.control-buttons { display: flex; gap: 20px; align-items: center; }
+.action-btn {
+    width: 65px; height: 65px; border-radius: 50%; border: 1px solid var(--glass-border);
+    background: var(--glass); color: white; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; align-items: center; justify-content: center; position: relative;
+}
+.action-btn:hover { background: var(--glass-heavy); transform: scale(1.1); }
+.action-btn.primary { width: 90px; height: 90px; background: var(--accent); border: none; color: #121212; }
+.action-btn.danger { color: var(--danger); }
+.action-btn svg { width: 28px; height: 28px; fill: currentColor; }
+
+.btn-tip { position: absolute; bottom: -25px; font-size: 9px; font-weight: 800; white-space: nowrap; }
+
+/* MODALS */
+#sideNav {
+    position: fixed; right: -400px; top: 0; width: 380px; height: 100vh;
+    background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px);
+    z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 40px; border-left: 1px solid var(--glass-border);
+}
+#sideNav.open { right: 0; }
+
+.user-row { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; cursor: pointer; }
 .user-row:hover { color: var(--accent); }
 
-/* CALLING CENTER */
-.call-display { text-align: center; margin-bottom: 30px; }
-.status-text { font-size: 36px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 5px; }
-.sub-text { font-size: 12px; opacity: 0.7; }
-
-.controls { display: flex; gap: 15px; align-items: center; }
-.btn {
-    width: 60px; height: 60px; border-radius: 50%; border: none;
-    background: var(--glass); cursor: pointer; color: white;
-    display: flex; align-items: center; justify-content: center;
-    transition: 0.2s; position: relative;
-}
-.btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.2); }
-.btn svg { width: 24px; height: 24px; fill: currentColor; }
-.btn.main-call { width: 80px; height: 80px; background: var(--accent); color: black; }
-.btn.danger-btn { color: var(--danger); }
-.btn-lbl { position: absolute; bottom: -20px; font-size: 9px; font-weight: 800; white-space: nowrap; }
-
-/* HISTORY PANEL */
-#historyTab {
-    position: fixed; right: -350px; top: 0; width: 320px; height: 100vh;
-    background: #000; z-index: 2000; transition: 0.3s; padding: 25px;
-}
-#historyTab.open { right: 0; }
-
-#contextMenu {
-    display: none; position: fixed; background: #2c2c2e; border-radius: 10px;
-    padding: 5px; z-index: 5000; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-#contextMenu button {
-    width: 100%; background: none; border: none; color: white;
-    text-align: left; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 11px;
-}
-#contextMenu button:hover { background: rgba(255,255,255,0.1); }
-
-@media (max-width: 800px) {
+@media (max-width: 900px) {
     #mainApp { flex-direction: column; overflow-y: auto; }
-    #chatPanel { height: 500px; flex: none; border-right: none; border-bottom: 1px solid var(--glass-border); }
+    #chatPanel, #hubPanel { flex: none; width: 100%; }
+    #chatPanel { height: 600px; }
 }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-unit" onclick="location.reload()">
-        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <div class="brand">LoveTalk</div>
+    <div class="brand-unit">
+        <svg class="logo-svg" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="var(--heart-pink)"/>
+            <path d="M8 8h8v2H8V8zm0 4h5v2H8v-2z" fill="white" opacity="0.8"/>
+        </svg>
+        <div class="brand-name">LoveTalk</div>
     </div>
-    <div class="header-right">
-        <div id="myId" class="id-badge">...</div>
-        <button onclick="toggleHistory()" style="background:white; color:black; border:none; padding:6px 12px; border-radius:20px; font-size:10px; font-weight:800; cursor:pointer;">HISTORY</button>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <div class="user-status">
+            <span class="status-dot"></span>
+            <span id="userName">Verifying...</span>
+        </div>
+        <button onclick="toggleSide()" style="background:white; color:black; border:none; padding:8px 18px; border-radius:20px; font-size:11px; font-weight:800; cursor:pointer;">HISTORY</button>
     </div>
 </header>
 
 <div id="mainApp">
     <section id="chatPanel">
-        <div class="chat-container">
-            <div class="chat-header" id="activePeer">CHAT</div>
+        <div class="chat-box">
+            <div class="chat-header" id="chatTitle">READY TO CONNECT</div>
             <div id="messages">
-                <div style="margin: auto; text-align: center; opacity: 0.3; font-size: 12px;">Start a call to chat</div>
+                <div style="margin: auto; text-align: center; max-width: 250px;">
+                    <p style="color: #8e8e93; font-size: 13px;">Your messages are private and end-to-end encrypted.</p>
+                </div>
             </div>
-            <div id="memeGallery"></div>
-            <div style="padding: 12px; border-top: 1px solid #f0f0f0; display: flex; gap: 8px;">
-                <input type="text" id="msgInput" placeholder="iMessage" style="flex:1; border:none; background:#f2f2f7; padding:10px 15px; border-radius:20px; outline:none;" onkeydown="if(event.key==='Enter')sendMsg()">
-                <button onclick="sendMsg()" style="background:var(--apple-blue); border:none; color:white; width:36px; height:36px; border-radius:50%; cursor:pointer;">↑</button>
+            <div id="memeTray"></div>
+            <div class="chat-footer">
+                <div class="input-area">
+                    <button onclick="toggleMemes()" style="background:none; border:none; font-size:20px; cursor:pointer;">🤡</button>
+                    <input type="text" id="msgInput" placeholder="Send a message..." onkeydown="if(event.key==='Enter')sendMsg()">
+                    <button onclick="sendMsg()" style="background:var(--apple-blue); border:none; color:white; width:34px; height:34px; border-radius:50%; font-weight:800; cursor:pointer;">↑</button>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="hubPanel">
-        <div class="list-section">
-            <div class="glass-box">
-                <h4>ONLINE</h4>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h4>Verified Online</h4>
                 <div id="onlineList"></div>
             </div>
-            <div class="glass-box">
-                <h4>FAVORITES</h4>
+            <div class="stat-card">
+                <h4>Soulmates</h4>
                 <div id="favList"></div>
             </div>
         </div>
 
-        <div class="call-display">
-            <h1 class="status-text" id="statusMain">READY</h1>
-            <p class="sub-text" id="statusSub">Search for your better half</p>
+        <div class="call-ui">
+            <h1 class="status-tag" id="mainStatus">READY</h1>
+            <p style="opacity:0.6; font-size:14px;">Find someone to talk to instantly</p>
         </div>
 
-        <div class="controls">
-            <button class="btn danger-btn" onclick="reportUser()">
+        <div class="control-buttons">
+            <button class="action-btn danger" onclick="report()">
                 <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                <span class="btn-lbl">REPORT</span>
+                <span class="btn-tip">REPORT</span>
             </button>
-            <button class="btn main-call" onclick="handleCall()" id="callBtn">
+
+            <button class="action-btn primary" onclick="handleCall()" id="callBtn">
                 <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                <span class="btn-lbl">START CALL</span>
+                <span class="btn-tip" style="color:white; bottom:-30px;">START CALL</span>
             </button>
-            <button class="btn" onclick="addFav()">
+
+            <button class="action-btn" onclick="addFav()">
                 <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                <span class="btn-lbl">FAVORITE</span>
+                <span class="btn-tip">FAVORITE</span>
             </button>
         </div>
 
-        <div style="margin-top: 40px; font-size: 11px; display: flex; align-items: center; gap: 8px;">
-            <input type="checkbox" id="autoCall"> <label for="autoCall">Auto-Next Connection</label>
+        <div style="font-size: 12px; display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" id="autoNext" style="accent-color: var(--accent);">
+            <label for="autoNext" style="opacity:0.8; cursor:pointer;">Auto-connect to next person</label>
         </div>
     </section>
 </div>
 
-<div id="historyTab">
-    <div onclick="toggleHistory()" style="cursor:pointer; opacity:0.5; margin-bottom:20px;">✕ CLOSE</div>
-    <h3 style="margin-bottom:15px;">Call Logs</h3>
+<div id="sideNav">
+    <div onclick="toggleSide()" style="cursor:pointer; font-size:12px; opacity:0.5; margin-bottom:30px;">✕ CLOSE HISTORY</div>
+    <h2 style="margin-bottom:20px; font-weight:800;">Recent Encounters</h2>
     <div id="historyList"></div>
 </div>
 
-<div id="contextMenu">
-    <button onclick="handleCall()">Call Back</button>
-    <button onclick="addFav()">Add Favorite</button>
-    <button style="color:var(--danger)" onclick="blockUser()">Block User</button>
-</div>
-
 <script>
-let peer = null;
-let myUser = {};
+let currentPeer = null;
 let favorites = JSON.parse(localStorage.getItem('lt_favs') || '[]');
-
-const rFirst = ["Spark", "Affection", "Sweet", "Velvet", "Gaze", "Moon", "Rose", "Crush", "Heart", "Silk"];
-const rLast = ["Soul", "Flame", "Baker", "Dream", "Hunter", "Starlight", "Petal", "Whisper", "Vibe", "Kiss"];
+const rFirst = ["Spark", "Velvet", "Midnight", "Ember", "Ocean", "Rose", "Golden", "Silk", "Neon", "Lunar"];
+const rLast = ["Soul", "Whisper", "Vibe", "Flame", "Baker", "Dream", "Hunter", "Starlight", "Petal", "Aura"];
 
 function init() {
-    // Persistent Mock Identity
-    let id = localStorage.getItem('lt_id');
-    if(!id) {
-        id = Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
-        localStorage.setItem('lt_id', id);
-    }
-    let name = localStorage.getItem('lt_name');
+    let name = localStorage.getItem('lt_username');
     if(!name) {
-        name = rFirst[Math.floor(Math.random()*rFirst.length)] + rLast[Math.floor(Math.random()*rLast.length)];
-        localStorage.setItem('lt_name', name);
+        name = rFirst[Math.floor(Math.random()*rFirst.length)] + rLast[Math.floor(Math.random()*rLast.length)] + (Math.floor(Math.random()*90)+10);
+        localStorage.setItem('lt_username', name);
     }
-    myUser = { name, ip: id };
-    document.getElementById('myId').innerText = myUser.name + " (" + myUser.ip + ")";
+    document.getElementById('userName').innerText = name;
     
     renderFavs();
-    generateMockOnline();
+    generateOnline();
+    loadMemes();
 }
 
 function handleCall() {
-    if(peer) endCall();
-    else findPeer();
+    if(currentPeer) endCall();
+    else findMatch();
 }
 
-function findPeer() {
+function findMatch() {
     const btn = document.getElementById('callBtn');
-    document.getElementById('statusMain').innerText = "LINKING...";
+    document.getElementById('mainStatus').innerText = "LINKING...";
     btn.style.background = "var(--danger)";
     
     setTimeout(() => {
-        peer = rFirst[Math.floor(Math.random()*rFirst.length)] + rLast[Math.floor(Math.random()*rLast.length)] + "_" + Math.floor(Math.random()*99);
-        document.getElementById('statusMain').innerText = "CONNECTED";
-        document.getElementById('statusSub').innerText = "Speaking with " + peer;
-        document.getElementById('activePeer').innerText = "CHAT WITH " + peer;
-        document.getElementById('messages').innerHTML = `<div style="text-align:center; font-size:10px; opacity:0.3;">Joined room as ${myUser.name}</div>`;
-        logCall(peer);
+        currentPeer = rFirst[Math.floor(Math.random()*rFirst.length)] + rLast[Math.floor(Math.random()*rLast.length)];
+        document.getElementById('mainStatus').innerText = "CONNECTED";
+        document.getElementById('chatTitle').innerText = "CHAT WITH " + currentPeer.toUpperCase();
+        addMsg(`Connected with ${currentPeer}. Say hello!`, 'system');
+        logEntry(currentPeer);
     }, 1500);
 }
 
 function endCall() {
-    peer = null;
-    document.getElementById('statusMain').innerText = "READY";
-    document.getElementById('statusSub').innerText = "Search for your better half";
-    document.getElementById('activePeer').innerText = "CHAT";
+    currentPeer = null;
+    document.getElementById('mainStatus').innerText = "READY";
+    document.getElementById('chatTitle').innerText = "READY TO CONNECT";
     document.getElementById('callBtn').style.background = "var(--accent)";
+    addMsg("Call ended.", "system");
     
-    if(document.getElementById('autoCall').checked) {
-        setTimeout(findPeer, 1000);
+    if(document.getElementById('autoNext').checked) {
+        setTimeout(findMatch, 1000);
     }
 }
 
 function sendMsg() {
     const input = document.getElementById('msgInput');
-    if(!input.value.trim() || !peer) return;
-    
-    addBubble(input.value, true);
+    if(!input.value.trim() || !currentPeer) return;
+    addMsg(input.value, 'mine');
     input.value = "";
     
+    // Bot Mock Response
     setTimeout(() => {
-        if(peer) addBubble("That is so romantic...", false);
-    }, 1200);
+        if(currentPeer) addMsg("That's really interesting, tell me more!", 'other');
+    }, 1500);
 }
 
-function addBubble(text, mine) {
+function addMsg(text, type) {
     const box = document.getElementById('messages');
-    const d = document.createElement('div');
-    d.className = "msg " + (mine ? "mine" : "other");
-    d.innerHTML = `<div class="bubble">${text}</div>`;
-    box.appendChild(d);
+    const wrap = document.createElement('div');
+    wrap.className = type === 'system' ? 'system-msg' : 'msg ' + type;
+    
+    if(type === 'system') {
+        wrap.innerHTML = `<div style="text-align:center; font-size:11px; color:#aaa; margin:10px 0;">${text}</div>`;
+    } else {
+        wrap.innerHTML = `<div class="bubble">${text}</div>`;
+    }
+    
+    box.appendChild(wrap);
     box.scrollTop = box.scrollHeight;
 }
 
-function logCall(name) {
+function toggleMemes() {
+    const tray = document.getElementById('memeTray');
+    tray.style.display = tray.style.display === 'grid' ? 'none' : 'grid';
+}
+
+async function loadMemes() {
+    const tray = document.getElementById('memeTray');
+    try {
+        const res = await fetch('https://api.imgflip.com/get_memes');
+        const data = await res.json();
+        const memes = data.data.memes.slice(0, 60);
+        tray.innerHTML = memes.map(m => `<img src="${m.url}" class="meme-thumb" onclick="sendMeme('${m.url}')">`).join('');
+    } catch(e) { tray.innerText = "Failed to load memes."; }
+}
+
+function sendMeme(url) {
+    if(!currentPeer) return;
+    addMsg(`<img src="${url}" style="width:100%; border-radius:10px;">`, 'mine');
+    toggleMemes();
+}
+
+function logEntry(name) {
     const list = document.getElementById('historyList');
-    const d = document.createElement('div');
-    d.className = "user-row";
-    d.innerHTML = `<span>${name}</span> <span style="opacity:0.5">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`;
-    list.prepend(d);
+    const div = document.createElement('div');
+    div.className = "user-row";
+    div.innerHTML = `<span>${name}</span> <span style="float:right; opacity:0.4">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`;
+    list.prepend(div);
 }
 
 function addFav() {
-    const target = peer;
-    if(!target || favorites.includes(target)) return;
-    favorites.push(target);
+    if(!currentPeer || favorites.includes(currentPeer)) return;
+    favorites.push(currentPeer);
     localStorage.setItem('lt_favs', JSON.stringify(favorites));
     renderFavs();
 }
@@ -351,37 +391,21 @@ function renderFavs() {
     list.innerHTML = favorites.map(f => `<div class="user-row">♥ ${f}</div>`).join('');
 }
 
-function reportUser() {
-    if(!peer) return;
-    alert("User " + peer + " has been reported for community violations. Connection severed.");
+function report() {
+    if(!currentPeer) return;
+    alert("User reported. Severing connection.");
     endCall();
 }
 
-function blockUser() {
-    alert("User blocked. You will no longer match with them.");
-    endCall();
-}
-
-function toggleHistory() { document.getElementById('historyTab').classList.toggle('open'); }
-
-function generateMockOnline() {
+function generateOnline() {
     const list = document.getElementById('onlineList');
-    for(let i=0; i<8; i++) {
+    for(let i=0; i<5; i++) {
         let name = rFirst[Math.floor(Math.random()*rFirst.length)] + rLast[Math.floor(Math.random()*rLast.length)];
-        let div = document.createElement('div');
-        div.className = "user-row";
-        div.innerHTML = `<span>🟢 ${name}</span>`;
-        div.oncontextmenu = (e) => {
-            e.preventDefault();
-            const menu = document.getElementById('contextMenu');
-            menu.style.display = 'block';
-            menu.style.left = e.pageX + 'px';
-            menu.style.top = e.pageY + 'px';
-            window.onclick = () => menu.style.display = 'none';
-        };
-        list.appendChild(div);
+        list.innerHTML += `<div class="user-row">🟢 ${name}</div>`;
     }
 }
+
+function toggleSide() { document.getElementById('sideNav').classList.toggle('open'); }
 
 init();
 </script>
