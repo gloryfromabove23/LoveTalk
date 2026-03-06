@@ -2,253 +2,358 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LoveTalk ♥︎ | Genuine Connection</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LoveTalk ♥︎ | Connection Reimagined</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
 :root { 
-    --main-bg: linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC); 
-    --glass: rgba(255, 255, 255, 0.15);
+    --bg-gradient: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
+    --glass: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.2);
     --accent: #4BFF8B;
     --apple-blue: #007aff;
+    --dark: #121212;
 }
 
-* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
 
 body { 
-    margin: 0; 
-    font-family: 'Inter', sans-serif; 
-    background: var(--main-bg); 
-    background-size: 300% 300%; 
-    animation: grad 15s ease infinite; 
-    color: white; 
-    overflow-x: hidden; 
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg-gradient);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    color: white;
     height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
-@keyframes grad { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
+@keyframes gradientShift { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
 
-/* NAVIGATION */
-#topBar { 
-    padding: 15px 40px; 
-    display: flex; 
-    justify-content: space-between; 
+/* TOP NAVIGATION */
+header {
+    height: 70px;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    background: rgba(0,0,0,0.15); 
-    backdrop-filter: blur(15px); 
-    z-index: 1000;
-}
-.user-identity { font-size: 12px; font-weight: 800; background: var(--glass); padding: 8px 15px; border-radius: 20px; color: var(--accent); }
-
-/* MAIN LAYOUT */
-#appView { display: flex; flex: 1; height: calc(100vh - 70px); }
-
-/* LEFT: PERSISTENT CHAT (50%) */
-#chatSide { 
-    width: 50%; 
-    background: rgba(255, 255, 255, 0.05); 
-    display: flex; 
-    flex-direction: column; 
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0,0,0,0.1);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    z-index: 100;
 }
 
-#chatBox { flex: 1; display: flex; flex-direction: column; background: white; margin: 20px; border-radius: 25px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+.brand { font-weight: 800; font-size: 24px; letter-spacing: -1.5px; cursor: default; }
+.user-pill { background: var(--glass); padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: 600; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 8px; }
+.status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); }
 
-#messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
-.msg-row { display: flex; flex-direction: column; max-width: 75%; margin-bottom: 4px; }
-.msg-row.mine { align-self: flex-end; align-items: flex-end; }
+/* MAIN CONTAINER */
+#mainApp { display: flex; flex: 1; height: calc(100vh - 70px); }
 
-.bubble { padding: 10px 16px; border-radius: 20px; font-size: 14px; line-height: 1.4; position: relative; }
-.bubble.other { background: #e5e5ea; color: black; border-bottom-left-radius: 4px; }
-.bubble.mine { background: var(--apple-blue); color: white; border-bottom-right-radius: 4px; }
+/* LEFT PANEL: iMESSAGE CHAT (50%) */
+#chatPanel {
+    width: 50%;
+    background: rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-right: 1px solid var(--glass-border);
+}
 
-.meta { font-size: 9px; color: #8e8e93; margin-top: 4px; text-transform: uppercase; font-weight: 600; }
+.chat-container {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
 
-/* TYPING INDICATOR */
-.typing { padding: 10px 20px; display: none; align-items: center; gap: 4px; }
-.dot { width: 6px; height: 6px; background: #8e8e93; border-radius: 50%; animation: blink 1.4s infinite; }
-.dot:nth-child(2) { animation-delay: 0.2s; }
-.dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+.chat-header {
+    padding: 15px;
+    text-align: center;
+    background: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+#messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* iMessage Bubbles */
+.msg { max-width: 75%; display: flex; flex-direction: column; }
+.msg.mine { align-self: flex-end; align-items: flex-end; }
+.msg.other { align-self: flex-start; align-items: flex-start; }
+
+.bubble { 
+    padding: 12px 18px; 
+    border-radius: 22px; 
+    font-size: 14px; 
+    line-height: 1.5; 
+}
+.msg.mine .bubble { background: var(--apple-blue); color: white; border-bottom-right-radius: 4px; }
+.msg.other .bubble { background: #e5e5ea; color: black; border-bottom-left-radius: 4px; }
+.timestamp { font-size: 10px; color: #8e8e93; margin-top: 4px; font-weight: 600; text-transform: uppercase; }
 
 /* CHAT INPUT */
-#chatInputArea { padding: 15px; border-top: 1px solid #eee; display: flex; align-items: center; gap: 10px; background: #fff; }
-#chatInputArea input { flex: 1; border: none; background: #f2f2f7; padding: 12px 18px; border-radius: 25px; outline: none; color: black; }
+.chat-footer { padding: 15px; border-top: 1px solid #eee; background: white; }
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f2f2f7;
+    padding: 8px 15px;
+    border-radius: 40px;
+}
+.input-wrapper input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 8px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+}
 
-/* RIGHT: CALLING & LISTS */
-#callSide { flex: 1; padding: 30px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
+/* RIGHT PANEL: HUB */
+#hubPanel {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+}
 
-.header-lists { display: flex; width: 100%; gap: 15px; margin-bottom: 30px; }
-.list-card { flex: 1; background: rgba(0,0,0,0.25); border-radius: 20px; padding: 15px; height: 160px; overflow-y: auto; }
-.list-card h4 { margin: 0 0 10px; font-size: 11px; letter-spacing: 1px; color: var(--accent); opacity: 0.9; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
-.user-entry { font-size: 13px; padding: 6px 0; cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; }
-.user-entry:hover { color: var(--accent); }
+.hub-lists { display: flex; width: 100%; gap: 20px; margin-bottom: 40px; }
+.glass-list {
+    flex: 1;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 20px;
+    height: 180px;
+    overflow-y: auto;
+}
+.glass-list h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; opacity: 0.7; }
+.user-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.user-row:hover { color: var(--accent); }
 
-/* LOGO & PULSE */
-#logoWrapper { margin: 40px 0; position: relative; width: 150px; height: 150px; }
-#heartIcon { fill: var(--accent); opacity: 0; transition: opacity 0.2s; }
-.pulse-active { animation: heartFlicker 0.2s infinite alternate; }
+/* CALL CONTROLS */
+#logoContainer { width: 140px; height: 140px; margin-bottom: 20px; }
+.heart-path { fill: var(--accent); opacity: 0; transition: opacity 0.3s; }
+.flicker { animation: heartFlicker 0.2s infinite alternate; }
 @keyframes heartFlicker { from { opacity: 0.2; } to { opacity: 1; } }
 
-/* HORIZONTAL BUTTONS */
-.btn-row { display: flex; gap: 20px; align-items: center; margin-top: 20px; }
-.action-btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--glass); cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.2s; }
-.action-btn:active { transform: scale(0.9); }
-.action-btn svg { width: 30px; height: 30px; fill: white; }
-.btn-label { position: absolute; bottom: -25px; font-size: 10px; font-weight: 800; background: white; color: black; padding: 2px 8px; border-radius: 5px; }
+.call-title { font-size: 42px; font-weight: 800; letter-spacing: -2px; margin-bottom: 5px; }
+.call-status { font-size: 12px; font-weight: 600; opacity: 0.6; margin-bottom: 40px; }
 
-/* MEME GALLERY */
-#memeGrid { display: none; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 10px; background: #f2f2f7; max-height: 250px; overflow-y: auto; border-top: 1px solid #ddd; }
-.meme-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 5px; cursor: pointer; }
+.controls { display: flex; align-items: center; gap: 25px; }
+.btn-circle {
+    width: 65px; height: 65px; border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.btn-circle:hover { transform: scale(1.1); background: rgba(255,255,255,0.25); }
+.btn-circle.call-main { width: 90px; height: 90px; background: var(--accent); border: none; }
+.btn-circle svg { width: 28px; height: 28px; fill: white; }
+.btn-label { position: absolute; bottom: -30px; font-size: 9px; font-weight: 800; background: white; color: black; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+
+/* SIDE TABS / MODALS */
+#historyTab {
+    position: fixed;
+    right: -350px; top: 0; width: 350px; height: 100vh;
+    background: var(--dark);
+    z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 30px; border-left: 1px solid #333;
+}
+#historyTab.open { right: 0; }
+.close-tab { position: absolute; top: 20px; right: 20px; cursor: pointer; opacity: 0.5; }
+
+/* MEME GRID */
+#memeGallery {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px; padding: 10px;
+    background: #f2f2f7; max-height: 200px; overflow-y: auto;
+}
+.meme-item { width: 100%; aspect-ratio: 1; border-radius: 8px; cursor: pointer; object-fit: cover; }
 
 /* CONTEXT MENU */
-#contextMenu { display: none; position: fixed; background: #1c1c1e; border-radius: 12px; padding: 8px; z-index: 5000; width: 150px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-#contextMenu button { width: 100%; background: none; border: none; color: white; text-align: left; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; }
+#contextMenu {
+    display: none; position: fixed;
+    background: #1c1c1e; border-radius: 12px;
+    padding: 8px; z-index: 5000; width: 160px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+#contextMenu button {
+    width: 100%; background: none; border: none; color: white;
+    text-align: left; padding: 10px; border-radius: 8px;
+    cursor: pointer; font-size: 12px; font-family: inherit;
+}
 #contextMenu button:hover { background: rgba(255,255,255,0.1); }
 
-/* FOOTER MISSION */
-#missionSection { padding: 400px 10% 100px; text-align: center; background: white; color: #333; line-height: 1.6; }
+/* FOOTER SPACER */
+#scrollContent { height: 1000px; padding: 100px 15%; background: white; color: #121212; text-align: center; }
 
-/* RESPONSIVE SPLIT */
 @media (max-width: 900px) {
-    #appView { flex-direction: column; }
-    #chatSide { width: 100%; order: 2; height: 600px; }
-    #callSide { width: 100%; order: 1; height: auto; padding-bottom: 100px; }
+    #mainApp { flex-direction: column; overflow-y: auto; }
+    #chatPanel, #hubPanel { width: 100%; height: auto; }
 }
 </style>
 </head>
 <body>
 
-<div id="topBar">
-    <div style="font-weight: 800; letter-spacing: -1px; font-size: 20px;">LoveTalk ♥︎</div>
-    <div id="myUsername" class="user-identity">Generating Identity...</div>
-    <button class="theme-btn" onclick="openMod('cModal')">Edit Canvas</button>
-</div>
+<header>
+    <div class="brand">LoveTalk ♥︎</div>
+    <div style="display: flex; gap: 20px; align-items: center;">
+        <button class="user-pill" onclick="toggleHistory()">
+            <span class="status-dot"></span>
+            <span id="userNameDisplay">Serendipity_Crush</span>
+            <span style="opacity:0.5; font-size:10px;">• HISTORY</span>
+        </button>
+        <button onclick="openCanvas()" style="background:white; color:black; border:none; padding:8px 16px; border-radius:20px; font-size:10px; font-weight:800; cursor:pointer;">CANVAS</button>
+    </div>
+</header>
 
-<div id="appView">
-    <div id="chatSide">
-        <div id="chatBox">
+<div id="mainApp">
+    <section id="chatPanel">
+        <div class="chat-container">
+            <div class="chat-header" id="chatName">LIVE CHAT</div>
             <div id="messages">
-                <div style="text-align:center; opacity:0.3; font-size:11px; margin-top:100px;">No Active Call</div>
+                <div style="margin: auto; text-align: center; opacity: 0.3; font-size: 12px;">Start a call to enable chat</div>
             </div>
-            <div class="typing" id="typingIndicator">
-                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            </div>
-            <div id="memeGrid"></div>
-            <div id="chatInputArea">
-                <button onclick="toggleMemes()" style="background:none; border:none; font-size:22px; cursor:pointer;">🎲</button>
-                <input id="msgInput" type="text" placeholder="iMessage" onkeydown="if(event.key==='Enter')sendMsg()">
-                <button onclick="sendMsg()" style="background:var(--apple-blue); border:none; color:white; width:34px; height:34px; border-radius:50%; font-weight:800; cursor:pointer;">↑</button>
+            <div id="memeGallery"></div>
+            <div class="chat-footer">
+                <div class="input-wrapper">
+                    <button onclick="toggleMemes()" style="background:none; border:none; font-size:18px; cursor:pointer;">🎲</button>
+                    <input type="text" id="msgInput" placeholder="iMessage" onkeydown="if(event.key==='Enter')sendMsg()">
+                    <button onclick="sendMsg()" style="background:var(--apple-blue); border:none; color:white; width:30px; height:30px; border-radius:50%; font-weight:800; cursor:pointer;">↑</button>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div id="callSide">
-        <div class="header-lists">
-            <div class="list-card">
-                <h4>VERIFIED HUMANS</h4>
-                <div id="humanList"></div>
+    <section id="hubPanel">
+        <div class="hub-lists">
+            <div class="glass-list">
+                <h4>Verified Humans</h4>
+                <div id="onlineList"></div>
             </div>
-            <div class="list-card">
-                <h4>CONNECTIONS</h4>
+            <div class="glass-list">
+                <h4>Connections</h4>
                 <div id="connList"></div>
             </div>
         </div>
 
-        <div id="logoWrapper">
+        <div id="logoContainer">
             <svg viewBox="0 0 100 100">
                 <defs><mask id="m"><rect width="100" height="100" fill="white"/><path d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65" fill="black"/></mask></defs>
                 <path fill="white" d="M20 15 H80 Q88 15 88 23 V68 Q88 76 80 76 H45 L30 90 V76 Q12 76 12 68 V23 Q12 15 20 15 Z" mask="url(#m)"/>
-                <path id="heartIcon" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
+                <path id="heartIcon" class="heart-path" d="M50 65 C45 60 30 55 30 42 A12 12 0 0 1 50 35 A12 12 0 0 1 70 42 C70 55 55 60 50 65"/>
             </svg>
         </div>
 
-        <h1 id="callStatus" style="font-size: 40px; margin: 0; font-weight: 800;">READY</h1>
-        <p id="peerInfo" style="opacity: 0.6; margin-bottom: 30px;">Tap Call to start a conversation</p>
+        <h1 class="call-title" id="statusTitle">READY</h1>
+        <p class="call-status" id="statusSub">Connect with a human heart</p>
 
-        <div class="btn-row">
-            <button class="action-btn" onclick="toggleMute()">
+        <div class="controls">
+            <button class="btn-circle" onclick="toggleMute()">
                 <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
                 <span class="btn-label" id="muteLbl">MUTE</span>
             </button>
-            <button class="action-btn" id="mainCallBtn" style="width:100px; height:100px; background:var(--accent);" onclick="handleCall()">
+            
+            <button class="btn-circle call-main" onclick="handleCall()" id="callBtn">
                 <svg viewBox="0 0 24 24" style="fill:black"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                <span class="btn-label" style="bottom:-10px">START</span>
+                <span class="btn-label" style="bottom:-15px" id="callLbl">START CALL</span>
             </button>
-            <button class="action-btn" onclick="addConnection()">
+
+            <button class="btn-circle" onclick="addFriend()">
                 <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                <span class="btn-label">ADD</span>
-            </button>
-            <button class="action-btn" onclick="blockUser()">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                <span class="btn-label">BLOCK</span>
+                <span class="btn-label">ADD FRIEND</span>
             </button>
         </div>
-    </div>
+
+        <div style="margin-top: 50px; display: flex; align-items: center; gap: 10px; font-size: 12px; opacity: 0.8;">
+            <input type="checkbox" id="autoCall"> 
+            <label for="autoCall">Enable Auto-Call</label>
+        </div>
+    </section>
 </div>
 
-<div id="missionSection">
-    <h2>Our Sacred Mission</h2>
-    <p>LoveTalk is founded on the principle that every human deserves to be heard. In an age of algorithms, we choose heart.</p>
-    <p>Scroll down further to read our full statement of faith and community standards.</p>
+<div id="historyTab">
+    <div class="close-tab" onclick="toggleHistory()">✕ CLOSE</div>
+    <h2 style="margin-bottom: 20px; font-weight: 800;">Call History</h2>
+    <div id="historyList"></div>
 </div>
 
 <div id="contextMenu">
-    <button onclick="handleCall()">Call Now</button>
-    <button onclick="addConnection()">Add Friend</button>
-    <button style="color:#ff3b30" onclick="blockUser()">Block / Report</button>
+    <button onclick="startSpecificCall()">Call Back</button>
+    <button onclick="addFriend()">Add to Favorites</button>
+    <button style="color:#ff4b4b" onclick="blockUser()">Block / Report</button>
 </div>
 
-<div id="cModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#1c1c1e; padding:30px; border-radius:25px; z-index:9000; border:1px solid #333;">
-    <h3 style="margin-top:0">Canvas Settings</h3>
-    <button class="theme-btn" onclick="setBg('linear-gradient(-45deg, #FF9A8B, #FF6A88, #FF99AC)')" style="margin-bottom:10px; width:100%">Sunset Pink</button>
-    <button class="theme-btn" onclick="setBg('linear-gradient(135deg, #001f3f, #0074D9)')" style="margin-bottom:10px; width:100%">Deep Ocean</button>
-    <button class="theme-btn" onclick="setBg('#121212')" style="margin-bottom:20px; width:100%">Midnight</button>
-    <button class="theme-btn" onclick="cls()" style="background:var(--accent); width:100%">Done</button>
+<div id="scrollContent">
+    <h2 style="font-size: 40px; margin-bottom: 20px;">The Mission</h2>
+    <p style="font-size: 18px; line-height: 1.8; opacity: 0.8;">LoveTalk is built on the foundation of <strong>Love</strong>. We believe in connecting people through genuine conversation, reflecting the ultimate love shown to us by Christ.</p>
 </div>
 
 <script>
 let currentUser = "";
-let peer = "";
-let isMuted = false;
+let peer = null;
+let history = [];
 let connections = [];
+let selectedContextUser = "";
 
-// ROM-COM NAME GENERATOR
-const first = ["MeetCute", "Serendipity", "SlowBurn", "Grumpy", "Sunshine", "EnemiesTo", "CoffeeShop", "LastFirst", "RainyDay", "Secret"];
-const second = ["Chaos", "Crush", "Baker", "Lover", "Stargazer", "Dreamer", "Heartthrob", "Bff", "Protagonist", "Date"];
+const romcomFirst = ["MeetCute", "Serendipity", "SlowBurn", "Sunshine", "EnemiesTo", "CoffeeShop", "LastFirst", "RainyDay", "Secret", "FallingFor"];
+const romcomLast = ["Chaos", "Crush", "Baker", "Lover", "Stargazer", "Dreamer", "Heartthrob", "Bff", "Protagonist", "Date"];
 
-function generateIdentity() {
-    let savedName = localStorage.getItem('lovetalk_user');
-    if (!savedName) {
-        savedName = first[Math.floor(Math.random()*first.length)] + "_" + second[Math.floor(Math.random()*second.length)] + "_" + Math.floor(Math.random()*99);
-        localStorage.setItem('lovetalk_user', savedName);
+// IDENTITY & STORAGE
+function init() {
+    let saved = localStorage.getItem('lovetalk_user');
+    if(!saved) {
+        saved = romcomFirst[Math.floor(Math.random()*romcomFirst.length)] + "_" + romcomLast[Math.floor(Math.random()*romcomLast.length)] + "_" + Math.floor(Math.random()*99);
+        localStorage.setItem('lovetalk_user', saved);
     }
-    currentUser = savedName;
-    document.getElementById('myUsername').innerText = "Logged in as: " + currentUser;
+    currentUser = saved;
+    document.getElementById('userNameDisplay').innerText = currentUser;
+    generateMockOnline();
 }
 
-// UI HELPERS
-function openMod(id) { document.getElementById(id).style.display='block'; }
-function cls() { document.getElementById('cModal').style.display='none'; }
-function setBg(c) { document.body.style.background = c; }
-
-// LIST POPULATION
-function populateHumans() {
-    const list = document.getElementById('humanList');
-    list.innerHTML = "";
-    for(let i=0; i<5; i++) {
-        let name = first[Math.floor(Math.random()*first.length)] + "_" + second[Math.floor(Math.random()*second.length)];
-        let div = document.createElement('div');
-        div.className = "user-entry";
-        div.innerHTML = `<span>🟢 ${name}</span>`;
-        div.onclick = (e) => showContext(e, name);
-        list.appendChild(div);
-    }
+// UI TOGGLES
+function toggleHistory() { document.getElementById('historyTab').classList.toggle('open'); }
+function toggleMemes() { 
+    const g = document.getElementById('memeGallery');
+    g.style.display = g.style.display === 'grid' ? 'none' : 'grid';
+    if(g.innerHTML === "") loadMemes();
 }
 
-function showContext(e, name) {
+// CONTEXT MENU
+function showActions(e, name) {
     e.preventDefault();
+    selectedContextUser = name;
     const menu = document.getElementById('contextMenu');
     menu.style.display = 'block';
     menu.style.left = e.pageX + 'px';
@@ -259,105 +364,128 @@ function showContext(e, name) {
 
 // CALL LOGIC
 function handleCall() {
-    if (peer) endCall();
+    if(peer) endCall();
     else startSearch();
 }
 
 function startSearch() {
-    document.getElementById('callStatus').innerText = "LINKING...";
-    document.getElementById('mainCallBtn').style.background = "#ff3b30";
-    document.getElementById('typingIndicator').style.display = "flex";
+    document.getElementById('statusTitle').innerText = "LINKING...";
+    document.getElementById('callBtn').style.background = "#ff4b4b";
+    document.getElementById('callLbl').innerText = "END CALL";
     
     setTimeout(() => {
-        peer = first[Math.floor(Math.random()*first.length)] + "_" + second[Math.floor(Math.random()*second.length)];
-        document.getElementById('callStatus').innerText = "CONNECTED";
-        document.getElementById('peerInfo').innerText = "Talking with " + peer;
-        document.getElementById('heartIcon').classList.add('pulse-active');
-        document.getElementById('messages').innerHTML = `<div style="text-align:center; font-size:10px; color:#8e8e93; margin:10px 0;">Conversation with ${peer} started</div>`;
-        document.getElementById('typingIndicator').style.display = "none";
+        peer = romcomFirst[Math.floor(Math.random()*romcomFirst.length)] + "_" + romcomLast[Math.floor(Math.random()*romcomLast.length)];
+        document.getElementById('statusTitle').innerText = "CONNECTED";
+        document.getElementById('statusSub').innerText = "Talking with " + peer;
+        document.getElementById('chatName').innerText = "CHAT WITH " + peer.toUpperCase();
+        document.getElementById('heartIcon').classList.add('flicker');
+        document.getElementById('messages').innerHTML = `<div style="text-align:center; font-size:10px; opacity:0.3;">Conversation started</div>`;
+        
+        // Add to history
+        addToHistory(peer);
     }, 2000);
 }
 
+function startSpecificCall() {
+    if(peer) endCall();
+    setTimeout(() => {
+        peer = selectedContextUser;
+        document.getElementById('statusTitle').innerText = "CONNECTED";
+        document.getElementById('statusSub').innerText = "Talking with " + peer;
+        document.getElementById('heartIcon').classList.add('flicker');
+        addToHistory(peer);
+    }, 500);
+}
+
 function endCall() {
-    peer = "";
-    document.getElementById('callStatus').innerText = "READY";
-    document.getElementById('peerInfo').innerText = "Tap Call to start a conversation";
-    document.getElementById('mainCallBtn').style.background = "var(--accent)";
-    document.getElementById('heartIcon').classList.remove('pulse-active');
+    peer = null;
+    document.getElementById('statusTitle').innerText = "READY";
+    document.getElementById('statusSub').innerText = "Connect with a human heart";
+    document.getElementById('callBtn').style.background = "var(--accent)";
+    document.getElementById('callLbl').innerText = "START CALL";
+    document.getElementById('heartIcon').classList.remove('flicker');
+    document.getElementById('chatName').innerText = "LIVE CHAT";
+    
+    if(document.getElementById('autoCall').checked) {
+        setTimeout(startSearch, 1500);
+    }
 }
 
 // CHAT
 function sendMsg() {
     const input = document.getElementById('msgInput');
-    if (!input.value.trim() || !peer) return;
+    if(!input.value.trim() || !peer) return;
     
     renderBubble(input.value, true);
     input.value = "";
     
-    // Auto-reply simulation
+    // Simple bot echo
     setTimeout(() => {
-        if(peer) renderBubble("That's so funny! Tell me more.", false);
+        if(peer) renderBubble("Wow, I feel exactly the same way.", false);
     }, 1500);
 }
 
 function renderBubble(txt, isMine) {
-    const msgs = document.getElementById('messages');
-    const row = document.createElement('div');
-    row.className = "msg-row " + (isMine ? "mine" : "");
-    
+    const box = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = "msg " + (isMine ? "mine" : "other");
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    row.innerHTML = `
-        <div class="bubble ${isMine ? 'mine' : 'other'}">${txt}</div>
-        <div class="meta">${now} ${isMine ? '• Read' : ''}</div>
-    `;
     
-    msgs.appendChild(row);
-    msgs.scrollTop = msgs.scrollHeight;
+    div.innerHTML = `
+        <div class="bubble">${txt}</div>
+        <div class="timestamp">${now} ${isMine ? '• Read' : ''}</div>
+    `;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
 }
 
-function toggleMemes() {
-    const grid = document.getElementById('memeGrid');
-    grid.style.display = (grid.style.display === 'grid') ? 'none' : 'grid';
-    if(grid.innerHTML === "") fetchMemes();
+// HISTORY & LISTS
+function addToHistory(name) {
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const row = document.createElement('div');
+    row.className = "user-row";
+    row.innerHTML = `<span>${name}</span> <span style="opacity:0.4">${time}</span>`;
+    row.onclick = (e) => showActions(e, name);
+    document.getElementById('historyList').prepend(row);
 }
 
-async function fetchMemes() {
-    const grid = document.getElementById('memeGrid');
+function addFriend() {
+    const name = peer || selectedContextUser;
+    if(!name || connections.includes(name)) return;
+    connections.push(name);
+    const row = document.createElement('div');
+    row.className = "user-row";
+    row.innerHTML = `<span>♥ ${name}</span>`;
+    row.onclick = (e) => showActions(e, name);
+    document.getElementById('connList').prepend(row);
+}
+
+function generateMockOnline() {
+    const list = document.getElementById('onlineList');
+    for(let i=0; i<6; i++) {
+        let name = romcomFirst[Math.floor(Math.random()*romcomFirst.length)] + "_" + romcomLast[Math.floor(Math.random()*romcomLast.length)];
+        let div = document.createElement('div');
+        div.className = "user-row";
+        div.innerHTML = `<span>🟢 ${name}</span>`;
+        div.onclick = (e) => showActions(e, name);
+        list.appendChild(div);
+    }
+}
+
+async function loadMemes() {
     const res = await fetch('https://api.imgflip.com/get_memes');
     const data = await res.json();
-    grid.innerHTML = data.data.memes.slice(0, 60).map(m => `
-        <img src="${m.url}" class="meme-img" onclick="sendMeme('${m.url}')">
+    document.getElementById('memeGallery').innerHTML = data.data.memes.slice(0, 21).map(m => `
+        <img src="${m.url}" class="meme-item" onclick="sendMeme('${m.url}')">
     `).join('');
 }
 
 function sendMeme(url) {
-    renderBubble(`<img src="${url}" style="width:100%; border-radius:10px;">`, true);
-    document.getElementById('memeGrid').style.display = 'none';
+    renderBubble(`<img src="${url}" style="width:100%; border-radius:12px;">`, true);
+    document.getElementById('memeGallery').style.display = 'none';
 }
 
-function addConnection() {
-    if(!peer) return;
-    if(!connections.includes(peer)) {
-        connections.push(peer);
-        const div = document.createElement('div');
-        div.className = "user-entry";
-        div.innerHTML = `<span>♥ ${peer}</span>`;
-        document.getElementById('connList').prepend(div);
-    }
-}
-
-function blockUser() {
-    if(peer) {
-        alert(peer + " has been blocked.");
-        endCall();
-    }
-}
-
-// INIT
-window.onload = () => {
-    generateIdentity();
-    populateHumans();
-};
+init();
 </script>
 </body>
 </html>
